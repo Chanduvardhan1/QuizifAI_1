@@ -88,6 +88,15 @@ const FreeProfile = () => {
   const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
 
+  const [otheroccupation, setOtherccupation] = useState("");
+  const [address1, setAddress1] = useState('');
+
+  const [occupations, setOccupations] = useState([]);
+
+  const [isSendOtpSent,setIsSendOtpSent] = useState(false)
+
+  const [showOtherInput, setShowOtherInput] = useState(false);
+
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName);
     setInputValue(buttonName);
@@ -114,7 +123,7 @@ const FreeProfile = () => {
   
     const fetchDetailsByPincode = async (pincode) => {
       try {
-        const response = await axios.post('https://quizifai.com:8010/location_details/', {
+        const response = await axios.post('https://dev.quizifai.com:8010/location_details/', {
           pincode: pincode
         });
         const data = response.data.data[0];
@@ -148,7 +157,7 @@ const FreeProfile = () => {
       console.log("User ID:", userId);     
       try {
         const response = await fetch(
-          `https://quizifai.com:8010/dashboard`,
+          `https://dev.quizifai.com:8010/dashboard`,
           {
             method: "POST",
             headers: {
@@ -195,6 +204,7 @@ const FreeProfile = () => {
           occupation: userProfileDetails.occupation_name,
           preferredLoginMethod: userProfileDetails.preferred_login_method,
           address: userProfileDetails.user_address_line_1,
+          otheroccupation: userProfileDetails.other_occupation_name,
         };
         setFirstName(userProfileDetails.first_name);
         setMiddleName(userProfileDetails.middle_name);
@@ -212,6 +222,7 @@ const FreeProfile = () => {
         setOccupation(userProfileDetails.occupation_name);
         setInitialLoginData(initialData);
         setPreferredLoginMethod(userProfileDetails.preferred_login_method);
+        setOtherccupation(userProfileDetails.occupation_name);
          
         const userDetails = data.data[0].audit_details;
         setUserName(userDetails.full_name);
@@ -246,7 +257,7 @@ const FreeProfile = () => {
     }); // Save the current form data as the initial state
     setIsEditing(true);
     fetchDetailsByPincode(postalCode); // Call fetchDetailsByPincode here
-        handlePostalCodeChange(postalCode);
+    handlePostalCodeChange(postalCode);
   };
    // save after edit 
   const handleSaveClick = async () => {
@@ -269,9 +280,9 @@ const FreeProfile = () => {
       user_address_id: null,
       user_location_id: locationId,
       user_address_line_1: address,
-      user_address_line_2: " ",
+      user_address_line_2: address1,
       occupation: occupation,
-      other_occupation: " ",
+      other_occupation: otheroccupation,
       user_phone_number: mobileNumber,
 
     };
@@ -280,7 +291,7 @@ const FreeProfile = () => {
 
     try {
       const response = await fetch(
-        `https://quizifai.com:8010/edt_prfl_dtls`,
+        `https://dev.quizifai.com:8010/edt_prfl_dtls`,
         {
           method: "POST",
           headers: {
@@ -338,9 +349,36 @@ const FreeProfile = () => {
 setIsEditingLogin(true);
 setIsEmailOtpSent(false);
 setIsMobileOtpSent(false);
+setIsSendOtpSent(true)
 handleEditClick(); 
 
 
+  };
+  useEffect(() => {
+    // Fetch the data from the API
+    fetch('https://dev.quizifai.com:8010/occupations/', {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.response === 'success') {
+          setOccupations(data.data);
+        } else {
+          console.error('Failed to fetch occupations');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+  const handleOccupationChange = (e) => {
+    const selectedOccupation = e.target.value;
+    setOccupation(selectedOccupation);
+    setShowOtherInput(selectedOccupation === 'Other');
   };
   const handleLoginSaveClick = async () => {
     const payload = {
@@ -355,7 +393,7 @@ handleEditClick();
   
     try {
       const response = await fetch(
-        `https://quizifai.com:8010/chnge_email_mobile`,
+        `https://dev.quizifai.com:8010/chnge_email_mobile`,
         {
           method: "POST",
           headers: {
@@ -434,6 +472,7 @@ handleEditClick();
     setIsEmailOtpSent(false);
 setIsMobileOtpSent(false);
 setIsEditingLogin(false);
+setIsSendOtpSent(false)
 // handleEditClick(); 
 
   }
@@ -505,7 +544,7 @@ const handleUpdatePassword = async (e) => {
   }
 
   try {
-    const response = await axios.post('https://quizifai.com:8010/update_password', {
+    const response = await axios.post('https://dev.quizifai.com:8010/update_password', {
       user_id: userId, // Replace with your user ID
       old_password: oldPassword,
       new_password: newPassword,
@@ -615,33 +654,22 @@ const handleLoginCancelClick1 = () =>{
               </div>
 
               <div className={styles.inputGroup1}>
-                <label className="text-blue-800 font-semibold">
-                  Occupation
-                </label>
-                <select
-                  name="occupation"
-                  className="border-transparent 
-                           border-b-2   
-                        hover:border-blue-200 
-                          ml-[25px] 
-                          h-[30px] 
-                          w-[165px] 
-                          text-[11px] 
-                          pl-[3px]
-                          focus:outline-none"
-                          type="text"
-                          value={occupation}
-                          onChange={(e) => setOccupation(e.target.value)}
-                          disabled={!isEditing}
-                >
-                 {/* <option value={occupation}>{occupation}</option> */}
-                 <option value="Student">Student</option>
-                 <option value="Teacher">Teacher</option>
-                 <option value="Professional">Professional</option>
-                 <option value="Other">Other</option> 
-                </select>
-                <hr className="h-[0.5px] w-[270px] bg-gray-100"></hr>
-              </div>
+      <label className="text-blue-800 font-semibold">Occupation</label>
+      <select
+        name="occupation"
+        className="border-transparent border-b-2 hover:border-blue-200 ml-[25px] h-[30px] w-[165px] text-[11px] pl-[3px] focus:outline-none"
+        value={occupation}
+        onChange={handleOccupationChange}
+        disabled={!isEditing}
+      >
+        {occupations.map((occ) => (
+          <option key={occ.occupation_id} value={occ.occupation_name}>
+            {occ.occupation_name}
+          </option>
+        ))}
+      </select>
+      <hr className="h-[0.5px] w-[270px] bg-gray-100"></hr>
+    </div>
             </div>
 
            {/* Middle name and pincode*/}  
@@ -842,15 +870,15 @@ const handleLoginCancelClick1 = () =>{
 
         <div className="flex ml-[85px] mt-[5px]">
           <div className={styles.inputGroup1}>
-            <label for="address" className="text-blue-800 font-semibold">User Address</label>
+            <label for="address" className="text-blue-800 font-semibold">User Address1</label>
             <input
               className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[20px] 
-                          mr-[75px]
+                          mr-[70px]
                           h-[30px] 
-                          w-[145px] 
+                          w-[144px] 
                           text-[11px]
                           pl-[3px] 
                           focus:outline-none"
@@ -886,6 +914,56 @@ const handleLoginCancelClick1 = () =>{
               }`}
             />
           </div>
+          
+          
+        </div>
+
+        <div className="flex ml-[85px] mt-[5px]">
+          <div className={styles.inputGroup1}>
+            <label for="address" className="text-blue-800 font-semibold">User Address2</label>
+            <input
+              className="border-transparent 
+                           border-b-2   
+                        hover:border-blue-200 
+                          ml-[20px] 
+                          mr-[70px]
+                          h-[30px] 
+                          w-[142px] 
+                          text-[11px]
+                          pl-[3px] 
+                          focus:outline-none"
+              type="text" id="address"
+              value={address1}
+              onChange={(e) => setAddress1(e.target.value)}
+               disabled={!isEditing}
+            />
+            <hr className="h-[1px] w-[250px] bg-gray-200"></hr>
+          </div>
+          {showOtherInput && (
+          <div className={styles.inputGroup1}>
+            <label className="text-blue-800 font-semibold">Other Occupation</label>
+            <input
+              className="border-transparent 
+                           border-b-2   
+                        hover:border-blue-200 
+                          ml-[10px] 
+                          h-[30px] 
+                          w-[164px] 
+                          text-[11px] 
+                          pl-[7px]
+                          focus:outline-none"
+              type="text"
+              value={otheroccupation}
+              onChange={(e) => setOtherccupation(e.target.value)}
+
+            />
+            <hr
+              className={`h-[1px] w-[270px] bg-gray-200 ${
+                isFocused ? "bg-blue-500" : ""
+              }`}
+            />
+          </div>
+            )}
           
         </div>
      </div>
@@ -925,7 +1003,7 @@ const handleLoginCancelClick1 = () =>{
             className={styles.inputGroup1}
             style={{ marginLeft: "200px", textWrap: "nowrap",marginTop:"5px" }}
           >
-            <label className="text-blue-800 font-semibold">login Method</label>
+            <label className="text-blue-800 font-semibold">Login Method</label>
             <button
         className={`border-b-2 w-[77.5px] text-[11px] pl-[10px] ml-[10px] focus:outline-none ${
           preferredLoginMethod === 'Email' ? 'border-blue-200' : 'border-transparent'
@@ -1024,12 +1102,15 @@ const handleLoginCancelClick1 = () =>{
         Edit
       </button>
     )}
+       {isSendOtpSent && (
     <button
       className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[4%] text-white"
       onClick={handleLoginCancelClick}
     >
       Cancel
     </button>
+       )}
+   
     {message && (
       <div className="mt-[20px] text-green-500 font-semibold">
         {message}

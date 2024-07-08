@@ -48,7 +48,9 @@ const LogoutBar = (data) => {
  
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
   const [userName, setUserName] = useState('');
-  const [occupation, setOccupation] = useState(localStorage.getItem("occupation_name"));
+  // const [occupation, setOccupation] = useState(localStorage.getItem("occupation_name"));
+  // const [occupation, setOccupation] = useState("");
+
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [district, setDistrict] = useState("")
@@ -62,7 +64,9 @@ const LogoutBar = (data) => {
   const [subscriptionStartDate, setSubscriptionStartDate] = useState('');
   const [subscriptionEndDate, setSubscriptionEndDate] = useState('');
   const [remainingDays, setRemainingDays] = useState('');
-  
+  const [occupation, setOccupation] = useState("");
+const [otherOccupation, setOtherOccupation] = useState("");
+
   
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -99,10 +103,23 @@ const LogoutBar = (data) => {
 
           const userDetails = auditDetails;
           setUserName(userDetails.full_name);
-
+       
           const UserProfileDetails = data.data[0].user_profile_details;
           setDistrict(UserProfileDetails.district_name);
-
+          const userProfileDetails = data.data[0].user_profile_details;
+          if (userProfileDetails) {
+            console.log("User Profile Details:", userProfileDetails);
+  
+            // Fetch occupation details
+            setOccupation(userProfileDetails.occupation_name);
+            setOtherOccupation(userProfileDetails.other_occupation_name);
+  
+            console.log("Occupation:", userProfileDetails.occupation_name);
+            console.log("Other Occupation:", userProfileDetails.other_occupation_name);
+          } else {
+            console.error("No user profile details found.");
+          }
+  
           const subscriptionDetails = auditDetails.subscription_details && auditDetails.subscription_details[0];
           if (subscriptionDetails) {
             setSubscriptionStartDate(subscriptionDetails.start_date || "");
@@ -184,7 +201,7 @@ const LogoutBar = (data) => {
               marginTop:"-5px",
             }}
           >
-            {occupation}
+             {occupation === "Other" ? otherOccupation : occupation}
           </p>
 
           <div className="flex">

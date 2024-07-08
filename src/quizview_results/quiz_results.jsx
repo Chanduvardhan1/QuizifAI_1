@@ -295,9 +295,9 @@ const quiz_results = () => {
 
           <span className={styles.quizname}>{quizData.quiz_name}</span>
 </div>
-<div className={styles.download} >
+{/* <div className={styles.download} >
 <button className={styles.downbutton} onClick={handleDownload}>Download</button>
-</div>
+</div> */}
 </div>
 
           <p className={styles.quizdescription}>{quizData.quiz_description}</p>

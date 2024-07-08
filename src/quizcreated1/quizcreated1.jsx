@@ -168,14 +168,14 @@ if (!quizData) {
         <main className="w-full">
           {/* <div className=" h-[1000px] max-w-full bg-gradient-to-t from-[#CEE4FF80] to-[#E2EFFF80]"> */}
           <div className=" h-[1000px] max-w-full ">
-            <div className="w-[802px] h-[45px] absolute top-[120px] left-[297px]">
+            <div className="w-[802px] h-[45px] absolute top-[80px] left-[297px]">
               <h1 className="font-Poppins text-[#ff5c38] text-[30px] font-bold leading-[45px]  flex justify-center">
                 Created Successfully
               </h1>
             </div>
           
               <div className="w-[948px] h-[464px]">
-                 <div className=" absolute top-[40px]">
+                 <div className=" absolute top-[-20px]">
                 <div className="flex">
                   {/* <img
                     className="w-[51px] h-[37px] absolute top-[180px] left-[295px]"
@@ -184,9 +184,7 @@ if (!quizData) {
                   <h1 className="font-Poppins text-[#214082] text-[18px] font-bold leading-[40px] absolute top-[175px] left-[100px]  text-nowrap">
                     {quizData.quiz_title}
                   </h1>
-                  <h1 className="w-[760px] h-[49px] absolute top-[205px] left-[100px]">
-                    {quizData.quiz_description}
-                  </h1>
+                 
                   {/* <img
                     className="w-[30px] h-[30px] absolute top-[177px] left-[737px]"
                     src={QuizCreatedBy}
@@ -196,6 +194,9 @@ if (!quizData) {
                   </h1> */}
                 </div>
                 <div className="w-[900px] h-[49px] absolute top-[222px] left-[100px]">
+                  <h1 className="">
+                    {quizData.quiz_description}
+                  </h1>
                   <div className=" flex gap-[55px]">
                   <div className=" w-[300px]">
                     <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px] ">created By:</span>
@@ -219,9 +220,9 @@ if (!quizData) {
                     src={HorizontalLine}
                   />
                 </div>
-                <div className=" absolute top-[340px] left-[300px] flex gap-[55px]" >
+                <div className=" absolute top-[340px] left-[315px] flex gap-[55px]" >
                   <div  className=" w-[300px]">
-                    <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">Category:</span>
+                    <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">Category: </span>
                     <span>{quizData.quiz_sub_category_name}</span>
                   </div>
                   <div className=" w-[300px]">
@@ -326,7 +327,7 @@ if (!quizData) {
                       {" "}
                       Retake this paper:{quizData.retake_flag}
                     </h1> */}
-                    <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">Retake this paper:</span>
+                    <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">Retake this paper: </span>
                     <span>{quizData.retake_flag}</span>
                   </div>
                   {/* <img
@@ -339,7 +340,7 @@ if (!quizData) {
                       Multiple Answers:{" "}
                       {quizData.multi_answer ? "Yes" : "No"}
                     </h1> */}
-                    <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  "> Multiple Answers:</span>
+                    <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  "> Multiple Answers: </span>
                     <span>{quizData.multi_answer ? "Yes" : "No"}</span>
                   </div>
                   {/* <img
@@ -389,8 +390,8 @@ if (!quizData) {
                       {quizData.disabled_on}
                     </h1> */}
                     <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  "> Quiz will be live from:</span>
-                    <span> {quizData.available_from} to{" "}
-                      {quizData.disabled_on}</span>
+                    <span> {quizData.available_from} 
+                    {quizData.disabled_on ? ` To ${quizData.disabled_on}` : ''}</span>
                   </div>
                   {/* <img
                     className="w-[32px] h-[32px] absolute top-[603px] left-[767px]"
