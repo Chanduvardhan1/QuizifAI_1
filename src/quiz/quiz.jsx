@@ -425,7 +425,7 @@ const Quiz = () => {
           {/* Header content */}
           <p className="-mt-[5px]">Welcome {username}</p>
           <div className={styles.headerRight}>
-          {userRole === "quiz master" && (
+          {userRole === "Quiz Master" && (
         <div className="w-[99px] h-[40px] absolute mr-[300px] mb-2 pb-2 -mt-[25px] rounded-[10px] bg-[#fee2e2]">
           <div className="flex">
             <img

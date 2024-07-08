@@ -348,7 +348,7 @@ const Dashboard = () => {
                 </a>
               </div>
             </div> */}
-               {userRole === "quiz master" && (
+               {userRole === "Quiz Master" && (
         <div className="w-[99px] h-[41px] absolute mr-[80px] mb-2 pb-2 -mt-[35px] rounded-[10px] bg-[#fee2e2]">
           <div className="flex">
             <img
