@@ -704,6 +704,8 @@ const register = () => {
 
       if (responseData.response === "success") {
         setShowRegistrationSuccess(true);
+      }  else if (responseData.response === "fail" && responseData.response_message === "Failed to fetch user_role_id") {
+        setErrorMessage("Failed to fetch user role ID. Please try again later.");
       }  else {
         // Check if the error detail contains information about age
         if (responseData.detail && responseData.detail.length > 0) {
@@ -725,6 +727,12 @@ const register = () => {
       
     } catch (error) {
       console.error("Error:", error);
+      // Handle specific errors and set error message accordingly...
+      if (error.response && error.response.data && error.response.data.message === "Failed to fetch user_role_id") {
+        setErrorMessage("Failed to fetch user role ID. Please try again later.");
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
     }
   };
   useEffect(() => {
@@ -2052,9 +2060,9 @@ const register = () => {
                     Back to Login
                   </span>{" "}
                 </p> */}
-                {errorMessage && (
-                  <div style={{ color: "red" }}>{errorMessage}</div>
-                )}
+                 {errorMessage && (
+      <div style={{ color: "red" }}>{errorMessage}</div>
+    )}
                 <button
                   // onClick={handleRegister}
                   className={styles.registerButton}
