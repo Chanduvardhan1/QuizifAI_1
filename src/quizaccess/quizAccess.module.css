@@ -1,0 +1,344 @@
+.container {
+    display: flex;
+    font-family: "Poppins";
+  }
+   
+  .searchIconContainer {
+    position: relative;
+    top: -22px; 
+    margin-left: 10px;
+  }
+  .body {
+    font-family: "Poppins";
+  }
+  
+  
+  .navigation {
+    width: 219px;
+    background-color: #F5F5FB;
+    font-weight: 500;
+  }
+
+  .dashboardLogo{
+    margin-left: 50px;
+    margin-top: 50px;
+  }
+  
+
+.pageItem {
+    display: flex;
+    align-items: center;
+    font-family: "poppins";
+    margin-top: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-left: 40px;
+    margin-right: 20px; 
+}
+
+
+.infoLine {
+  display: flex;
+  align-items: center;
+}
+
+.info {
+  flex: 1;
+}
+
+.divider {
+  width: 243.83px;
+  height: 2px;
+  background-color: #DCDCE5;
+  border: none;
+}
+
+.pageIcon {
+    width: 15px; 
+    height: 15px; 
+    margin-right: 20px; 
+}
+
+.pageLink {
+    text-decoration: none;
+    color: #000; 
+    cursor: pointer;
+}
+
+.logoutIcon{
+    margin-left: 140px;
+
+}
+
+  .logout {
+    width: 272px;
+    background-color: #F5F5FB;
+    
+  }
+
+  .logoutText{
+    margin-left: 20px;
+    margin-top: 80px;
+  }
+  
+  
+
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  
+    /* background: linear-gradient(
+    0deg,
+    rgba(206, 228, 255, 0.5) -23.93%,
+    rgba(226, 239, 255, 0.5) 43.85%,
+    rgba(238, 246, 255, 0.5) 97.11%
+  ); */
+  height: 700px;
+    /* Add any other styles you need for your main content */
+    padding: 20px;
+    /* Example padding, adjust as needed */
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* margin-bottom: 20px; */
+  }
+  
+  .titleContainer,
+  .infoContainer 
+ {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    /* margin-top: 30px; */
+    gap: 162px;
+  }
+  
+  .icon {
+    margin-right: 5px; /* Adjust margin as needed */
+    width: 20px; /* Adjust width as needed */
+    height: 20px; /* Adjust height as needed */
+  }
+
+  .titleContainer{
+    font-family: Poppins;
+font-size: 18px;
+font-weight: 700;
+line-height: 40px;
+letter-spacing: 0em;
+text-align: left;
+margin-left: 50px;
+
+  }
+
+  .infoContainer{
+    font-family: Poppins;
+font-size: 15px;
+font-weight: 500;
+line-height: 40px;
+letter-spacing: 0em;
+text-align: left;
+margin-right: 95px;
+margin-left: 50px;
+
+
+  }
+
+  .icon1{
+    width: 51px;
+height: 37px;
+margin-right: 15px;
+
+  }
+
+  .icon2{
+    width: 30px;
+height: 30px;
+margin-right: 10px;
+
+
+  }
+
+  .description{
+    width: 43px;
+height: 43px;
+margin-left: 50px;
+
+
+  }
+
+  .descriptionText {
+    flex: 1;
+    margin-left: 50px; /* Adjust margin left for text box */
+    text-align: justify; /* Align text to justify */
+    font-family: Poppins;
+font-size: 15px;
+
+line-height: 23px;
+letter-spacing: 0em;
+text-align: left;
+
+  }
+
+  .descriptionContainer {
+    display: flex;
+    justify-content: center; /* Center icon and text horizontally */
+    margin-top: -10px;
+  }
+  
+.horizontalLine {
+    border: 1px dashed #555555; /* Add border style */
+    margin-top: 20px; /* Adjust margin top for spacing */
+    width: 885px;
+    margin-left: 40px;
+border: 1;
+
+
+  }
+  .sentencesContainer2{
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+    margin-left: 50px;
+    align-items: flex-start;
+    gap: 154px;
+}
+  .sentencesContainer {
+    display: flex;
+    justify-content: flex-start;
+    /* margin-top: 20px;  */
+    margin-left: 50px;
+    align-items: flex-start;
+    gap: 33px;
+  }
+  .sentence1{
+    display: flex;
+    align-items: center;
+    margin-left: 146px;
+    font-family: Poppins;
+    font-size: 15px;
+
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    
+  }
+  .sentence2{
+    display: flex;
+    align-items: center;
+   
+    font-family: Poppins;
+    font-size: 15px;
+
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+  
+  }
+  .sentence3{
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    font-family: Poppins;
+    font-size: 15px;
+
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-left: 5px;
+  }
+  .sentence4{
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    font-family: Poppins;
+    font-size: 15px;
+
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    
+  }
+  .sentence5 {
+    display: flex;
+    align-items: center;
+
+    font-family: Poppins;
+font-size: 15px;
+font-weight: 600;
+line-height: 23px;
+letter-spacing: 0em;
+text-align: left;
+
+  }
+  
+  .sentencesContainer1 {
+    display: flex;
+    justify-content: flex-start;
+    /* margin-top: 20px;  */
+    margin-left: 50px;
+    /* gap: 112px; */
+    /* justify-content: space-between; */
+    /* margin-right: 447px; */
+  }
+  .sentencesContainer3 {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px; 
+    margin-left: 45px;
+    gap: 82px;
+    /* justify-content: space-between; */
+    /* margin-right: 447px; */
+   
+  }
+  .sentencesContainer4 {
+    display: flex;
+    justify-content: flex-start;
+    /* margin-top: 20px; */
+    margin-left: 47px;
+    align-items: flex-start;
+    gap: 33px;
+  }
+  .sentence {
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    font-family: Poppins;
+font-size: 15px;
+/* font-weight: 600; */
+line-height: 23px;
+letter-spacing: 0em;
+text-align: left;
+
+  }
+  
+  .sentence span {
+    margin-left: 5px; 
+  }
+  .back{
+    display: flex;
+    cursor: pointer;
+    justify-content: end;
+  }
+  .buttonContainer {
+    display: flex;
+    /* justify-content: end; */
+    margin-top: 36px;
+    margin-bottom: 80px;
+    margin-left: 845px;
+    /* padding-right: 130px; */
+  }
+  
+  .imageButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .imageButton img {
+    width: 80px; /* Adjust width as needed */
+    height: 30px;
+  }

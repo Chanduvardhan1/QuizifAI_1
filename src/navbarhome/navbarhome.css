@@ -1,0 +1,271 @@
+
+/* home.module.css */
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+  
+  
+}
+
+.header1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  font-family: poppins;
+
+}
+
+.logo {
+ padding-left: 80px;
+ margin-top: 8px;
+ margin-left: -35px;
+ /* border: 1px solid black; */
+}
+
+.Homehifen{
+  padding-left: 5px;
+  /* font-size: 5px; */
+}
+
+.navigation ul {
+  /* border: 1px solid black; */
+  list-style-type: none;
+  display: flex;
+  align-items: center; 
+  margin-top: 10px;
+  padding: 0; 
+  /* border: 0.1px solid rgb(156, 155, 155); */
+}
+
+.navigation ul li {
+  padding: 10px;
+  padding-right: 8px;
+  padding-top: 5px;
+  /* border: 0.1px solid rgb(232, 230, 230); */
+
+}
+.navigation ul li:first-child {
+   padding-right: 8px;
+   
+}
+
+.navigation ul li:last-child {
+  /* margin-right: 100px; */
+}
+
+.navigation ul li:nth-child(-n+2):hover{
+  background-color: rgb(239,81,48);
+  color:white;
+  padding: 4px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 20px;
+  transform: scale(1.1); /* Zoom effect on hover */
+  transition: transform 0.3s ease;
+  /* padding-top: 5px; */
+}
+
+.navigation ul li:nth-child(-n+2) {
+  margin-right: 10px;
+  
+}
+
+.navigation ul li  {
+  font-family: Poppins;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #555555;
+  text-decoration: none;
+}
+
+.buttons button:hover{
+  background-color: rgb(239,81,48);
+  transform: scale(1.1); /* Zoom effect on hover */
+  transition: transform 0.3s ease;
+}
+
+.buttons button {
+  width: 80px;
+  height: 30px;
+  border-radius: 20px;
+  background: #3B61C8;
+  font-family: Poppins;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  margin-right: 6px;
+  margin-left: 4px;
+}
+
+.content {
+  padding: 20px;
+}
+
+.navItem {
+  cursor: pointer;
+}
+
+.navigation {
+  cursor: pointer;
+}
+
+
+.text-content {
+  width: 376px;
+  height: 136px;
+  position: relative;
+  margin-top: 100px;
+  top: 258px;
+  left: 100px;
+  
+}
+
+
+
+
+
+
+.line3 {
+  font-family: Poppins;
+  font-size: 13px;
+  font-weight: 700;
+  /* line-height: 40px; */
+  letter-spacing: 0em;
+  text-align: left;
+  color: white;
+ 
+}
+.line3:hover{
+  background-color: #F15A3D;
+  padding: 9px;
+  padding-left: 18px;
+  border-radius: 10px;
+}
+.ContactMail1{
+  /* position: absolute;
+  top: 18px; */
+  text-decoration: underline;
+}
+.ContactMail2{
+  /* padding-left: 133px; */
+  text-decoration: underline;
+}
+.line{
+  /* position: absolute;
+  left: 120px;
+  top: 18px; */
+}
+/* .backgroundButton:hover{
+  background-color: orange;
+} */
+
+
+.buttons {
+  display: flex; 
+}
+
+.aiImage {
+  margin-left: 20px; 
+}
+/* .buttons button {
+  width: 180px;
+  height: 35px;
+  border-radius: 30px;
+  border: none;
+  background: #3B61C8;
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: white;
+  margin-left: 10px;
+  cursor: pointer;
+} */
+
+
+.text-content .line3 {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 100px;
+  color: white;
+}
+
+.aiImage {
+left: -100px !important;
+
+}
+
+
+.outerBox {
+  /* position: absolute;
+  top: 140px;
+  left: 730px; */
+  width: 390px;
+  height: 360px;
+  border: none;
+  box-sizing: border-box;
+  background-color: rgb(241 241 255);
+  border-radius: 20px;
+}
+
+.innerBox {
+  padding: 20px;
+  margin-bottom: 10px;
+ 
+}
+
+.contactForm {
+  margin-top: 0px;
+}
+
+.formRow {
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  /* background-color: white; */
+}
+
+.formRow img {
+  margin-right: 15px;
+}
+
+.input[type="text"],
+.input[type="email"],
+.textarea {
+  width: 100%;
+  height: 50px; 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  
+}
+
+.additionalBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 543px;
+  height: 479px;
+  border: 2px solid #000;
+  box-sizing: border-box;
+}
+.sendbutton:hover{
+       background-color: #7e71ff;
+}
