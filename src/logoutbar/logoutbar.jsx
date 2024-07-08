@@ -70,7 +70,7 @@ const LogoutBar = (data) => {
 
       try {
         const response = await fetch(
-          `https://dev.quizifai.com:8010/dashboard`,
+          `https://quizifai.com:8010/dashboard`,
           {
             method: "POST",
             headers: {
