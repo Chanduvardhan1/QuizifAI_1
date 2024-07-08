@@ -194,6 +194,15 @@ const LoginPage = () => {
   //   }
   // };
   const handleLogin = async (loginOption, email, mobile, password) => {
+    
+    if (!email) {
+      setErrorMessage("Please enter your email");
+      return;
+    }
+    if (!password) {
+      setErrorMessage("Please enter your password");
+      return;
+    }
     try {
       console.log("email - ", email);
       // console.log("password before storing:", password);
@@ -232,8 +241,8 @@ const LoginPage = () => {
           }
         } else if (responseData.response === "fail") {
           let errorMessage = responseData.message || "An unknown error occurred while logging in.";
-          if (responseData.response_message === "Password is incorrect.Please try again.") {
-            errorMessage = "Please enter your password";
+          if (responseData.response_message === "Password is incorrect. Please try again.") {
+            errorMessage = "Password is incorrect. Please try again.";
           } else if (responseData.response_message === "Email is not valid.Please check your email") {
             errorMessage = "Check your email to complete the verification process";
           } else if (responseData.response_message === "Mobile Number is incorrect or account doesn't exist pls sinup.") {
@@ -248,6 +257,8 @@ const LoginPage = () => {
             errorMessage = "Email is incorrect or account doesn't exist.";
           } else if (responseData.response_message === "Your login request is being processed. Please wait a moment while we verify your account details.") {
             errorMessage = "Your login request is being processed. Please wait a moment while we verify your account details.";
+          }else if (responseData.response_message === "Please click here to complete your registration and activate your account.") {
+            errorMessage = "Please click here to complete your registration and activate your account.";
           }
 
           setErrorMessage(errorMessage);

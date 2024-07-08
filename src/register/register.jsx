@@ -653,84 +653,7 @@ const register = () => {
     const platform = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
     ? "mobile" // If any of the identifiers are found, return 'Mobile'.
     : "Web";
-    // if (firstname.trim() === "") {
-    //   setfirstname("");
-    // } else {
-    //   setfirstname("");
-    // }
 
-    // if (lastname.trim() === "") {
-    //   setlastname("");
-    // } else {
-    //   setlastname("");
-    // }
-    // if (middlename.trim() === "") {
-    //   setmiddlename("");
-    // } else {
-    //   setmiddlename("");
-    // }
-    // if (dateofbirth.trim() === "") {
-    //   setdateofbirth("");
-    // } else {
-    //   setdateofbirth("");
-    // }
-    // if (emailOrMobile.trim() === "") {
-    //   setemailOrMobile("");
-    // } else {
-    //   setemailOrMobile("");
-    // }
-    // if (occupationname.trim() === "") {
-    //   setoccupationname("");
-    // } else {
-    //   setoccupationname("");
-    // }
-
-    // // if (occupationname1.trim() === "") {
-    // //   setoccupationname1("");
-    // // } else {
-    // //   setoccupationname1("");
-    // // }
-
-    // if (pincode.trim() === "") {
-    //   setpincode("");
-    // } else {
-    //   setpincode("");
-    // }
-
-    // if (cityname.trim() === "") {
-    //   setcityname("");
-    // } else {
-    //   setcityname("");
-    // }
-
-    // if (Districtname.trim() === "") {
-    //   setDistrictname("");
-    // } else {
-    //   setDistrictname("");
-    // }
-
-    // if (statename.trim() === "") {
-    //   setstatename("");
-    // } else {
-    //   setstatename("");
-    // }
-
-    // if (countryname.trim() === "") {
-    //   setcountryname("");
-    // } else {
-    //   setcountryname("");
-    // }
-    // if (statename.trim() === "") {
-    //   setPassword("");
-    // } else {
-    //   setPassword("");
-    // }
-
-    // if (countryname.trim() === "") {
-    //   setConfirmpassword("");
-    // } else {
-    //   setConfirmpassword("");
-    // }
 
     const requstBody = {
       first_name: firstname,
@@ -781,9 +704,7 @@ const register = () => {
 
       if (responseData.response === "success") {
         setShowRegistrationSuccess(true);
-      } else if (responseData.response === "fail") {
-        setShowRegistrationSuccess(true);
-      } else {
+      }  else {
         // Check if the error detail contains information about age
         if (responseData.detail && responseData.detail.length > 0) {
           responseData.detail.forEach((error) => {
