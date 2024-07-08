@@ -270,8 +270,8 @@ const FreeProfile = () => {
       email_otp: emailOtp,
       user_phone_number: mobileNumber,
       otp: otp,
-      user_role: "quiz user", // Example value, adjust as needed
-      user_type: "public", 
+      user_role: "Quiz User", 
+      user_type: "Public", 
       user_org_id: null,
       gender: gender,
       display_name: " ",

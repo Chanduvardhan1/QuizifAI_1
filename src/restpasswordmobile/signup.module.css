@@ -418,43 +418,43 @@
   }
   
   .loginButton {
-    width: 104px;
-    
-    height: 41px;
-    background-color:#F5F5F5;
-    color: white;
-    font-size: 15px;
-    border-radius: 10px;
-    border: none;
-    /* margin-right: 200px;
-    margin-left:200px; */
-    color:#223F80;
+    width: 80px;
+    height: 30px;
+    border-radius: 20px;
+    background: #3b61c8;;
+    font-family: Poppins;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 30px;
+    color: #fff;
   }
   .loginButton:hover {
-    background-color: #7e71ff; /* Change background color on hover */
+    background-color:rgb(239,81,48); /* Change background color on hover */
     transform: scale(1.1); /* Zoom effect on hover */
     transition: transform 0.3s ease;
 }
  
 .loginButton1 {
-  width: 104px;
-  height: 41px;
-  background-color:#223F80;
-  color: white;
-  font-size: 15px;
-  border-radius: 10px;
-  border: none;
+  width: 80px;
+  height: 30px;
+  border-radius: 20px;
+  background: #3b61c8;;
+  font-family: Poppins;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 30px;
+  color: #fff;
 /* position:relative;
 top:-40px */
 }
 .loginButton1:hover {
-  background-color: #7e71ff; /* Change background color on hover */
+  background-color:rgb(239,81,48); /* Change background color on hover */
   transform: scale(1.1); /* Zoom effect on hover */
   transition: transform 0.3s ease;
 }
 .Button{
   display: flex;
-    gap: 125px;
+    gap: 167px;
     padding: 5px;
 }
   .registerButton {
