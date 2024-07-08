@@ -108,7 +108,7 @@ const LoginPage = () => {
   //   // }
   //   try {
   //     console.log("email - ", email);
-  //     const response = await fetch(`https://dev.quizifai.com:8010/login`, {
+  //     const response = await fetch(`https://quizifai.com:8010/login`, {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
@@ -294,7 +294,7 @@ const LoginPage = () => {
       email_or_mobile: loginMethod === "email" ? email : mobile,
     });
 
-    fetch("https://dev.quizifai.com:8010/forgotpassword", {
+    fetch("https://quizifai.com:8010/forgotpassword", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
