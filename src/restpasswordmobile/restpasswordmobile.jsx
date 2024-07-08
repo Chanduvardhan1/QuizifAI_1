@@ -856,17 +856,18 @@ const resetpasswordmobile = () => {
               )} */}
 
               <div className={styles1.Button}>
-              <button
-                  onClick={handleSignUp2}
-                  className={styles1.loginButton1}
-                >
-                  submit
-                </button>
+             
                 <button
                   onClick={handlecancel}
                   className={styles1.loginButton}
                 >
                   cancel
+                </button>
+                <button
+                  onClick={handleSignUp2}
+                  className={styles1.loginButton1}
+                >
+                  submit
                 </button>
              
               </div>
