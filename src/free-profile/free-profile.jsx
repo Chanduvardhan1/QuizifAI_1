@@ -222,7 +222,7 @@ const FreeProfile = () => {
         setOccupation(userProfileDetails.occupation_name);
         setInitialLoginData(initialData);
         setPreferredLoginMethod(userProfileDetails.preferred_login_method);
-        setOtherccupation(userProfileDetails.occupation_name);
+        setOtherccupation(userProfileDetails.other_occupation_name);
          
         const userDetails = data.data[0].audit_details;
         setUserName(userDetails.full_name);
