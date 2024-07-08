@@ -203,7 +203,7 @@ const FreeProfile = () => {
         setDob(userProfileDetails.date_of_birth);
         setDistrict(userProfileDetails.district_name);
         setEmail(userProfileDetails.user_email);
-        // setMobileNumber(userProfileDetails.user_phone_number);
+        setMobileNumber(userProfileDetails.user_phone_number);
         setAddress(userProfileDetails.user_address_line_1);
         setCountry(userProfileDetails.country_name);
         setState(userProfileDetails.state_name);
@@ -245,6 +245,8 @@ const FreeProfile = () => {
           preferredLoginMethod,
     }); // Save the current form data as the initial state
     setIsEditing(true);
+    fetchDetailsByPincode(postalCode); // Call fetchDetailsByPincode here
+        handlePostalCodeChange(postalCode);
   };
    // save after edit 
   const handleSaveClick = async () => {
@@ -431,6 +433,7 @@ handleEditClick();
     setMobileNumber(initialFormData.mobileNumber);
     setIsEmailOtpSent(false);
 setIsMobileOtpSent(false);
+setIsEditingLogin(false);
 // handleEditClick(); 
 
   }
