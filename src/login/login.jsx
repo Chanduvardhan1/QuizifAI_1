@@ -194,8 +194,6 @@ const LoginPage = () => {
   //   }
   // };
   const handleLogin = async (loginOption, email, mobile, password) => {
-    
-
     if (!password) {
       setErrorMessage("Please enter your password");
       return;
@@ -238,14 +236,14 @@ const LoginPage = () => {
           }
         } else if (responseData.response === "fail") {
           let errorMessage = responseData.message || "An unknown error occurred while logging in.";
-          if (responseData.response_message === "Password is incorrect. Please try again.") {
+          if (responseData.response_message === "Password is incorrect.Please try again.") {
             errorMessage = "Password is incorrect. Please try again.";
           } else if (responseData.response_message === "Email is not valid.Please check your email") {
             errorMessage = "Email is not valid.Please check your email";
           } else if (responseData.response_message === "Mobile Number is incorrect or account doesn't exist pls sinup.") {
             errorMessage = "Mobile Number is not valid.Please check your number";
           } else if (responseData.response_message === "Email is not verified, please verify your email") {
-            errorMessage = "Check your email to complete the verification process";
+            errorMessage = "Email is not verified, please verify your email";
           } else if (responseData.response_message === "Registration is not yet completed.") {
             errorMessage = "Registration is not yet completed.";
           } else if (responseData.response_message === "Mobile Number is not valid.Please check your number") {
@@ -261,6 +259,7 @@ const LoginPage = () => {
           }else if (responseData.response_message === "Mobile Number is not valid. Please check your number") {
             errorMessage = "Mobile Number is not valid. Please check your number";
           }
+
           setErrorMessage(errorMessage);
         } else {
           setErrorMessage("An unknown error occurred while logging in.");
@@ -325,10 +324,11 @@ const LoginPage = () => {
     });
   };
 
-  // const handleEmailChange = (event) => {
-  //   setEmail(event.target.value);
-  // };
 
+  const handleEmailChange1 = (e) => {
+    const value = e.target.value.trim().toLowerCase();
+    setEmail(value);
+  };
   // const handleMobileChange = (event) => {
   //   setMobile(event.target.value);
   // };
@@ -441,7 +441,7 @@ const LoginPage = () => {
                           label="Email"
                           required
                           value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          onChange={handleEmailChange1}
                           variant="outlined"
                           className={styles.inputField}
                           style={{ width: "325px", height: "50px" }}
