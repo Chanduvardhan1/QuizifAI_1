@@ -31,6 +31,7 @@ import rightIcon from "../../src/assets/Images/images/quizresults/right.png";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../navbar/navbar.jsx";
+import { MdOutlineCancel } from "react-icons/md";
 
 // import LeftBar from "../pages/leftbar";
 
@@ -109,6 +110,17 @@ const quizview = () => {
   const navigate = useNavigate();
   const handleBackToquizcreated = () => {
     navigate("/quizcreated");
+  };
+  const Back = () => {
+    // Check if quizData exists before navigating
+    if (quizData) {
+      // Pass quizData as state when navigating to "/quizcreated1"
+      navigate("/quizcreated1", { state: { quizData } });
+    } else {
+      console.log("Quiz data is not available to pass to '/quizcreated1'.");
+      // Navigate without passing quizData if it's not available
+      navigate("/quizcreated1");
+    }
   };
   // useEffect(() => {
   //   // const userId = sessionStorage.getItem('userId'); // Retrieve the user ID from sessionStorage
@@ -288,7 +300,8 @@ const quizview = () => {
           <span>Public access: {quizData.quiz_public_access ? 'Yes' : 'No'}</span>
         </div>
         </div> */}
-       
+                        <div className="absolute top-[30px] left-[1260px] cursor-pointer text-[#eeb600f0] " onClick={Back}><MdOutlineCancel /></div>
+
         <div className={styles.boxContainer}>
         {quizData.questions && quizData.questions.map((question, index) => (
   <div key={index} className={styles.questionContainer}>

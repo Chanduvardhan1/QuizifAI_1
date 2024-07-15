@@ -277,7 +277,7 @@ const QuizQuestions = () => {
     const optionB = currentQuestion[b];
   
     // Define your special options
-    const specialOptions = ["All of the above", "None of the above"];
+    const specialOptions = ["All of the above", "None of the above","All the above","None the above"    ,"All of the Above", "None of the Above","All The above","None The above","All Of The Above", "None Of The Above","All The Above","None The bove"];
   
     // Check if optionA or optionB is a special option
     if (specialOptions.includes(optionA) && specialOptions.includes(optionB)) {
@@ -323,17 +323,17 @@ const QuizQuestions = () => {
         </div>
         <div>
 
-        <span className={styles.Question} >Duration:</span>{" "}
+        <span className={styles.Question} >Duration :</span>{" "}
           <span className={styles.username1} >{quiz_duration} min</span>
         </div>
         <div>
 
-<span className={styles.Question} >Total Score:</span>{" "}
+<span className={styles.Question} >Total Marks :</span>{" "}
   <span className={styles.username1} >{quiz_total_marks}</span>
 </div>
 <div>
 
-<span className={styles.Question } >Pass Score :</span>{" "}
+<span className={styles.Question } >Pass percentage :</span>{" "}
   <span className={styles.username1} >{pass_percentage}</span>
 </div>
         </div>

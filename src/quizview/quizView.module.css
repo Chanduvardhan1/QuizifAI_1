@@ -203,8 +203,8 @@ text-align: left;
   .boxContainer {
     border-radius: 20px;
     background-color: #FFFFFF;
-    display: flex;
-    flex-direction: column;
+    padding: 20px;
+    padding-top: 60px;
   }
   .box {
     width: 235px;

@@ -36,13 +36,7 @@
   align-items: center;
 }
 
-.logo {
-  width: 600px;
-  /* height: 500px; */
-  margin-top: 50px;
-  margin-left: 130px;
 
-}
 
 .image {
   width: 733.25px;
@@ -119,10 +113,13 @@
   height:50px;
 }
 .Occupation{
-  display:flex;
-  gap:10px;
-height:50px;
-margin-bottom:20px;
+  display: flex;
+  gap: 10px;
+  height: 50px;
+  margin-bottom: 20px;
+  justify-content: start;
+  align-items: start;
+  width: 429px;
 
 }
 .mandatory{

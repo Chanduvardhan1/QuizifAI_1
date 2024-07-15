@@ -279,7 +279,7 @@ localStorage.setItem('emailOrMobile', emailOrMobile);
   };
   const handleInputChange = (field, value) => {
     if (field === 'emailOrMobile') {
-        setemailOrMobile(value.trim());  // Trim spaces from email input
+        setemailOrMobile(value.trim().toLowerCase());  // Trim spaces and convert to lowercase
     } else if (field === 'name') {
         if (validateName(value.trim())) {
             setResponseMessage1("");
@@ -289,7 +289,8 @@ localStorage.setItem('emailOrMobile', emailOrMobile);
         setTermsChecked(value);
         setTerms("");
     }
-}
+};
+
   //   let valid = true;
   //   const newErrors = {};
 

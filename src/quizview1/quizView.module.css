@@ -201,16 +201,10 @@ text-align: left;
     height: 71px;
   }
   .boxContainer {
-    width: 724px;
-    height: 1072px;
-    position: absolute;
-    width: 724px;
-/* top: 548px; */
-left: 230px;
-   
-
     border-radius: 20px;
     background-color: #FFFFFF;
+    padding: 20px;
+    padding-top: 60px;
   }
   .box {
     width: 235px;
