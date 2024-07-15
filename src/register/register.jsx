@@ -71,6 +71,8 @@ const register = () => {
   const [countdown, setCountdown] = useState(5); 
    const[platform, serplatform] =useState("")
    const [readOnly, setReadOnly] = useState(false);
+   const [occupationName, setOccupationName] = useState('');
+
 
   const handleDateChange =(e) =>{
     const dateValue = e.target.value;
@@ -390,11 +392,13 @@ const register = () => {
   const togglePasswordVisibility1 = () => {
     setShowPassword(!showPassword);
   };
+
   const handleEmailValidation = (input) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setEmail(input);
-
-    if (emailRegex.test(input)) {
+    
+    const processedInput = input.trim().toLowerCase(); // Trim and convert to lowercase
+  
+    if (emailRegex.test(processedInput)) {
       setEmailValid(true);
     } else {
       setEmailValid(false);
@@ -653,7 +657,7 @@ const register = () => {
     const platform = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
     ? "mobile" // If any of the identifiers are found, return 'Mobile'.
     : "Web";
-
+  
 
     const requstBody = {
       first_name: firstname,
@@ -664,13 +668,13 @@ const register = () => {
       user_phone_number: userphonenumber,
       occupation_name: occupationname,
       other_occupation_name: occupationname1,
-      location_name: cityname,
-      country_name: countryname,
-      pin_code: pincode,
-      state_name: statename,
+      // location_name: cityname,
+      // country_name: countryname,
+      // pin_code: pincode,
+      // state_name: statename,
       password: password,
       confirm_password: confirmpassword,
-      district_name:Districtname,
+      // district_name:Districtname,
       platform:platform,
     };
 
@@ -691,11 +695,11 @@ const register = () => {
         user_email: "",
         user_phone_number: "",
         occupation_name: "",
-        location_name: "",
-        country_name: "",
-        pin_code: "",
-        state_name: "",
-        district_name:"",
+        // location_name: "",
+        // country_name: "",
+        // pin_code: "",
+        // state_name: "",
+        // district_name:"",
       });
 
       
@@ -704,9 +708,7 @@ const register = () => {
 
       if (responseData.response === "success") {
         setShowRegistrationSuccess(true);
-      }  else if (responseData.response === "fail" && responseData.response_message === "Failed to fetch user_role_id") {
-        setErrorMessage("Failed to fetch user role ID. Please try again later.");
-      }  else {
+      } else {
         // Check if the error detail contains information about age
         if (responseData.detail && responseData.detail.length > 0) {
           responseData.detail.forEach((error) => {
@@ -716,23 +718,23 @@ const register = () => {
               setErrorMessage("Date of birth should be a valid date or datetime, input is too short");
             } else if (error.type === "value_error" && error.msg === "Value error, Password must be at least 8 characters long") {
               setErrorMessage("Password must be at least 8 characters long");
-            } else {
+            } else if (error.type === "value_error" && error.msg === "Value error, password and confirm_password did not match") {
+              setErrorMessage("Password and confirm password did not match");
+            } else if (error.type === "value_error" && error.msg === "Value error, Phone number must be exactly 10 digits and contain only numeric characters") {
+              setErrorMessage("Phone number must be exactly 10 digits and contain only numeric characters");
+            }else {
               setErrorMessage(error.msg);
             }
           });
+        } else if (responseData.response_message && responseData.response_message.includes("'NoneType' object has no attribute 'lower'")) {
+          setErrorMessage("'NoneType' object has no attribute 'lower'");
         } else {
-          setErrorMessage(responseData.data);
+          setErrorMessage(responseData.response_message);
         }
       }
       
     } catch (error) {
       console.error("Error:", error);
-      // Handle specific errors and set error message accordingly...
-      if (error.response && error.response.data && error.response.data.message === "Failed to fetch user_role_id") {
-        setErrorMessage("Failed to fetch user role ID. Please try again later.");
-      } else {
-        setErrorMessage("An unexpected error occurred. Please try again.");
-      }
     }
   };
   useEffect(() => {
@@ -867,7 +869,7 @@ const register = () => {
     <div className="container">
       <div className={styles.mainContent}>
         <div className={styles.leftSection}>
-          <div className={styles1.logo}>
+          <div className={styles1.logo4}>
             <img src={quizifailogo} alt="Logo" width={1000} height={1000}
              style={{ marginTop: "-15px" }} />
           </div>
@@ -1091,8 +1093,9 @@ const register = () => {
                     value={emailOrMobile}
                     //onChange={(e) => setemailOrMobile(e.target.value)}
                     onChange={(e) => {
-                      handleEmailValidation(e.target.value);
-                      setemailOrMobile(e.target.value);
+                      const processedInput = e.target.value.trim().toLowerCase();
+                      setemailOrMobile(processedInput);
+                      handleEmailValidation(processedInput);
                     }}
                   />
                   {/* {renderEmailValidationIcon()}{" "} */}
@@ -1449,9 +1452,7 @@ const register = () => {
                     value={occupationname}
                     onChange={(e) => setoccupationname(e.target.value)}
                   >
-                    {/* <option value="" disabled selected>
-                      Occupation
-                    </option> */}
+                  
                        {occupations.map((occupation) => (
         <MenuItem key={occupation.occupation_id} value={occupation.occupation_name}>
           {occupation.occupation_name}
@@ -1459,6 +1460,7 @@ const register = () => {
       ))}
                     {/* occupation options  */}
                   </TextField>
+                  {occupationname === "Other" && (
                   <TextField
                   label="Other occupation"
                   variant="outlined"
@@ -1498,68 +1500,10 @@ const register = () => {
                   value={occupationname1}
                   onChange={(e) => setoccupationname1(e.target.value)}
                 />
-                  {/* <div className={styles.inputContainer}> */}
-                  {/* {mobileValid ? (
-                    <FaCheck
-                      className={`${styles.validationIcon} ${styles.validationIconGreen}`}
-                    />
-                  ) : (
-                    <div>
-                      <img
-                        src={wrongMarkImage}
-                        alt="Wrong Mark"
-                        className={styles.validationIcon}
-                        style={{
-                          width: "15px",
-                          height: "15px",
-                          verticalAlign: "middle",
-                          marginLeft: "360px",
-                          marginTop: "-36px",
-                        }}
-                      />
-                      {/* <select
-                            className={styles.countrySelect}
-                            style={{ marginRight: "10px" }}
-                            defaultValue=""
-                          >
-                            <option value="" disabled selected>
-                              Country
-                            </option>
-                            <option value="India">India +91</option>
-                            <option value="Bangladesh">Bangladesh +880</option>
-                            <option value="USA">USA +1</option>
-                            <option value="Sri Lanka">Sri Lanka +94</option>
-                            <option value="Germany">Germany +49</option>
-                            {/* country options*/}
-                      {/* </select> */}
-                      {/* <input
-                            type="tel"
-                            className={styles.iconInput}
-                            // onChange={handleMobileChange}
-                            placeholder="Mobile Number"
-                            style={{
-                              backgroundImage: `url('images/signup/mobileIcon.png')`,
-                              backgroundRepeat: "no-repeat",
-                              width: "137px",
-                              height: "43px",
-                              paddingLeft: "40px",
-                              backgroundPosition: "10px center",
-                            }}
-                            name="user_phone_number"
-                            value={userphonenumber}
-                            onChange={(e) => setuserphonenumber(e.target.value)}
-                          /> */}
-                      {/* {!mobileValid && (
-                            <FaTimes
-                              className={`${styles.validationIcon} ${styles.validationIconRed}`}
-                            />
-                          )} */}
-                    {/* </div>
-                  )}  */}
-                  {/* </div> */}
+                  )}
                 </div>
                 {/* Postal Code, City */}
-                <div className={styles.inputRow10}>
+                {/* <div className={styles.inputRow10}>
                   <TextField
                     required
                     type="text"
@@ -1600,24 +1544,7 @@ const register = () => {
                     value={pincode}
                     onChange={(e) => setpincode(e.target.value)}
                   />
-                  {/* <div  style={{
-                      backgroundImage: `url('images/signup/postalCodeIcon.png')`,
-                      backgroundRepeat: "no-repeat",
-                      width: "35px",
-                      height: "50px",
-                  
-                      position:" relative",
-                      top: "27px",
-                      left: "-189px",
-                  
-                      marginBottom: "10px",
-                      // border: "1px solid #c2c2c2",
-                      backgroundPosition:
-                        "10px center, right 10px center, right 40px center",
-                      cours: "pointer",
-                    }}>
-
-                  </div> */}
+          
                   <div
                     className={styles1.searchicon}
                     onClick={handleSubmit1}
@@ -1634,10 +1561,10 @@ const register = () => {
                       cours: "pointer",
                     }}
                   ></div>
-                </div>
-                <div className={styles1.selected1}>
-                  <div className={styles.selected1} >
-                    <div className={styles.selected1}  style={{ display: "flex",flexDirection:"column",alignItems:"end" }}>
+                </div> */}
+                {/* <div className={styles1.selected1}>
+                  <div className={styles.selected1} > */}
+                    {/* <div className={styles.selected1}  style={{ display: "flex",flexDirection:"column",alignItems:"end" }}>
                       <label>
                         <TextField
                           id="outlined-select-currency-native"
@@ -1645,11 +1572,7 @@ const register = () => {
                           required
                           label="Location"
                           error={submitted && cityname.trim() === ""}
-                          // helperText={
-                          //   submitted && cityname.trim() === ""
-                          //     ? "cityname is required"
-                          //     : ""
-                          // }
+                         
                           className={styles.iconInput1}
                           style={{
                             width: "435px",
@@ -1678,19 +1601,7 @@ const register = () => {
                           value={cityname}
                           onChange={(e) => setcityname(e.target.value)}
                         >
-                          {/* <option value=""  disabled selected>Location</option> */}
-                          {/* {
-                            [
-                              ...new Set(
-                                responseData?.data.map(
-                                  (location) => location.location
-                                )
-                              ),
-                            ].map((cityName, index) => (
-                              <MenuItem key={index} value={cityName}>
-                                {cityName}
-                              </MenuItem>
-                            ))} */}
+                        
                             {responseData?.data.map((location, index) => (
         <MenuItem key={index} value={location.location}>
           {location.location}
@@ -1732,18 +1643,12 @@ const register = () => {
                               borderRadius: "10px",
                               marginTop: "0px",
                               marginRight: "10px",
-                              // position: "relative",
-                              // top: "-145px",
-                              // left: "183px",
-                              // top: "-108px",
-                              // border: "1px solid #c2c2c2",
-                              // left: "178px",
+                              
                             },
                           }}
                           value={Districtname}
                           onChange={(e) => setDistrictname(e.target.value)}
                         >
-                          {/* <option value=""  disabled selected>District</option> */}
                           {responseData &&
                            
                             [
@@ -1766,11 +1671,7 @@ const register = () => {
                         
                             required
                             error={submitted && statename.trim() === ""}
-                            // helperText={
-                            //   submitted && statename.trim() === ""
-                            //     ? "statename is required"
-                            //     : ""
-                            // }
+                          
                             label="State"
                             className={styles.iconInput1}
                             style={{
@@ -1805,21 +1706,7 @@ const register = () => {
                             value={statename}
                             onChange={(e) => setstatename(e.target.value)}
                           >
-                            {/* <option value=""  disabled selected>State</option> */}
-                            {/* {responseData &&
-                              responseData.data &&
-                              Array.isArray(responseData.data[0]) &&
-                              [
-                                ...new Set(
-                                  responseData.data[0].map(
-                                    (location) => location.Statename
-                                  )
-                                ),
-                              ].map((stateName, index) => (
-                                <MenuItem key={index} value={stateName}>
-                                  {stateName}
-                                </MenuItem>
-                              ))} */}
+                          
                           </TextField>
                         </label>
 
@@ -1883,12 +1770,12 @@ const register = () => {
                                   {countryName}
                                 </MenuItem>
                               ))} */}
-                          </TextField>
+                          {/* </TextField>
                         </label>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                    </div> */}
+                  {/* </div>
+                </div> */}
                 {/* <div>
                     {responseData &&
                       responseData.data &&
@@ -2060,9 +1947,9 @@ const register = () => {
                     Back to Login
                   </span>{" "}
                 </p> */}
-                 {errorMessage && (
-      <div style={{ color: "red" }}>{errorMessage}</div>
-    )}
+                {errorMessage && (
+                  <div style={{ color: "red" }}>{errorMessage}</div>
+                )}
                 <button
                   // onClick={handleRegister}
                   className={styles.registerButton}

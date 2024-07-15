@@ -12,6 +12,7 @@ import expand from "../assets/Images/images/dashboard/expand.png";
 import ranks from "../assets/Images/images/dashboard/ranks.png";
 import infinity from "../assets/Images/images/dashboard/infinity.png"
 import questionmark from "../assets/Images/images/dashboard/questionmark.png";
+import profileimg from "../assets/Images/images/profile/profileImage.png";
 
 
 const currentValue1 = 50; 
@@ -48,9 +49,7 @@ const LogoutBar = (data) => {
  
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
   const [userName, setUserName] = useState('');
-  // const [occupation, setOccupation] = useState(localStorage.getItem("occupation_name"));
-  // const [occupation, setOccupation] = useState("");
-
+  const [occupation, setOccupation] = useState(localStorage.getItem("occupation_name"));
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [district, setDistrict] = useState("")
@@ -64,9 +63,7 @@ const LogoutBar = (data) => {
   const [subscriptionStartDate, setSubscriptionStartDate] = useState('');
   const [subscriptionEndDate, setSubscriptionEndDate] = useState('');
   const [remainingDays, setRemainingDays] = useState('');
-  const [occupation, setOccupation] = useState("");
-const [otherOccupation, setOtherOccupation] = useState("");
-
+  
   
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -103,23 +100,10 @@ const [otherOccupation, setOtherOccupation] = useState("");
 
           const userDetails = auditDetails;
           setUserName(userDetails.full_name);
-       
+
           const UserProfileDetails = data.data[0].user_profile_details;
           setDistrict(UserProfileDetails.district_name);
-          const userProfileDetails = data.data[0].user_profile_details;
-          if (userProfileDetails) {
-            console.log("User Profile Details:", userProfileDetails);
-  
-            // Fetch occupation details
-            setOccupation(userProfileDetails.occupation_name);
-            setOtherOccupation(userProfileDetails.other_occupation_name);
-  
-            console.log("Occupation:", userProfileDetails.occupation_name);
-            console.log("Other Occupation:", userProfileDetails.other_occupation_name);
-          } else {
-            console.error("No user profile details found.");
-          }
-  
+
           const subscriptionDetails = auditDetails.subscription_details && auditDetails.subscription_details[0];
           if (subscriptionDetails) {
             setSubscriptionStartDate(subscriptionDetails.start_date || "");
@@ -168,16 +152,17 @@ const [otherOccupation, setOtherOccupation] = useState("");
 
   </div>
 
-        <div style={{ position: "relative"}}>
+       <div style={{ position: "relative"}}>
           
         <img
-          src={user2Icon}
+          src={profileimg}
           alt="Background Image"
-          style={{ display: "block", marginLeft: "45px"}}
+          style={{ display: "block", marginLeft: "45px", width: "113px",
+            height:"110px"}}
         />
 
-<img
-          src={userIcon}
+{/* <img
+          src={profileimg}
           alt="Foreground Image"
           style={{
             position: "absolute",
@@ -185,8 +170,10 @@ const [otherOccupation, setOtherOccupation] = useState("");
             left: "50%",
             transform: "translate(-50%, -50%)",
             paddingRight:"9px",
+            width: "113px",
+    height:"110px"
           }}
-        />
+        /> */}
         </div>
         <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: "15px", marginBottom: "5px", fontWeight: 600 ,color:"#002366"}}>
@@ -201,7 +188,7 @@ const [otherOccupation, setOtherOccupation] = useState("");
               marginTop:"-5px",
             }}
           >
-             {occupation === "Other" ? otherOccupation : occupation}
+            {occupation}
           </p>
 
           <div className="flex">

@@ -297,7 +297,7 @@ const quizAccess = () => {
   alt="Calendar Icon"
   className={styles.icon2}
 /> */}
-          <span className={styles.sentence5} style={{color:"#214082"}}>Created On:</span>
+          <span className={styles.sentence5} style={{color:"#214082"}}>Created On :</span>
           <span className={styles.sentence3}>{quizData.created_on}</span>
           </div>
         </div>
@@ -308,7 +308,7 @@ const quizAccess = () => {
     src={categoryIcon} 
     className={styles.icon2}
   /> */}
-            <span className={styles.sentence5} style={{color:"#214082"}}>Category:</span>
+            <span className={styles.sentence5} style={{color:"#214082"}}>Category :</span>
           <span className={styles.sentence3}>{`${quizData.quiz_category_name}`}</span>
           
         </div>
@@ -317,7 +317,7 @@ const quizAccess = () => {
     src={categoryIcon} 
     className={styles.icon2}
   /> */}
-          <span  className={styles.sentence5} style={{color:"#214082"}}>Sub Category:</span>
+          <span  className={styles.sentence5} style={{color:"#214082"}}>Sub Category :</span>
           <span  className={styles.sentence3}>{`${quizData.quiz_sub_category_name}`}</span>
         </div>
         
@@ -330,7 +330,7 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-          <span className={styles.sentence5} style={{color:"#214082"}}>Complexity:</span>
+          <span className={styles.sentence5} style={{color:"#214082"}}>Complexity :</span>
           <span className={styles.sentence3}>{`${quizData.quiz_complexity_name}`}</span>
         </div>
         <div className={styles.sentence4}>
@@ -339,7 +339,7 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-          <span  className={styles.sentence5} style={{color:"#214082"}}>Pass Score:</span>
+          <span  className={styles.sentence5} style={{color:"#214082"}}>Pass percentage :</span>
           <span  className={styles.sentence3}>{`${quizData.pass_percentage}%`}</span>
         </div>
         <div className={styles.sentence4}>
@@ -348,8 +348,8 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-          <span className={styles.sentence5} style={{color:"#214082"}}>Duration:</span>
-          <span className={styles.sentence3}>{`${quizData.quiz_duration} mints`}</span>
+          <span className={styles.sentence5} style={{color:"#214082"}}>Duration :</span>
+          <span className={styles.sentence3}>{`${quizData.quiz_duration} Min`}</span>
         </div>
         <div className={styles.sentence4}>
         {/* <img
@@ -357,7 +357,7 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-          <span className={styles.sentence5} style={{color:"#214082"}}>Question Count:</span>
+          <span className={styles.sentence5} style={{color:"#214082"}}>Question Count :</span>
           <span className={styles.sentence3}>{`${quizData.num_questions}`}</span>
         </div>
       </div>
@@ -370,7 +370,7 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-          <span className={styles.sentence5} style={{color:"#214082"}}>Course:</span>
+          <span className={styles.sentence5} style={{color:"#214082"}}>Course :</span>
           <span className={styles.sentence3}>{`${quizData.course_name}`}</span>
         </div>
         <div className={styles.sentence1}>
@@ -379,7 +379,7 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-          <span className={styles.sentence5} style={{color:"#214082"}}>Class:</span>
+          <span className={styles.sentence5} style={{color:"#214082"}}>Class :</span>
           <span className={styles.sentence3}>{`${quizData.class_name}`}</span>
         </div>
         
@@ -394,7 +394,7 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-          <span className={styles.sentence5} style={{color:"#214082"}}>Total Attempts:</span>
+          <span className={styles.sentence5} style={{color:"#214082"}}>Total Attempts :</span>
           <span >{quizData['quiz metrics'].total_attempts}</span>
         </div>
         <div className={styles.sentence}>
@@ -403,7 +403,7 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-   <span className={styles.sentence5} style={{color:"#214082"}}>Your Attempts:</span>
+   <span className={styles.sentence5} style={{color:"#214082"}}>Your Attempts :</span>
           <span>{quizData['quiz metrics'].your_attempts}</span>
         </div>
         <div className={styles.sentence}>
@@ -411,7 +411,7 @@ const quizAccess = () => {
     src={user4Icon} 
     alt="Calendar Icon"
     className={styles.icon2}
-  /> */}  <span className={styles.sentence5} style={{color:"#214082"}}>Highest Score:</span>
+  /> */}  <span className={styles.sentence5} style={{color:"#214082"}}>Highest Score :</span>
           <span>{quizData['quiz metrics'].highest_score !== null ? quizData['quiz metrics'].highest_score : 'N/A'}</span>
         </div>
        
@@ -424,7 +424,7 @@ const quizAccess = () => {
     alt="Calendar Icon"
     className={styles.icon2}
   /> */}
-   <span className={styles.sentence5} style={{color:"#214082"}}>Quickest completion time: </span>
+   <span className={styles.sentence5} style={{color:"#214082"}}>Quickest completion time : </span>
           <span>{quizData['quiz metrics'].quickest_completion_time !== null ? quizData['quiz metrics'].quickest_completion_time : 'N/A'}</span>
         </div>
         </div>
