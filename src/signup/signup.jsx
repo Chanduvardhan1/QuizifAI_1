@@ -236,7 +236,7 @@ localStorage.setItem('emailOrMobile', emailOrMobile);
           data.response === 'fail' &&
           data.response_message === 'Email is already registered. Please log in or use a different email.'
         ) {
-          setResponseMessage(data.response_message);
+          setResponseMessage("Email is already registered. Please login or use a different email.");
         }  else if (
           data.response === 'fail' &&
           data.response_message === 'Please provide a valid email address to proceed with your account.'
@@ -413,7 +413,7 @@ localStorage.setItem('mobile', mobile);
           "Mobile is already registered. Please log in or use a different mobile number."
           
         ) {
-          setResponseMessage(data.response_message);
+          setResponseMessage("Mobile is already registered. Please login or use a different mobile number.");
           // navigate("/Register");
           // navigate("/login", {
           //   state: { emailMobOption: loginMethod, emailMob: mobile },

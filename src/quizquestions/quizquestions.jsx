@@ -217,7 +217,13 @@ const QuizQuestions = () => {
       console.error('No quiz data available to submit');
       return;
     }
-
+    const unansweredQuestions = quizData.questions.some((question, index) => {
+      return selectedOptions[index] === undefined;
+    });
+    if (unansweredQuestions) {
+      alert('Please answer all questions before submitting the quiz.');
+      return;
+    }
     const answers = Object.keys(selectedOptions).map(questionIndex => ({
       question_id: quizData.questions[questionIndex].question_id,
       options: {
@@ -257,6 +263,12 @@ const QuizQuestions = () => {
       console.error('There was a problem with your fetch operation:', error);
     });
   };
+
+  const handleQuestionClick = (index) => {
+    setCurrentQuestionIndex(index);
+  };
+
+
   const formatTime = (seconds) => {
     const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
     const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
@@ -268,7 +280,7 @@ const QuizQuestions = () => {
     return <div>Loading...</div>;
   }
   const filteredQuizData = quizData.questions.filter(item => item.question_id);
-  const currentQuestion = quizData.questions.filter(item => item.question_id)[currentQuestionIndex];
+  const currentQuestion = filteredQuizData[currentQuestionIndex];
   const optionLabels = ['A', 'B', 'C', 'D'];
   const optionKeys = ['quiz_ans_option_1_text', 'quiz_ans_option_2_text', 'quiz_ans_option_3_text', 'quiz_ans_option_4_text'];
 
@@ -466,6 +478,21 @@ const QuizQuestions = () => {
     </div> */}
 
     {/* </div> */}
+    <div className={styles.questionNumbersContainer}>
+    {filteredQuizData.map((_, index) => {
+          const isSelected = selectedOptions[index] !== undefined;
+          return (
+            <div
+              key={index}
+              className={`${styles.questionNumber} ${isSelected ? styles.selected : ''}`}
+              onClick={() => handleQuestionClick(index)}
+            >
+              {index + 1}
+            </div>
+          );
+        })}
+         
+      </div>
     <div className={styles.currentQuestion}>
       {currentQuestion && (
         <>

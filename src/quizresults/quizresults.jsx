@@ -368,17 +368,17 @@ if (!Array.isArray(leaderboardData)) {
         </div>
         <div>
 
-        <span className={styles.Question} >Duration:</span>{" "}
+        <span className={styles.Question} >Duration :</span>{" "}
           <span className={styles.username1} >{`${quizData.attempt_duration}`}</span>
         </div>
         <div>
 
-<span className={styles.Question} >Total Score:</span>{" "}
+<span className={styles.Question} >Total Marks:</span>{" "}
   <span className={styles.username1} >{`${quizData.quiz_total_marks}`}</span>
 </div>
 <div>
 
-<span className={styles.Question } >Pass Score :</span>{" "}
+<span className={styles.Question } >Pass Percentage :</span>{" "}
   <span className={styles.username1} >{`${quizData.attempt_percentage}`}</span>
 </div>
 {/* <div>

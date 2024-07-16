@@ -38,9 +38,9 @@ const LogoutBar = (data) => {
   const navigate = useNavigate();
 
 
-  const handleBackToLogin = () => {
-    navigate("/login");
-  };
+  // const handleBackToLogin = () => {
+  //   navigate("/login");
+  // };
 
  const handleToProfile =() =>{
   navigate("/free-profile");
@@ -132,7 +132,34 @@ const LogoutBar = (data) => {
 
     fetchQuizData();
   }, [userId]); 
-  
+
+  const handleBackToLogin = () => {
+    fetch('https://quizifai.com:8010/usr_logout/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: userId
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Logout response:', data);
+      if (data.response === 'success') {
+        // alert(data.response_message)
+        navigate("/login");
+      } else {
+        console.error('Logout failed:', data.response_message);
+        // Handle unsuccessful logout (optional)
+      }
+    })
+      .catch(error => {
+        console.error('Error logging out:', error);
+        // Handle errors appropriately
+      });
+  };
   return (
     <div className={styles.logout}>
      <div style={{ marginTop: "10px", display: "flex", alignItems: "center" , marginLeft:"30px"}}> 

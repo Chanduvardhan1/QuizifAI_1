@@ -157,11 +157,11 @@ const Dashboard = () => {
   //   localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
   //   navigate('/leaderboard', { state: { quizId, quizTotalMarks, passPercentage } });
   // };
-  const leaderboard1 = (quizId, attemptId, quizduration, complexity) => {
+  const leaderboard1 = (quizId, attemptId, complexity,quizduration) => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     localStorage.setItem("quiz_level_attempt_id", attemptId);
-    localStorage.setItem("quiz_duration", quizduration);
     localStorage.setItem("complexity", complexity); // Store attempt_id in local storage
+    localStorage.setItem("quiz_duration", quizduration);
     navigate(`/leaderboard`);
   };
   const Edit = (quizId) => {
@@ -329,7 +329,7 @@ const Dashboard = () => {
       <div className={styles.mainContent}>
         <div className={styles.header}>
           {/* Header content */}
-          <p>Welcome {username}</p>
+          <p><span className={styles.Welcome}>Welcome</span>  {username}</p>
 
           <div className={styles.headerRight}>
             {/* <div>{getFormattedDate()}</div> */}
@@ -375,8 +375,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className={styles.completionInfo}>
-          You've completed {weeklyQuizCount} Quizzes this week with an average
-          score of {averageScorePercentage}%
+        You have successfully completed {weeklyQuizCount} Quizzes this week, achieving an average score of {averageScorePercentage}%.
         </div>
         <div className="flex mx-auto">
           <div className={styles.resultWrapper}>
@@ -565,7 +564,8 @@ const Dashboard = () => {
                                   leaderboard1(
                                     quizItem.quiz_id,
                                     quizItem.quiz_level_attempt_id,
-                                    quizItem.complexity
+                                    quizItem.complexity,
+                                    quizItem.quiz_duration
                                   )
                                 }
                               >
@@ -595,11 +595,11 @@ const Dashboard = () => {
 
                         <p className="px-[2px] font-normal">|</p>
 
-                        <span className="relative group">
-                            <span className="text-[#002366] w-[100px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                        <span class="relative group">
+                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-normal inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {quizItem.sub_category}
                             </span>
-                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[10px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
+                            <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
                               {quizItem.sub_category}
                             </span>
                           </span>
@@ -866,11 +866,11 @@ const Dashboard = () => {
                           </span>
                         </span>
                         <p className="px-[2px] font-normal">|</p>
-                        <span className="relative group">
-                            <span className="text-[#002366] w-[100px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                        <span class="relative group">
+                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-normal inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {quizItem.sub_category}
                             </span>
-                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[10px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
+                            <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
                               {quizItem.sub_category}
                             </span>
                           </span>
@@ -1012,6 +1012,7 @@ const Dashboard = () => {
                   quizItem.active_flag === true &&
                   quizItem.popularity_flag === "Y"
               )
+              .sort((a,b) =>b.quiz_attempts - a.quiz_attempts)
               .slice(0, 3)
               .map((quizItem, index) => (
                 <div key={index} className="">
@@ -1132,7 +1133,7 @@ const Dashboard = () => {
                         <p className="px-[2px] font-normal">|</p>
 
                         <span className="relative group">
-                            <span className="text-[#002366] w-[100px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                            <span className="text-[#002366] w-[80px] cursor-pointer z-0 truncate text-[9px] font-normal">
                               {quizItem.sub_category}
                             </span>
                             <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[10px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
@@ -1409,11 +1410,11 @@ const Dashboard = () => {
                         </span>
                         <p className="px-[2px] font-normal">|</p>
 
-                        <span className="relative group">
-                            <span className="text-[#002366] w-[100px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                        <span class="relative group">
+                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-normal inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {quizItem.sub_category}
                             </span>
-                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[10px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
+                            <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
                               {quizItem.sub_category}
                             </span>
                           </span>

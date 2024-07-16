@@ -288,7 +288,7 @@ const quizAccess = () => {
   alt="Calendar Icon"
   className={styles.icon2}
 /> */}
-          <span className={styles.sentence5} style={{color:"#214082"}}>Created By:</span>{" "}
+          <span className={styles.sentence5} style={{color:"#214082"}}>Created By :</span>{" "}
           <span className={styles.sentence3} >{quizData.created_by}</span>
           </div>
           <div className={styles.sentence4}>

@@ -207,7 +207,7 @@ const Back = () => {
               <div className=" absolute top-[340px] left-[315px] flex gap-[55px]" >
                 <div  className=" w-[300px]">
                   <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">Category : </span>
-                  <span>{quizData.quiz_sub_category_name}</span>
+                  <span>{quizData.quiz_category_name}</span>
                 </div>
                 <div className=" w-[300px]">
                 <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px] ">Sub Category :</span>
@@ -238,7 +238,7 @@ const Back = () => {
                     Complexity:{quizData.quiz_complexity_name}
                   </h1> */}
                   <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">pass percentage :</span>
-                  <span> {quizData.pass_percentage}%</span>
+                  <span> {quizData.pass_percentage}</span>
                 </div>
                 {/* <img className="w-[31px] h-[16.41px] absolute top-[336px] left-[784px]" src={Medium}/>
            <img className="w-[31px] h-[16.41px] absolute top-[334px] left-[849px]" src={Complex}/> */}

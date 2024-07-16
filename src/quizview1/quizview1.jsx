@@ -126,7 +126,7 @@ const quizview1 = () => {
   // useEffect(() => {
   //   // const userId = sessionStorage.getItem('userId'); // Retrieve the user ID from sessionStorage
   //   // if (userId) {
-  //     fetch('https://dev.quizifai.com:8010/access_quiz_for_master', {
+  //     fetch('https://quizifai.com:8010/access_quiz_for_master', {
   //       method: 'POST',
   //       headers: {
   //         'Accept': 'application/json',

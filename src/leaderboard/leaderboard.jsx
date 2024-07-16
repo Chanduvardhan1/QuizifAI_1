@@ -56,7 +56,6 @@ const leaderboard = () => {
   const navigate = useNavigate();
   const [isQuizSubmitted, setIsQuizSubmitted] = useState(false); // State to track quiz submission
   const resultRef = useRef();
-  const complexity = localStorage.getItem("complexity");
 
   const optionLabels = {
     option1: 'A',
@@ -163,6 +162,7 @@ const leaderboard = () => {
   //   }
   // }, [quizId, attemptNo]);
   const quizduration = localStorage.getItem("quiz_duration");
+  const complexity = localStorage.getItem("complexity");
 
   useEffect(() => {
     const quizId = localStorage.getItem("quiz_id");
@@ -303,7 +303,7 @@ const leaderboard = () => {
         <div>
 
         <span className={styles.Question} >Duration:</span>{" "}
-          <span className={styles.username1} >{quizduration}</span>
+          <span className={styles.username1} >{complexity} Min</span>
         </div>
         <div>
 
@@ -318,7 +318,7 @@ const leaderboard = () => {
 <div>
 
 <span className={styles.Question } >complexity :</span>{" "}
-  <span className={styles.username1} >{complexity}</span>
+  <span className={styles.username1} >{quizduration} </span>
 </div>
         </div>
           <div className={styles.Createdbyupdated}>

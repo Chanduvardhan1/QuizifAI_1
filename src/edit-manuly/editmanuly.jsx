@@ -227,6 +227,10 @@ export default function editmanuly() {
 
   const [isModified, setIsModified] = useState(false);
   const saveButtonRef = useRef(null);
+  const [selectedQuestions, setSelectedQuestions] = useState([]); // State to store selected questions
+  const [isAllSelected, setIsAllSelected] = useState(false);
+
+ const [quizcreation , setQuizcreation] = useState('')
 
   useEffect(() => {
     fetchCategories();
@@ -564,8 +568,8 @@ export default function editmanuly() {
       alert("Please fill in all the required fields before proceeding.");
       return; // Prevent further execution
     }
-    if (numQuestions < 10) {
-      alert("You need to have at least 10 questions.");
+    if (numQuestions < 5) {
+      alert("You need to have at least 5 questions.");
       return;
     }
     
@@ -625,6 +629,7 @@ export default function editmanuly() {
           quiz_time_bounded_questions: timings,
           quiz_public_access: publicAccess,
           available_from: availablefrom,
+          quiz_creation_method:quizcreation,
           disabled_on: disabledon,
           quiz_total_marks: quiztotalmarks,
           questions: questions.map((question) => ({
@@ -801,6 +806,7 @@ export default function editmanuly() {
         setavailablefrom(data.data.available_from);
         setdisabledon(data.data.disabled_on);
         setquiztotalmarks(data.data.quiz_total_marks);
+        setQuizcreation(data.data.quiz_creation_method)
         console.log('Available classes:', data.data.class_name);
         console.log('Available subcategories:', data.data.quiz_sub_category_name);
 
@@ -1092,7 +1098,32 @@ const handleNumQuestionsChange = (e) => {
     setQuestions(updatedQuestions);
   }
 };
+const toggleQuestionSelection = (index) => {
+  setSelectedQuestions(prevSelected => {
+    if (prevSelected.includes(index)) {
+      return prevSelected.filter(i => i !== index);
+    } else {
+      return [...prevSelected, index];
+    }
+  });
+};
 
+const handleDeleteSelected = () => {
+  const newQuestions = questions.filter((_, index) => !selectedQuestions.includes(index));
+  setQuestions(newQuestions);
+  setNumQuestions(newQuestions.length);
+  setSelectedQuestions([]);
+  setIsAllSelected(false);
+};
+
+const handleSelectAll = () => {
+  if (isAllSelected) {
+    setSelectedQuestions([]);
+  } else {
+    setSelectedQuestions(questions.map((_, index) => index));
+  }
+  setIsAllSelected(!isAllSelected);
+};
 const handleQuizTotalMarksChange = (e) => {
 
   const value = parseInt(e.target.value, 10);
@@ -1727,10 +1758,45 @@ const handleQuizTotalMarksChange = (e) => {
 
             {/* Questions and options */}
             <div className="absolute top-[210px] left-[284px] ">
+              <div className=" flex justify-between items-center mb-[10px] pr-[40px] ">
+              <div className="ml-[-20px] mr-[5px]" >
+        <input 
+          type="checkbox"
+          checked={isAllSelected}
+          onChange={handleSelectAll}
+        />
+        <label className="ml-[5px] font-normal text-[#214082]">Select All</label>
+      </div>
+                <div>
+            {selectedQuestions.length > 0 && (
+        <button
+          onClick={handleDeleteSelected}
+          className="bg-orange-500 text-white p-2 text-[14px] rounded-full "
+        >
+          Delete
+        </button>
+      )}
+      </div>
+  
+      </div>
             {questions.map((question, questionIndex) => (
   <div key={questionIndex} className="mb-8">
+    
     {/* Input field for question */}
+    {/* <input
+            type="checkbox"
+            checked={selectedQuestions.includes(questionIndex)}
+            onChange={() => toggleQuestionSelection(questionIndex)}
+          /> */}
+         
+         
     <div className="flex items-center mb-4">
+    <input
+    className="ml-[-20px] mr-[5px] mt-1 flex justify-center text-center"
+            type="checkbox"
+            checked={selectedQuestions.includes(questionIndex)}
+            onChange={() => toggleQuestionSelection(questionIndex)}
+          />
       <div className="mr-2 text-xl font-normal text-[#214082]">
         {questionIndex + 1}.
       </div>
@@ -1797,10 +1863,11 @@ const handleQuizTotalMarksChange = (e) => {
           setNumQuestions(newQuestions.length);
           setIsModified(true);
         }}  
-        className="w-[30px] h-[30px] text-orange-500"
+        className="w-[25px] h-[25px] text-orange-500"
 />
+   
     </div>
-
+   
     {/* Input fields for options */}
     {question.options.map((option, optionIndex) => (
       <div key={optionIndex} className="flex items-center mb-2">

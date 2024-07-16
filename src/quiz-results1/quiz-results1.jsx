@@ -139,39 +139,39 @@ const topThree = leaderboardData.slice(0, 3);
           <div className={styles.Questionslines }>
         <div className={styles.Questions}>
 
-        <span className={styles.Question} >Questions :</span>{" "}
+        <span className={styles.Question} >Questions : </span>{" "}
           <span className={styles.username1} >{complexity}</span>
         </div>
         <div>
 
-        <span className={styles.Question} >Duration:</span>{" "}
-          <span className={styles.username1} >{quizduration}</span>
+        <span className={styles.Question} >Duration : </span>{" "}
+          <span className={styles.username1} >{quizduration} Min</span>
         </div>
         <div>
-
-<span className={styles.Question} >Total Marks:</span>{" "}
+ 
+<span className={styles.Question} >Total Marks : </span>{" "}
   <span className={styles.username1} >{quizTotalMarks}</span>
 </div>
 <div>
 
-<span className={styles.Question } >Pass Score :</span>{" "}
+<span className={styles.Question } >Pass Percentage : </span>{" "}
   <span className={styles.username1} >{passPercentage}</span>
 </div>
 <div>
 
-<span className={styles.Question } >Complexity:</span>{" "}
+<span className={styles.Question } >Complexity : </span>{" "}
   <span className={styles.username1} >{numberofquestions}</span>
 </div>
         </div>
           <div className={styles.Createdbyupdated}>
         <div className={styles.Created}>
 
-        <span className={styles.Createdby} >Created By:</span>
+        <span className={styles.Createdby} >Created By : </span>
           <span className={styles.username} >{createdby}</span>
         </div>
         <div>
 
-        <span className={styles.Createdby} >Created On:</span>{" "}
+        <span className={styles.Createdby} >Created On : </span>{" "}
           <span className={styles.username} >{`${quizData.created_date}`}</span>
         </div>
         </div>
@@ -200,7 +200,7 @@ const topThree = leaderboardData.slice(0, 3);
       </div>
 <div className={styles.alldetails}>
   <img className={styles.Allimg} src={sucess} alt="" />
-  <span  className={styles.Question}>Total Attempts: </span>
+  <span  className={styles.Question}>Total Attempts : </span>
   <span className={styles.username1} >{quizattempts}</span>
 
 </div>
@@ -212,8 +212,8 @@ const topThree = leaderboardData.slice(0, 3);
 </div> */}
 <div className={styles.alldetails}>
 <img className={styles.Allimg}  src={timeIcon1} alt="" />
-<span  className={styles.Question}>Average Completion Time: </span>
-<span className={styles.username1} >{mincompletiontime} Minutes</span>
+<span  className={styles.Question}>Average Completion Time : </span>
+<span className={styles.username1} >{mincompletiontime} Min</span>
 
 </div>
 {/* <div className={styles.alldetails}>
@@ -224,13 +224,13 @@ const topThree = leaderboardData.slice(0, 3);
 </div> */}
 <div className={styles.alldetails}>
   <img className={styles.Allimg} src={Top1} alt="" style={{ width:"42px", height:"44px",marginRight:"-10px",position:"relative",right:"5px"}}/>
-  <span  className={styles.Question}>Top Score:</span>
+  <span  className={styles.Question}>Top Score : </span>
   <span className={styles.username1} >{quizMetrics.highest_score}</span>
 
 </div>
 <div className={styles.alldetails}>
 <img className={styles.Allimg}  src={average1} a alt="" />
-<span  className={styles.Question}>Average Score: </span>
+<span  className={styles.Question}>Average Score : </span>
 <span className={styles.username1} >{avgscore}</span>
 
 </div>
@@ -280,7 +280,7 @@ const topThree = leaderboardData.slice(0, 3);
         <p className={styles.thired}>3<span  className={styles.st}>rd</span></p>
         </div>
         <div className={styles.innerBoxes1}>
-        <div className={styles.innerBox1} style={{width:"122px", height:"93px",}}>
+        <div className={styles.innerBox1} >
         {/* <img
     src={greybox1Image} 
     alt="img 1"
@@ -288,14 +288,14 @@ const topThree = leaderboardData.slice(0, 3);
             {/* <span className={styles.textOverImage} style={{marginTop:"-40px", marginLeft:"50px"}}>Username<br></br>99.5</span> */}
             
           </div>
-          <div className={styles.innerBox2} style={{width:"122px", height:"118px", marginTop:"-24px",}}>
+          <div >
           {/* <img
     src={greybox2Image} 
     alt="img 1"
   /> */}
             {/* <span className={styles.textOverImage1}>Username<br></br>100</span> */}
           </div>
-          <div className={styles.innerBox3} style={{width:"122px", height:"93px",}}>
+          <div className={styles.innerBox3}>
           {/* <img
     src={greybox3Image} 
     alt="img 1"
