@@ -385,40 +385,46 @@ text-align: left;
 .start{
   transition-duration: 1s;
   transition-timing-function: linear;
+  display: flex;
+  gap: 2px;
+  /* justify-content: center; */
+  /* justify-items: center; */
+  align-items: center;
+  padding: 2px;
 }
 .start:hover{
   background-color: #cccecf;
 }
 .startimage{
-  position: absolute;
+  /* position: absolute;
   height: 1px;
   width: 1px;
   left: 6px;
-  top: 4px;
+  top: 4px; */
 }
 .starttext{
   font-size: 8px;
-  padding-left: 27px;
-  margin-left: -9px;
+  /* padding-left: 27px;
+  margin-left: -9px; */
   cursor: pointer;
 }
 .starttext:hover{
   color: black;
 }
 .editimage{
- position: absolute;
+ /* position: absolute; */
  height: 10px;
  width: 10px;
- left: 14px;
+ /* left: 14px;
  margin-left: -8px;
- top: 15px;
+ top: 15px; */
 }
 .edittext{
   font-size: 8px;
-  margin-left: -18px;
+  /* margin-left: -18px;
   position: absolute;
   top: 15px;
-  left: 36px;
+  left: 36px; */
   cursor: pointer;
 }
 .edittext:hover{
@@ -426,7 +432,13 @@ text-align: left;
 }
 .edit{
   transition-duration: 1s;
-  transition-timing-function: linear; 
+  transition-timing-function: linear;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+  display: flex;
+  gap: 2px;
+  /* align-items: center; */
+  padding: 2px; 
 }
 .edit:hover{
   background-color: #cccecf;
@@ -434,17 +446,17 @@ text-align: left;
 .leaderboardimage{
   height: 10px;
   width: 10px;
-  position: absolute;
+  /* position: absolute;
   left: 14px;
   top: 26px;
-  margin-left: -8px;
+  margin-left: -8px; */
 }
 .leaderboardtext{
   font-size: 8px;
-  margin-right: -18px;
+  /* margin-right: -18px;
   position: absolute;
   top: 26px;
-  left: 18px;
+  left: 18px; */
   cursor: pointer;
 }
 .leaderboardtext:hover{
@@ -453,6 +465,10 @@ text-align: left;
 .leaderboard{
   transition-duration: 1s;
   transition-timing-function: linear; 
+  display: flex;
+  gap: 2px;
+  /* align-items: center; */
+  padding: 2px;
 }
 .leaderboard:hover{
   background-color: #cccecf;
@@ -496,27 +512,33 @@ padding-top: 10px;
 }
 .infoIcons{
   border-radius: 5px;
-  height: 40px;
+  /* height: 40px; */
   width: 95px;
-  padding-top: 6px;
+  /* padding-top: 6px; */
   font-size: 8px;
-  padding-top: 2px;
+  /* padding-top: 2px;
   margin-top: -20px;
-  margin-left: -112px;
+  margin-left: -112px; */
   position: absolute;
+  display: flex;
+    flex-direction: column;
+    padding: 2px;
   background-color: #e2e8f0;
   clip-path: polygon(0% 0%, 80% 0, 81% 16%, 95% 26%, 81% 34%, 81% 100%, 0 100%);
 }
 .infoIcons1{
   border-radius: 5px;
-  height: 40px;
+  /* height: 40px; */
   width: 95px;
-  padding-top: 6px;
+  /* padding-top: 6px; */
   font-size: 8px;
-  padding-top: 2px;
-  margin-top: -40px;
-  margin-left: -124px;
+  /* padding-top: 2px;
+  margin-top: -20px;
+  margin-left: -112px; */
   position: absolute;
+  display: flex;
+    flex-direction: column;
+    padding: 2px;
   background-color: #e2e8f0;
   clip-path: polygon(0% 0%, 80% 0, 81% 16%, 95% 26%, 81% 34%, 81% 100%, 0 100%);
 }
@@ -540,6 +562,16 @@ padding-top: 10px;
   position: relative;
   bottom: 2px;
 
+}
+.retake{
+  transition-duration: 1s;
+    transition-timing-function: linear;
+    display: flex;
+    gap: 2px;
+    /* justify-content: center; */
+    /* justify-items: center; */
+    align-items: center;
+    padding: 2px;
 }
 .questiontext{
   font-size: 9px;
@@ -661,7 +693,7 @@ margin-top: -60px;
   position: relative; 
   top: 25px;
   margin-top: -20px;
-  margin-left: 210px;
+  margin-left: 245px;
 }
 .iconContainers{
   z-index: 40px;
@@ -672,7 +704,7 @@ margin-top: -60px;
 .iconContainer img {
   width: 8px; 
   height: 8px; 
-  margin-right: 3px;
+  /* margin-right: 3px; */
 
 }
 

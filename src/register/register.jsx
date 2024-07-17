@@ -51,11 +51,11 @@ const register = () => {
   const [occupations, setOccupations] = useState([]);
   //   const router = useRouter();
   const [Districtname, setDistrictname] = useState("");
-  const [emailOrMobile, setemailOrMobile] = useState('');
+  // const [emailOrMobile1, setemailOrMobile] = useState('');
   const [firstname, setfirstname] = useState("");
   const [middlename, setmiddlename] = useState("");
   const [lastname, setlastname] = useState("");
-  const [userphonenumber, setuserphonenumber] = useState("");
+  // const [userphonenumber, setuserphonenumber] = useState("");
   const [dateofbirth, setdateofbirth] = useState("");
   const [occupationname, setoccupationname] = useState("");
   const [occupationname1, setoccupationname1] = useState("");
@@ -72,44 +72,74 @@ const register = () => {
    const[platform, serplatform] =useState("")
    const [readOnly, setReadOnly] = useState(false);
    const [occupationName, setOccupationName] = useState('');
+   const location = useLocation();
+   const { mobile, emailOrMobile } = location.state || {};
+   const [userphonenumber, setuserphonenumber] = useState(mobile || '');
+   const [emailOrMobile1, setemailOrMobile] = useState(emailOrMobile || '');
+  //  const [mobileValid, setMobileValid] = useState(true);
+  const [calculatedAge, setCalculatedAge] = useState("");
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    const diffYears = today.getFullYear() - birthDate.getFullYear();
+    const diffMonths = today.getMonth() - birthDate.getMonth();
+    const diffDays = today.getDate() - birthDate.getDate();
+  
+    let years = diffYears;
+    let months = diffMonths;
+    let days = diffDays;
+  
+    if (days < 0) {
+      months -= 1;
+      days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+    }
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+  
+    return `${years} years ${months} months ${days} days`;
+  };
+  
 
-
-  const handleDateChange =(e) =>{
+  const handleDateChange = (e) => {
     const dateValue = e.target.value;
     const year = dateValue.split('-')[0];
-    if(year.length <= 4){
+    if (year.length <= 4) {
       setdateofbirth(dateValue);
+      setCalculatedAge(calculateAge(dateValue));
     }
-  }
+  };
+  
 
-  const signupDetails = useLocation();
-  const { emailMobOption, emailMob } = signupDetails.state || {};
+  // const signupDetails = useLocation();
+  // const { emailMobOption, emailMob } = signupDetails.state || {};
 
-  console.log("emailMobOption - ",emailMobOption)
-  useEffect(() => {
-    if (emailMobOption && emailMob) {
-      setemailOrMobile(emailMobOption === 'email' ? emailMob : '');
-    }
-  }, [emailMobOption, emailMob]);
+  // console.log("emailMobOption - ",emailMobOption)
+  // useEffect(() => {
+  //   if (emailMobOption && emailMob) {
+  //     setemailOrMobile(emailMobOption === 'email' ? emailMob : '');
+  //   }
+  // }, [emailMobOption, emailMob]);
 
-  useEffect(() => {
-    // Retrieve the email or mobile number from localStorage
-    const storedEmailOrMobile = localStorage.getItem('emailOrMobile');
-    if (storedEmailOrMobile) {
-      setemailOrMobile(storedEmailOrMobile);
-      setReadOnly(true); // Make the input field read-only if a value is found
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Retrieve the email or mobile number from localStorage
+  //   const storedEmailOrMobile = localStorage.getItem('emailOrMobile');
+  //   if (storedEmailOrMobile) {
+  //     setemailOrMobile(storedEmailOrMobile);
+  //     setReadOnly(true); // Make the input field read-only if a value is found
+  //   }
+  // }, []);
 
 
-  useEffect(() => {
-    // Retrieve the email or mobile number from localStorage
-    const storedmobile = localStorage.getItem('mobile');
-    if (storedmobile) {
-      setuserphonenumber(storedmobile);
-      setReadOnly(true); // Make the input field read-only if a value is found
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Retrieve the email or mobile number from localStorage
+  //   const storedmobile = localStorage.getItem('mobile');
+  //   if (storedmobile) {
+  //     setuserphonenumber(storedmobile);
+  //     setReadOnly(true); // Make the input field read-only if a value is found
+  //   }
+  // }, []);
   // useEffect(() => {
   //   const searchParams = new URLSearchParams(location.search);
   //   const email = searchParams.get("email");
@@ -464,13 +494,25 @@ const register = () => {
       );
     }
   };
-
+  useEffect(() => {
+    if (mobile) {
+      setuserphonenumber(mobile);
+    }
+    if (emailOrMobile) {
+      setemailOrMobile(emailOrMobile);
+    }
+  }, [mobile, emailOrMobile]);
   const handleMobileChange = (event) => {
-    const userphonenumber = event.target.value;
-    const isValidMobile = /^[0-9]{10}$/.test(userphonenumber);
+    const newMobile = event.target.value;
+    const isValidMobile = /^[0-9]{10}$/.test(newMobile);
 
-    setuserphonenumber(userphonenumber); // Update the state with the entered mobile number
-    setMobileValid(isValidMobile); // Update the state to indicate whether the mobile number is valid
+    setuserphonenumber(newMobile);
+    setMobileValid(isValidMobile);
+  };
+  const handleEmailChange = (event) => {
+    const processedInput = event.target.value.trim().toLowerCase();
+    setemailOrMobile(processedInput);
+    handleEmailValidation(processedInput);
   };
   // const [data, setdata] = useState({
   //   first_name: "",
@@ -1050,7 +1092,7 @@ const register = () => {
                     id="email"
                     label="Email"
                     variant="outlined"
-                    error={submitted && emailOrMobile.trim() === ""}
+                    // error={submitted && emailOrMobile.trim() === ""}
                     // helperText={
                     //   submitted && emailOrMobile.trim() === ""
                     //     ? "email is required"
@@ -1090,165 +1132,19 @@ const register = () => {
                     // value={email}
                     //onChange={(e) => handleEmailValidation(e.target.value)}
                     name="user_email"
-                    value={emailOrMobile}
+                    value={emailOrMobile1}
                     //onChange={(e) => setemailOrMobile(e.target.value)}
-                    onChange={(e) => {
-                      const processedInput = e.target.value.trim().toLowerCase();
-                      setemailOrMobile(processedInput);
-                      handleEmailValidation(processedInput);
-                    }}
+                    // onChange={(e) => {
+                    //   const processedInput = e.target.value.trim().toLowerCase();
+                    //   setemailOrMobile(processedInput);
+                    //   handleEmailValidation(processedInput);
+                    // }}
+                    onChange={handleEmailChange}
                   />
                   {/* {renderEmailValidationIcon()}{" "} */}
                 </div>
-                <div className={styles.password1}>
+                <div className={styles.mobileNumber}> 
                   <TextField
-                    id="password"
-                    label="Password"
-                    error={submitted && password.trim() === ""}
-                    value={password}
-                    required
-                  
-                    onChange={(e) => setPassword(e.target.value)}
-                    variant="outlined"
-                    className={styles.inputField}
-                    style={{ width: "210px", height: "50px" }}
-                    InputLabelProps={{
-                      style: { fontFamily: "poppins" },
-                    }}
-                    InputProps={{
-                      style: {
-                        backgroundSize: "19px 16px",
-                        backgroundPosition: "10px center",
-                        backgroundRepeat: "no-repeat",
-                        width: isMobile ? "100%" : "210px",
-                        height: "50px",
-                        // backgroundColor: "#F0EFFF",
-                        border: "none",
-                        fontFamily: "poppins",
-                        paddingLeft: "0px",
-                        borderRadius: "10px",
-                      },
-                      endAdornment: (
-                        <div
-                          className={styles.passwordToggleIcon}
-                          onClick={togglePasswordVisibility}
-                          style={{ color: "#A7A3FF",cursor:"pointer" }}
-                        >
-                          {showPassword ? <FaEye /> : <FaEyeSlash />}
-                        </div>
-                      ),
-                      autoComplete: "new-password",
-                    }}
-                    type={showPassword ? "text" : "password"}
-                  />
-                  <TextField
-                    id="password"
-                    required
-                    label="Confirm Password"
-                    error={submitted && confirmpassword.trim() === ""}
-                    value={confirmpassword}
-                    onChange={(e) => setConfirmpassword(e.target.value)}
-                    variant="outlined"
-                    className={styles.inputField}
-                    style={{ width: "210px", height: "50px" }}
-                    InputLabelProps={{
-                      style: { fontFamily: "poppins" },
-                    }}
-                    InputProps={{
-                      style: {
-                        backgroundSize: "19px 16px",
-                        backgroundPosition: "10px center",
-                        backgroundRepeat: "no-repeat",
-                        width: isMobile ? "100%" : "210px",
-                        height: "50px",
-                        // backgroundColor: "#F0EFFF",
-                        border: "none",
-                        fontFamily: "poppins",
-                        paddingLeft: "0px",
-                        borderRadius: "10px",
-                      },
-                      endAdornment: (
-                        <div
-                          className={styles.passwordToggleIcon}
-                          onClick={togglePasswordVisibility1}
-                          style={{ color: "#A7A3FF", cursor:"pointer" }}
-                        >
-                          {showPassword ? <FaEye /> : <FaEyeSlash />}
-                        </div>
-                      ),
-                      autoComplete: "new-password",
-                    }}
-                    type={showPassword ? "text" : "password"}
-                  />
-                </div>
-               
-
-                {/* Date of Birth, Occupation */}
-                <div className={styles.Dob}>
-                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker"]}
-                    >
-                      <DatePicker label="DOB" 
-                      className={styles1.customDatePicker}/>
-                    </DemoContainer>
-                  </LocalizationProvider> */}
-                  <TextField
-                    type="date"
-                    className={styles.iconInput}
-                    label="Date of birth"
-                    required
-                    focused
-                    error={submitted && dateofbirth.trim() === ""}
-                    // helperText={
-                    //   submitted && dateofbirth.trim() === ""
-                    //     ? "dateofbirth is required"
-                    //     : ""
-                    // }
-                    variant="outlined"
-                    style={{
-                      width: "210px",
-                      height: "44px",
-                      // marginRight: "20px",
-                      // marginBottom: "10px",
-                      // position: "relative",
-                      // top: "10px",
-                    }}
-                    InputLabelProps={{
-                      style: { fontFamily: "poppins",},
-                    }}
-                    InputProps={{
-                      style: {
-                        // backgroundImage: `url('/images/signup/firstNameIcon.png')`,
-                        //backgroundSize: "19px 16px",
-                        backgroundPosition: "150px center",
-                        backgroundRepeat: "no-repeat",
-                        width: "210px",
-                        height: "50px",
-                        paddingLeft: "0px",
-                        //backgroundColor: "#F0EFFF",
-                        border: "none",
-                        fontFamily: "poppins",
-
-                        borderRadius: "10px",
-                      },
-                      autoComplete: "off",
-                      // style={{
-                      //   backgroundImage: `url('images/signup/dateIcon.png')`,
-                      //   backgroundRepeat: "no-repeat",
-                      //   width: "179px",
-                      //   height: "44px",
-                      //   paddingLeft: "40px",
-                      //   backgroundPosition: "10px center",
-                      //   border:"1px solid #c2c2c2",
-
-                      //   borderRadius: "10px",
-                      // }}
-                    }}
-                    name="date_of_birth"
-                    value={dateofbirth}
-                    onChange={(handleDateChange)}
-                  />
-                   <TextField
                     id="mobileNumber"
                     label="Mobile Number"
                     variant="outlined"
@@ -1288,76 +1184,16 @@ const register = () => {
                       
                     }}
                     
-                    // onChange={(e) => handleMobileChange}
+                    onChange={handleMobileChange}
                     //name="user_phone_number"
-                    onChange={(e) => {
-                      handleMobileChange(e);
-                      setuserphonenumber(e.target.value);
-                    }}
+                    // onChange={(e) => {
+                    //   handleMobileChange(e);
+                    //   setuserphonenumber(e.target.value);
+                    // }}
                     value={userphonenumber}
                     //onChange={(e) => setuserphonenumber(e.target.value)}
-                  />
-               
-                </div>
-
-                {/* Email Address, Country, Mobile Number */}
-                {/* <div className={styles1.inputRow1}>
-                  <TextField
-                    // required
-                    id="email"
-                    label="Email Address"
-                    variant="outlined"
-                    error={submitted && emailOrMobile.trim() === ""}
-                    // helperText={
-                    //   submitted && emailOrMobile.trim() === ""
-                    //     ? "email is required"
-                    //     : ""
-                    // }
-                    className={styles.iconInput}
-                    style={{
-                      width: "432px",
-                      height: "44px",
-                      // marginTop: "10px",
-                      marginBottom: "20px",
-                    }}
-                    InputLabelProps={{
-                      style: { fontFamily: "poppins" },
-                    }}
-                    InputrequiredProps={{
-                      style: { color:"red", },
-                    }}
-                    InputProps={{
-                      style: {
-                        backgroundImage: `url('/images/signup/emailIcon.png')`,
-                        //backgroundSize: "19px 16px",
-                        backgroundPosition: "400px center",
-                        backgroundRepeat: "no-repeat",
-                        width: "432px",
-                        height: "50px",
-                        //backgroundColor: "#F0EFFF",
-                        border: "none",
-                        fontFamily: "poppins",
-                        fontSize: "15px",
-
-                        borderRadius: "10px",
-                      },
-                      autoComplete: "off",
-                      // readOnly: true,occupation
-                    }}
-                    // value={email}
-                    //onChange={(e) => handleEmailValidation(e.target.value)}
-                    name="user_email"
-                    value={emailOrMobile}
-                    //onChange={(e) => setemailOrMobile(e.target.value)}
-                    onChange={(e) => {
-                      handleEmailValidation(e.target.value);
-                      setemailOrMobile(e.target.value);
-                    }}
-                  />
-                  {/* {renderEmailValidationIcon()}{" "} */}
-                {/* </div>  */}
-                {/* Render email validation icon */}
-                <div className={styles.Occupation}>
+                  /></div>
+                   <div className={styles.Occupation}>
                   {/* <input
                       type="date"
                       className={styles.iconInput}
@@ -1502,6 +1338,274 @@ const register = () => {
                 />
                   )}
                 </div>
+                <div className={styles.Dob}>
+                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}
+                    >
+                      <DatePicker label="DOB" 
+                      className={styles1.customDatePicker}/>
+                    </DemoContainer>
+                  </LocalizationProvider> */}
+                  <TextField
+                    type="date"
+                    className={styles.iconInput}
+                    label="Date of birth"
+                    required
+                    focused
+                    error={submitted && dateofbirth.trim() === ""}
+                    // helperText={
+                    //   submitted && dateofbirth.trim() === ""
+                    //     ? "dateofbirth is required"
+                    //     : ""
+                    // }
+                    variant="outlined"
+                    style={{
+                      width: "210px",
+                      height: "44px",
+                      // marginRight: "20px",
+                      // marginBottom: "10px",
+                      // position: "relative",
+                      // top: "10px",
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins",},
+                    }}
+                    InputProps={{
+                      style: {
+                        // backgroundImage: `url('/images/signup/firstNameIcon.png')`,
+                        //backgroundSize: "19px 16px",
+                        backgroundPosition: "150px center",
+                        backgroundRepeat: "no-repeat",
+                        width: "210px",
+                        height: "50px",
+                        paddingLeft: "0px",
+                        //backgroundColor: "#F0EFFF",
+                        border: "none",
+                        fontFamily: "poppins",
+
+                        borderRadius: "10px",
+                      },
+                      autoComplete: "off",
+                      // style={{
+                      //   backgroundImage: `url('images/signup/dateIcon.png')`,
+                      //   backgroundRepeat: "no-repeat",
+                      //   width: "179px",
+                      //   height: "44px",
+                      //   paddingLeft: "40px",
+                      //   backgroundPosition: "10px center",
+                      //   border:"1px solid #c2c2c2",
+
+                      //   borderRadius: "10px",
+                      // }}
+                    }}
+                    name="date_of_birth"
+                    value={dateofbirth}
+                    onChange={(handleDateChange)}
+                  />
+                  <div>
+                   <TextField
+                   
+                    className={styles.iconInput}
+                    label="Age"
+                    
+                  
+                    error={submitted && dateofbirth.trim() === ""}
+                    // helperText={
+                    //   submitted && dateofbirth.trim() === ""
+                    //     ? "dateofbirth is required"
+                    //     : ""
+                    // }
+                    variant="standard"
+                    style={{
+                      width: "210px",
+                      height: "44px",
+                      // marginRight: "20px",
+                      // marginBottom: "10px",
+                      // position: "relative",
+                      // top: "10px",
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins",},
+                    }}
+                    InputProps={{
+                      disableUnderline: true,
+                      style: {
+                        // backgroundImage: `url('/images/signup/firstNameIcon.png')`,
+                        //backgroundSize: "19px 16px",
+                        backgroundPosition: "150px center",
+                        backgroundRepeat: "no-repeat",
+                        width: "210px",
+                        height: "50px",
+                        paddingLeft: "0px",
+                        //backgroundColor: "#F0EFFF",
+                        border: "none",
+                        fontFamily: "poppins",
+
+                        borderRadius: "10px",
+                      },
+                      autoComplete: "off",
+                      // style={{
+                      //   backgroundImage: `url('images/signup/dateIcon.png')`,
+                      //   backgroundRepeat: "no-repeat",
+                      //   width: "179px",
+                      //   height: "44px",
+                      //   paddingLeft: "40px",
+                      //   backgroundPosition: "10px center",
+                      //   border:"1px solid #c2c2c2",
+
+                      //   borderRadius: "10px",
+                      // }}
+                    }}
+                    name="date_of_birth"
+                    value={calculatedAge}
+                  />
+                <div className={styles.line} ></div>
+                </div>
+                </div>
+                <div className={styles.password1}>
+                  <TextField
+                    id="password"
+                    label="Password"
+                    error={submitted && password.trim() === ""}
+                    value={password}
+                    required
+                  
+                    onChange={(e) => setPassword(e.target.value)}
+                    variant="outlined"
+                    className={styles.inputField}
+                    style={{ width: "210px", height: "50px" }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins" },
+                    }}
+                    InputProps={{
+                      style: {
+                        backgroundSize: "19px 16px",
+                        backgroundPosition: "10px center",
+                        backgroundRepeat: "no-repeat",
+                        width: isMobile ? "100%" : "210px",
+                        height: "50px",
+                        // backgroundColor: "#F0EFFF",
+                        border: "none",
+                        fontFamily: "poppins",
+                        paddingLeft: "0px",
+                        borderRadius: "10px",
+                      },
+                      endAdornment: (
+                        <div
+                          className={styles.passwordToggleIcon}
+                          onClick={togglePasswordVisibility}
+                          style={{ color: "#A7A3FF",cursor:"pointer" }}
+                        >
+                          {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </div>
+                      ),
+                      autoComplete: "new-password",
+                    }}
+                    type={showPassword ? "text" : "password"}
+                  />
+                  <TextField
+                    id="password"
+                    required
+                    label="Confirm Password"
+                    error={submitted && confirmpassword.trim() === ""}
+                    value={confirmpassword}
+                    onChange={(e) => setConfirmpassword(e.target.value)}
+                    variant="outlined"
+                    className={styles.inputField}
+                    style={{ width: "210px", height: "50px" }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins" },
+                    }}
+                    InputProps={{
+                      style: {
+                        backgroundSize: "19px 16px",
+                        backgroundPosition: "10px center",
+                        backgroundRepeat: "no-repeat",
+                        width: isMobile ? "100%" : "210px",
+                        height: "50px",
+                        // backgroundColor: "#F0EFFF",
+                        border: "none",
+                        fontFamily: "poppins",
+                        paddingLeft: "0px",
+                        borderRadius: "10px",
+                      },
+                      endAdornment: (
+                        <div
+                          className={styles.passwordToggleIcon}
+                          onClick={togglePasswordVisibility1}
+                          style={{ color: "#A7A3FF", cursor:"pointer" }}
+                        >
+                          {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </div>
+                      ),
+                      autoComplete: "new-password",
+                    }}
+                    type={showPassword ? "text" : "password"}
+                  />
+                </div>
+              
+               
+                {/* Date of Birth, Occupation */}
+               
+
+                {/* Email Address, Country, Mobile Number */}
+                {/* <div className={styles1.inputRow1}>
+                  <TextField
+                    // required
+                    id="email"
+                    label="Email Address"
+                    variant="outlined"
+                    error={submitted && emailOrMobile.trim() === ""}
+                    // helperText={
+                    //   submitted && emailOrMobile.trim() === ""
+                    //     ? "email is required"
+                    //     : ""
+                    // }
+                    className={styles.iconInput}
+                    style={{
+                      width: "432px",
+                      height: "44px",
+                      // marginTop: "10px",
+                      marginBottom: "20px",
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins" },
+                    }}
+                    InputrequiredProps={{
+                      style: { color:"red", },
+                    }}
+                    InputProps={{
+                      style: {
+                        backgroundImage: `url('/images/signup/emailIcon.png')`,
+                        //backgroundSize: "19px 16px",
+                        backgroundPosition: "400px center",
+                        backgroundRepeat: "no-repeat",
+                        width: "432px",
+                        height: "50px",
+                        //backgroundColor: "#F0EFFF",
+                        border: "none",
+                        fontFamily: "poppins",
+                        fontSize: "15px",
+
+                        borderRadius: "10px",
+                      },
+                      autoComplete: "off",
+                      // readOnly: true,occupation
+                    }}
+                    // value={email}
+                    //onChange={(e) => handleEmailValidation(e.target.value)}
+                    name="user_email"
+                    value={emailOrMobile}
+                    //onChange={(e) => setemailOrMobile(e.target.value)}
+                    onChange={(e) => {
+                      handleEmailValidation(e.target.value);
+                      setemailOrMobile(e.target.value);
+                    }}
+                  />
+                  {/* {renderEmailValidationIcon()}{" "} */}
+                {/* </div>  */}
+                {/* Render email validation icon */}
+               
                 {/* Postal Code, City */}
                 {/* <div className={styles.inputRow10}>
                   <TextField

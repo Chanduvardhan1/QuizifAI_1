@@ -612,70 +612,69 @@ const Quiz = () => {
                                 : "Open Navbar"}
                             </svg>
                             {cardStates[index] && (
-                              <div
-                                className={styles.infoIcons}
-                                style={{ marginTop: "-28px"}}
+                              <div className={styles.infoIcons1} style={{ marginLeft:"-122px", marginTop: "-28px"}}>
+                              <div className={styles.start}>
+                              <img
+                                className=" w-[10px] h-[10px]"
+                                src={eye}
+                                alt="Play icon"
+                              />
+                              <span
+                                className="text-[8px]   cursor-pointer hover:text-black"
+                                onClick={() =>
+                                  quizresults(
+                                    quizItem.quiz_id,
+                                    quizItem.quiz_level_attempt_id
+                                  )
+                                }
                               >
-                                <img
-                                  className="absolute h-[9px] w-[9px] left-[6px] top-1"
-                                  src={eye}
-                                  alt="Play icon"
-                                />
-                                <span
-                                  className="text-[8px] pl-[27px] -ml-[9px]  cursor-pointer hover:text-black"
-                                  onClick={() =>
-                                    quizresults(
-                                      quizItem.quiz_id,
-                                      quizItem.quiz_level_attempt_id
-                                    )
-                                  }
-                                >
-                                  View
-                                </span>
-                                <img
-                                  className="absolute h-[9px] w-[9px]  left-[14px] -ml-2 top-[15.5px]"
-                                  src={Share_button}
-                                  alt="download icon"
-                                />
-                                <span className="text-[8px] -ml-[18px] absolute top-[14px] left-9 cursor-pointer hover:text-black"
-                                 onClick={() =>
-                                  handleStartQuiz(quizItem.quiz_id)
-                                }>
-                                   Retake
-                                </span>
-                                <img
-                                  className={styles.leaderboardimage}
-                                  style={{ marginTop: "1px" }}
-                                  src={leaderboard_button}
-                                  alt="Play icon"
-                                />
-                                <span
-                                  className={styles.leaderboardtext}
-                                  onClick={() =>
-                                    leaderboard1(
-                                      quizItem.quiz_id,
-                                      quizItem.quiz_level_attempt_id,
-                                      quizItem.quiz_duration,
-                                      quizItem.complexity
-                                    )
-                                  }
-                                >
-                                  Leaderboard
-                                </span>
-                                {/* <img
-                                  className={styles.shareimage}
-                                  style={{ marginTop: "2px" }}
-                                  
-                                  src={download}
-                                  alt="Play icon"
-                                />
-                                <span
-                                  className={styles.sharetext}
-                                 
-                                >
-                                  Download
-                                </span> */}
+                                View
+                              </span>
                               </div>
+                              <div className={styles.retake}>
+                              <img
+                                className=" h-[10px] w-[10px] "
+                                src={Share_button}
+                                alt="download icon"
+                              />
+                              <span
+                                className="text-[8px] - cursor-pointer hover:text-black"
+                                onClick={() =>
+                                  handleStartQuiz(quizItem.quiz_id)
+                                }
+                              >
+                                Retake
+                              </span>
+                              </div>
+                              <div className={styles.leaderboard}>
+                              <img
+                                className={styles.leaderboardimage}
+                                style={{ marginTop: "1px" }}
+                                src={leaderboard_button}
+                                alt="Play icon"
+                              />
+                              <span
+                                className={styles.leaderboardtext}
+                                onClick={() =>
+                                  leaderboard1(
+                                    quizItem.quiz_id,
+                                    quizItem.quiz_level_attempt_id,
+                                    quizItem.complexity,
+                                    quizItem.quiz_duration
+                                  )
+                                }
+                              >
+                                Leaderboard
+                              </span>
+                              </div>
+                              {/* <img
+                            className={styles.shareimage} style={{marginTop:"2px"}}
+                            
+                            src={download}
+                            alt="Play icon"
+                          />
+                          <span className={styles.sharetext} >Download</span> */}
+                            </div>
                             )}
                           </div>
                         </div>
@@ -923,6 +922,7 @@ const Quiz = () => {
                                     Start
                                   </span>
                                 </div>
+                                {userRole === "Quiz Master" && (
                                 <div className={styles.edit}>
                                   <img
                                     className={styles.editimage}
@@ -936,6 +936,7 @@ const Quiz = () => {
                                     Edit
                                   </span>
                                 </div>
+                                )}
                                 <div className={styles.leaderboard}>
                                   <img
                                     className={styles.leaderboardimage}

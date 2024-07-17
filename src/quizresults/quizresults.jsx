@@ -373,13 +373,13 @@ if (!Array.isArray(leaderboardData)) {
         </div>
         <div>
 
-<span className={styles.Question} >Total Marks:</span>{" "}
+<span className={styles.Question} >Total Marks :</span>{" "}
   <span className={styles.username1} >{`${quizData.quiz_total_marks}`}</span>
 </div>
 <div>
 
 <span className={styles.Question } >Pass Percentage :</span>{" "}
-  <span className={styles.username1} >{`${quizData.attempt_percentage}`}</span>
+  <span className={styles.username1} >{`${quizData.attempt_percentage}`}%</span>
 </div>
 {/* <div>
 
@@ -390,12 +390,12 @@ if (!Array.isArray(leaderboardData)) {
           <div className={styles.Createdbyupdated}>
         <div className={styles.Created}>
 
-        <span className={styles.Createdby} >Created By:</span>{" "}
+        <span className={styles.Createdby} >Created By :</span>{" "}
           <span className={styles.username} >{`${quizData.created_by}`}</span>
         </div>
         <div>
 
-        <span className={styles.Createdby} >Created On:</span>{" "}
+        <span className={styles.Createdby} >Created On :</span>{" "}
           <span className={styles.username} >{`${quizData.created_on}`}</span>
         </div>
         </div>
@@ -636,7 +636,7 @@ if (!Array.isArray(leaderboardData)) {
             <div key={entry.rank}  >
               {/* <img src={images[index]} alt={`img ${index + 1}`} /> */}
               <span className={styles[`textOverImage${index + 1}`]} >
-                {entry.user_name} <br /> <span style={{color:'#e20000'}}>{entry.attained_percentage}</span>
+                {entry.user_name} <br /> <span style={{color:'#e20000'}}>{entry.attained_percentage}%</span>
               </span>
               {/* <span className={styles[`textOvernumber${index + 1}`]} >
                  {entry.attained_percentage}

@@ -96,11 +96,12 @@ const Signup = () => {
   //     state: dataa,
   //   });
   // };
-  function handleOpenGmail(loginMethod,emailOrMobile) {
+  function handleOpenGmail(mobile, emailOrMobile) {
     navigate("/register", {
-      state: { emailMobOption: loginMethod, emailMob: emailOrMobile },
+      state: { mobile, emailOrMobile },
     });
   }
+  
   useEffect(() => {
     let timer;
     if (resendTime > 0) {
@@ -139,9 +140,11 @@ const Signup = () => {
 
       return () => clearInterval(timer);
     } else if (showRegistrationSuccess && countdown === 0) {
-      navigate("/register");
+      navigate("/register", {
+        state: { mobile, emailOrMobile },
+      });
     }
-  }, [showRegistrationSuccess, countdown]);
+  }, [showRegistrationSuccess, countdown, mobile, emailOrMobile, navigate]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -187,7 +190,7 @@ const Signup = () => {
 if (hasError) {
     return;
 }
-localStorage.setItem('emailOrMobile', emailOrMobile);
+// localStorage.setItem('emailOrMobile', emailOrMobile);
     setResendAvailable(false); // Disable resend button after sending OTP
     setResendTime(10 * 60);
     const userData = {
@@ -357,7 +360,7 @@ localStorage.setItem('emailOrMobile', emailOrMobile);
 if (hasError) {
     return;
 }
-localStorage.setItem('mobile', mobile);
+// localStorage.setItem('mobile', mobile);
     setResendAvailable1(false); // Disable resend button after sending OTP
     setResendTime1(10 * 60);
     const userData = {
@@ -504,7 +507,7 @@ localStorage.setItem('mobile', mobile);
       if (data.response === "success" && data.response_message === "Mobile is verified you can proceed with registration.") {
         // setShowSecondButton(true);
         setShowRegistrationSuccess(true);
-        handleOpenGmail(loginMethod,mobile);
+        // handleOpenGmail(mobile, emailOrMobile);
       } else if (
         data.response === "fail" &&
         data.response_message ===
@@ -562,6 +565,7 @@ localStorage.setItem('mobile', mobile);
       if (data.response === "success"  && data.response_message ==="Email is Verified you can proceed with registration.") {
         // setShowSecondButton(true);
         setShowRegistrationSuccess(true);
+        // handleOpenGmail(mobile, emailOrMobile);
       }  else if (
         data.response === "fail" &&
         data.response_message ===

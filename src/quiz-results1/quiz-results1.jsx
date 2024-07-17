@@ -65,7 +65,7 @@ const Questions = () => {
   const { quizId , quizTotalMarks, passPercentage,quizname,quizdescription,createdby,complexity,numberofquestions,quizduration,  mincompletiontime,
     quizattempts,
     avgscore,
-    max_percentage} = location.state || {};
+    max_percentage,quizcreatedate} = location.state || {};
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [quizData, setQuizData] = useState({});
   const [quizMetrics, setQuizMetrics] = useState({})
@@ -155,7 +155,7 @@ const topThree = leaderboardData.slice(0, 3);
 <div>
 
 <span className={styles.Question } >Pass Percentage : </span>{" "}
-  <span className={styles.username1} >{passPercentage}</span>
+  <span className={styles.username1} >{passPercentage}%</span>
 </div>
 <div>
 
@@ -172,7 +172,7 @@ const topThree = leaderboardData.slice(0, 3);
         <div>
 
         <span className={styles.Createdby} >Created On : </span>{" "}
-          <span className={styles.username} >{`${quizData.created_date}`}</span>
+          <span className={styles.username} >{quizcreatedate}</span>
         </div>
         </div>
         </div>
@@ -323,7 +323,7 @@ const topThree = leaderboardData.slice(0, 3);
                 style={{ width: "100px" }}
               >
                 {item.user_name}<br />
-                <span style={{ color: index === 0 ? "#e20000" : index === 1 ? "#e20000" : "#e20000" }}>{item.attained_percentage}</span>
+                <span style={{ color: index === 0 ? "#e20000" : index === 1 ? "#e20000" : "#e20000" }}>{item.attained_percentage}%</span>
               </span>
             </div>
           ))}

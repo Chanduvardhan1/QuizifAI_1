@@ -303,22 +303,22 @@ const leaderboard = () => {
         <div>
 
         <span className={styles.Question} >Duration:</span>{" "}
-          <span className={styles.username1} >{complexity} Min</span>
+          <span className={styles.username1} >{quizduration} Min</span>
         </div>
         <div>
 
-<span className={styles.Question} >Total Score:</span>{" "}
+<span className={styles.Question} >Total Marks:</span>{" "}
   <span className={styles.username1} >{`${quizData.quiz_total_marks}`}</span>
 </div>
 <div>
 
-<span className={styles.Question } >Pass Score :</span>{" "}
-  <span className={styles.username1} >{`${quizData.attempt_percentage}`}</span>
+<span className={styles.Question } >Pass Percentage :</span>{" "}
+  <span className={styles.username1} >{`${quizData.attempt_percentage}`}%</span>
 </div>
 <div>
 
 <span className={styles.Question } >complexity :</span>{" "}
-  <span className={styles.username1} >{quizduration} </span>
+  <span className={styles.username1} >{complexity} </span>
 </div>
         </div>
           <div className={styles.Createdbyupdated}>
@@ -570,7 +570,7 @@ const leaderboard = () => {
             <div key={entry.rank}  >
               {/* <img src={images[index]} alt={`img ${index + 1}`} /> */}
               <span className={styles[`textOverImage${index + 1}`]} >
-                {entry.user_name} <br /> <span style={{color:'#e20000'}}>{entry.attained_percentage}</span>
+                {entry.user_name} <br /> <span style={{color:'#e20000'}}>{entry.attained_percentage}%</span>
               </span>
               {/* <span className={styles[`textOvernumber${index + 1}`]} >
                  {entry.attained_percentage}
