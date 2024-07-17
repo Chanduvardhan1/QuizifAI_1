@@ -238,7 +238,7 @@ const Back = () => {
                     Complexity:{quizData.quiz_complexity_name}
                   </h1> */}
                   <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">pass percentage :</span>
-                  <span> {quizData.pass_percentage}</span>
+                  <span> {quizData.pass_percentage}%</span>
                 </div>
                 {/* <img className="w-[31px] h-[16.41px] absolute top-[336px] left-[784px]" src={Medium}/>
            <img className="w-[31px] h-[16.41px] absolute top-[334px] left-[849px]" src={Complex}/> */}
@@ -252,7 +252,7 @@ const Back = () => {
                     {quizData.num_questions} questions
                   </h1> */}
                   <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">Duration :</span>
-                  <span> {quizData.quiz_duration} Min</span>
+                  <span> {quizData.quiz_duration} min</span>
                 </div>
                 <div className="w-[180px] h-[22px] absolute top-[356px] left-[915px]">
                   {/* <h1 className="font-Poppins text-[#214082] font-semibold text-[15px] leading-[22.5px] text-[#555555]">
@@ -311,7 +311,7 @@ const Back = () => {
                     {" "}
                     Retake this paper:{quizData.retake_flag}
                   </h1> */}
-                  <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">Retake this paper : </span>
+                  <span className="font-Poppins text-[#214082] text-[15px] font-bold leading-[40px]  ">Retake Attempt : </span>
                   <span>{quizData.retake_flag}</span>
                 </div>
                 {/* <img

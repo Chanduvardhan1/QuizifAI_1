@@ -131,6 +131,19 @@ const QuizQuestions = () => {
   const [elapsedTime, setElapsedTime] = useState(quiz_duration * 60); 
   const timerRef = useRef(null);
 
+  const handleNextClick = () => {
+    if (currentQuestionIndex + 1 < filteredQuizData.length) {
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    }
+  };
+
+  const handlePrevClick = () => {
+    if (currentQuestionIndex - 1 >= 0) {
+      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
+  const startIndex = Math.floor(currentQuestionIndex / 10) * 10; // Calculate startIndex based on currentQuestionIndex
 
   useEffect(() => {
     const quizId = localStorage.getItem("quiz_id");
@@ -345,19 +358,19 @@ const QuizQuestions = () => {
 </div>
 <div>
 
-<span className={styles.Question } >Pass percentage :</span>{" "}
-  <span className={styles.username1} >{pass_percentage}</span>
+<span className={styles.Question } >Pass Percentage :</span>{" "}
+  <span className={styles.username1} >{pass_percentage}%</span>
 </div>
         </div>
         <div className={styles.Createdbyandupdated}>
         <div className={styles.Createdby}>
 
-        <span className={styles.Created} style={{color:"#214082"}} >Created By:</span>{" "}
+        <span className={styles.Created} style={{color:"#214082"}} >Created By :</span>{" "}
           <span className={styles.username} >{`${quizData.created_by}`}</span>
         </div>
         <div>
 
-        <span className={styles.Created}style={{color:"#214082"}} >Created On:</span>{" "}
+        <span className={styles.Created}style={{color:"#214082"}} >Created On :</span>{" "}
           <span className={styles.username} >{`${quizData.created_on}`}</span>
         </div>
         </div>
@@ -479,19 +492,31 @@ const QuizQuestions = () => {
 
     {/* </div> */}
     <div className={styles.questionNumbersContainer}>
-    {filteredQuizData.map((_, index) => {
-          const isSelected = selectedOptions[index] !== undefined;
+        {/* Previous Button */}
+        {startIndex >= 10 && (
+          <button onClick={handlePrevClick}>&lt;</button>
+        )}
+
+        {/* Question Numbers */}
+        {filteredQuizData.slice(startIndex, startIndex + 10).map((_, index) => {
+          const actualIndex = startIndex + index;
+          const isSelected = selectedOptions[actualIndex] !== undefined;
+
           return (
             <div
-              key={index}
+              key={actualIndex}
               className={`${styles.questionNumber} ${isSelected ? styles.selected : ''}`}
-              onClick={() => handleQuestionClick(index)}
+              onClick={() => handleQuestionClick(actualIndex)}
             >
-              {index + 1}
+              {actualIndex + 1}
             </div>
           );
         })}
-         
+
+        {/* Next Button */}
+        {startIndex + 10 < filteredQuizData.length && (
+          <button onClick={handleNextClick}>&gt;</button>
+        )}
       </div>
     <div className={styles.currentQuestion}>
       {currentQuestion && (

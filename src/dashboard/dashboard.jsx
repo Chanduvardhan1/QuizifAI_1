@@ -47,7 +47,14 @@ const Dashboard = () => {
 
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
   const [username, setUsername] = useState("");
+
+  const [retakeCount, setRetakeCount] = useState(0);
+  const [retakeFlag, setRetakeFlag] = useState(0);
+
   const navigate = useNavigate();
+
+
+  
   useEffect(() => {
     const handleWindowClose = () => {
       fetch("https://quizifai.com:8010/usr_logout/", {
@@ -131,7 +138,8 @@ const Dashboard = () => {
     mincompletiontime,
     quizattempts,
     avgscore,
-    max_percentage
+    max_percentage,
+    quizcreatedate
   ) => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     navigate("/quiz-results1", {
@@ -148,7 +156,7 @@ const Dashboard = () => {
         mincompletiontime,
         quizattempts,
         avgscore,
-        max_percentage
+        max_percentage,quizcreatedate
       },
     });
   };
@@ -504,7 +512,7 @@ const Dashboard = () => {
                         </span>
                       </span>
                       <div className={styles.iconContainer}>
-                        <div className="z-40 mb-[2px] pl-[36px] font-normal rounded -mt-[13px]">
+                        <div className="z-40 mb-[2px]  font-normal rounded -mt-[13px]">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -522,14 +530,15 @@ const Dashboard = () => {
                             {cardStates[index] ? "Close Navbar" : "Open Navbar"}
                           </svg>
                           {cardStates[index] && (
-                            <div className={styles.infoIcons1} style={{marginRight: "12px", marginTop: "-28px"}}>
+                            <div className={styles.infoIcons1} style={{ marginLeft:"-122px", marginTop: "-28px"}}>
+                              <div className={styles.start}>
                               <img
-                                className="absolute h-[1px] w-[1px] left-[6px] top-1"
+                                className=""
                                 src={eye}
                                 alt="Play icon"
                               />
                               <span
-                                className="text-[8px] pl-[27px] -ml-[9px]  cursor-pointer hover:text-black"
+                                className="text-[8px]   cursor-pointer hover:text-black"
                                 onClick={() =>
                                   quizresults(
                                     quizItem.quiz_id,
@@ -539,19 +548,25 @@ const Dashboard = () => {
                               >
                                 View
                               </span>
+                              </div>
+                              {quizItem.retake_flag > 0 && (
+                              <div className={styles.retake}>
                               <img
-                                className="absolute h-[10px] w-[10px]  left-[14px] -ml-2 top-[17px]"
+                                className=" h-[10px] w-[10px] "
                                 src={Share_button}
                                 alt="download icon"
                               />
                               <span
-                                className="text-[8px] -ml-[18px] absolute top-[15px] left-9 cursor-pointer hover:text-black"
+                                className="text-[8px] - cursor-pointer hover:text-black"
                                 onClick={() =>
                                   handleStartQuiz(quizItem.quiz_id)
                                 }
                               >
                                 Retake
                               </span>
+                              </div>
+                              )}
+                              <div className={styles.leaderboard}>
                               <img
                                 className={styles.leaderboardimage}
                                 style={{ marginTop: "1px" }}
@@ -571,6 +586,7 @@ const Dashboard = () => {
                               >
                                 Leaderboard
                               </span>
+                              </div>
                               {/* <img
                             className={styles.shareimage} style={{marginTop:"2px"}}
                             
@@ -768,7 +784,7 @@ const Dashboard = () => {
                       </span>
 
                       <div className={styles.iconContainer}>
-                        <div className="z-40 mb-[2px] pl-[36px] font-normal rounded">
+                        <div className="z-40 mb-[2px]  font-normal rounded">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -803,6 +819,7 @@ const Dashboard = () => {
                                   Start
                                 </span>
                               </div>
+                              {userRole === "Quiz Master" && (
                               <div className={styles.edit}>
                                 <img
                                   className={styles.editimage}
@@ -816,6 +833,7 @@ const Dashboard = () => {
                                   Edit
                                 </span>
                               </div>
+                              )}
                               <div className={styles.leaderboard}>
                                 <img
                                   className={styles.leaderboardimage}
@@ -840,6 +858,7 @@ const Dashboard = () => {
                                       quizItem.quiz_attempts,
                                       quizItem.avg_score,
                                       quizItem.max_percentage,
+                                      quizItem.quiz_create_date
                                       
                                     )
                                   }
@@ -1038,7 +1057,7 @@ const Dashboard = () => {
                         </span>
                       </span>
                       <div className={styles.iconContainer}>
-                        <div className="z-40 mb-[2px] pl-[36px] font-normal rounded -mt-[12px] relative -top-[5px] right-[2px]">
+                        <div className="z-40 mb-[2px]  font-normal rounded -mt-[12px] relative -top-[5px] right-[2px]">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -1058,13 +1077,14 @@ const Dashboard = () => {
 
                           {cardStats[index] && (
                             <div className={styles.infoIcons} style={{marginTop: "-23px", marginLeft: "-118px"}}>
+                              <div className={styles.start}>
                               <img
-                                className="absolute h-[1px] w-[1px] left-[6px] top-1"
+                                className=""
                                 src={eye}
                                 alt="Play icon"
                               />
                               <span
-                                className="text-[8px] pl-[27px] -ml-[9px]  cursor-pointer hover:text-black"
+                                className="text-[8px]  cursor-pointer hover:text-black"
                                 onClick={() =>
                                   quizresults(
                                     quizItem.quiz_id,
@@ -1074,19 +1094,25 @@ const Dashboard = () => {
                               >
                                 View
                               </span>
+                              </div>
+                              {quizItem.retake_flag > 0 && (
+                              <div className={styles.retake}>
                               <img
-                                className="absolute h-[10px] w-[10px]  left-[14px] -ml-2 top-[17px]"
+                                className=" h-[10px] w-[10px] "
                                 src={Share_button}
                                 alt="download icon"
                               />
                               <span
-                                className="text-[8px] -ml-[18px] absolute top-[15px] left-9 cursor-pointer hover:text-black"
+                                className="text-[8px]  cursor-pointer hover:text-black"
                                 onClick={() =>
                                   handleStartQuiz(quizItem.quiz_id)
                                 }
                               >
                                 Retake
                               </span>
+                              </div>
+                              )}
+                              <div className={styles.leaderboard}>
                               <img
                                 className={styles.leaderboardimage}
                                 style={{ marginTop: "1px" }}
@@ -1106,6 +1132,7 @@ const Dashboard = () => {
                               >
                                 Leaderboard
                               </span>
+                              </div>
                               {/* <img
                             className={styles.shareimage} style={{marginTop:"2px"}}
                             
@@ -1304,7 +1331,7 @@ const Dashboard = () => {
                       </span>
 
                       <div className={styles.iconContainer}>
-                        <div className="z-40 mb-[2px] pl-[36px] font-normal rounded">
+                        <div className="z-40 mb-[2px]  font-normal rounded">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -1327,7 +1354,7 @@ const Dashboard = () => {
                           {cardStatuss[index] && (
                             <div
                               className={styles.infoIcons}
-                              style={{ marginTop: "-29px" }}
+                              style={{ marginTop: "-29px",marginLeft:"-115px" }}
                             >
                               <div className={styles.start}>
                                 <img
@@ -1344,6 +1371,8 @@ const Dashboard = () => {
                                   Start
                                 </span>
                               </div>
+                              {userRole === "Quiz Master" && (
+
                               <div className={styles.edit}>
                                 <img
                                   className={styles.editimage}
@@ -1357,6 +1386,7 @@ const Dashboard = () => {
                                   Edit
                                 </span>
                               </div>
+                              )}
                               <div className={styles.leaderboard}>
                                 <img
                                   className={styles.leaderboardimage}
@@ -1380,6 +1410,7 @@ const Dashboard = () => {
                                       quizItem.quiz_attempts,
                                       quizItem.avg_score,
                                       quizItem.max_percentage,
+                                      quizItem.quiz_create_date
                                     )
                                   }
                                 >

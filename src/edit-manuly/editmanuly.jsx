@@ -5,6 +5,7 @@ import Navigation from "../navbar/navbar";
 import { useNavigate } from "react-router-dom";
 // import { useHistory } from 'react-router-dom';
 import { MdOutlineCancel } from "react-icons/md";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 // Navbar-icons
 import QuizifAilogo from "../assets/Images/images/home/Quizifai3.png";
@@ -1758,24 +1759,25 @@ const handleQuizTotalMarksChange = (e) => {
 
             {/* Questions and options */}
             <div className="absolute top-[210px] left-[284px] ">
-              <div className=" flex justify-between items-center mb-[10px] pr-[40px] ">
-              <div className="ml-[-20px] mr-[5px]" >
+              <div className=" flex  items-center mb-[10px] pl-[20px] ">
+              {/* <div className="ml-[-20px] mr-[5px]" >
         <input 
           type="checkbox"
           checked={isAllSelected}
           onChange={handleSelectAll}
         />
-        <label className="ml-[5px] font-normal text-[#214082]">Select All</label>
-      </div>
-                <div>
+        <label className="ml-[5px] font-normal text-[#214082]">Select</label>
+      </div> */}
+                <div >
             {selectedQuestions.length > 0 && (
         <button
           onClick={handleDeleteSelected}
-          className="bg-orange-500 text-white p-2 text-[14px] rounded-full "
+          className="  text-black p-2 text-[14px] rounded-full  flex justify-center items-center gap-[3px]"
         >
-          Delete
+           <RiDeleteBinLine className=" text-orange-500 w-[20px] h-[20px] ml-[-5px]"  /> <span className=" text-[#214082]">Delete</span>
         </button>
       )}
+       
       </div>
   
       </div>
@@ -1857,7 +1859,7 @@ const handleQuizTotalMarksChange = (e) => {
         }}
         className="w-[30px] h-[30px] text-orange-500"
       > */}
-       <FaXmark onClick={() => {
+       <RiDeleteBinLine onClick={() => {
           const newQuestions = questions.filter((_, index) => index !== questionIndex);
           setQuestions(newQuestions);
           setNumQuestions(newQuestions.length);
