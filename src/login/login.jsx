@@ -42,6 +42,8 @@ const LoginPage = () => {
   const [emailError, setEmailError] = useState(false);
   const [loginOption, setloginOption] = useState("");
   const [platform, setplatform] = useState("")
+  const [Forgotmassage, setForgotmassage] = useState("")
+  const [Forgotmobile, setForgotmobile] = useState("")
   const validateEmail = () => {
     return /\S+@\S+\.\S+/.test(email);
   };
@@ -316,7 +318,8 @@ const LoginPage = () => {
           navigate("/resetpassword", { state: { userId,email} });
         }
       } else {
-        alert(data.response_message);
+        setForgotmassage(data.response_message);
+        setForgotmassage(data.output);
       }
     })
     .catch((error) => {
@@ -1023,6 +1026,7 @@ const LoginPage = () => {
                       {/* </div> */}
                   
                       <div className={styles.buttonContainer}>
+                     
                         <button
                           className={`${styles.submitButton} ${styles.button1}`}
                           onClick={handleForgotPasswordSubmit}
@@ -1035,6 +1039,7 @@ const LoginPage = () => {
                         >
                           Send OTP
                         </button>
+                     
                         {/* <button
                           className={`${styles.cancelButton} ${styles.button1}`}
                           style={{
@@ -1047,6 +1052,12 @@ const LoginPage = () => {
                           Cancel
                         </button> */}
                       </div>
+                      {Forgotmassage && (
+                <>
+                 
+                  <p className={styles.Forgotmassage} >{Forgotmassage}</p>
+                </>
+              )}
                       </div>
                       {errorMessage && (
                 <>

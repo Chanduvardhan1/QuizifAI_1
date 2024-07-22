@@ -439,6 +439,11 @@
   color: #454B60;
 }
 
+.Forgotmassage{
+  display: flex;
+  justify-content: center;
+  color: red;
+}
 .loginButton {
   width: 80px;
   height: 30px;

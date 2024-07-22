@@ -121,7 +121,14 @@ margin-right: 700px;
 .Createdbyupdated{
   display: flex;
   /* justify-content: space-between; */
-  gap: 150px; 
+  /* gap: 150px;  */
+  flex-direction: column;
+}
+.flexrow{
+  display: flex;
+  /* flex-direction: column; */
+  gap: 100px;
+
 }
   .icon1{
     width: 51px;
@@ -166,7 +173,7 @@ text-align: left;
   
 .horizontalLine {
     border: 1px dashed #555555; /* Add border style */
-    margin-top: 30px; /* Adjust margin top for spacing */
+    /* Adjust margin top for spacing */
     width: 800px;
     margin-left: 40px;
 border: 1;
@@ -912,8 +919,9 @@ margin-top: 30px;
 
 }
 .Questionslines{
-  display:flex;
-  gap:43px;
+  display: flex;
+  /* gap: 43px; */
+  flex-direction: column;
 }
 .Question{
   font-family: Poppins;

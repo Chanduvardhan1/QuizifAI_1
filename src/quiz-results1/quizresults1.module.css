@@ -14,7 +14,12 @@
   position: absolute;
   left: 0;
 }
-
+.flexrow{
+  display: flex;
+  /* flex-direction: column; */
+  gap: 100px;
+  margin-bottom: 10px;
+}
 .pageList{
   margin-top: 100px;
 }
@@ -656,8 +661,9 @@ font-size: 14px;
 .Createdbyupdated{
 display: flex;
 /* justify-content: space-between; */
-gap: 260px;
+gap: 5px;
 font-size: 14px;
+flex-direction: column;
 }
 .Createdby {
 font-family: Poppins;
@@ -908,7 +914,7 @@ text-align: left;
 }
 .Questionslines{
   display: flex;
-  gap: 45px;
+ flex-direction: column;
 }
 .Question{
   font-family: Poppins;

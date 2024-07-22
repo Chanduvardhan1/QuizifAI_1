@@ -165,12 +165,29 @@ const Dashboard = () => {
   //   localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
   //   navigate('/leaderboard', { state: { quizId, quizTotalMarks, passPercentage } });
   // };
-  const leaderboard1 = (quizId, attemptId, complexity,quizduration) => {
+  const leaderboard1 = (quizId, attemptId, complexity,quizduration,passpercentage) => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
-    localStorage.setItem("quiz_level_attempt_id", attemptId);
-    localStorage.setItem("complexity", complexity); // Store attempt_id in local storage
-    localStorage.setItem("quiz_duration", quizduration);
-    navigate(`/leaderboard`);
+    // localStorage.setItem("quiz_level_attempt_id", attemptId);
+    // localStorage.setItem("complexity", complexity); // Store attempt_id in local storage
+    // localStorage.setItem("quiz_duration", quizduration);
+    navigate(`/leaderboard`,{
+      state: {
+        quizId,
+        attemptId,
+        complexity,
+        quizduration,
+        passpercentage,
+        // quizdescription,
+        // createdby,
+        // numberofquestions,
+        // quizduration,
+        // complexity,
+        // mincompletiontime,
+        // quizattempts,
+        // avgscore,
+        // max_percentage,quizcreatedate
+      },
+    });
   };
   const Edit = (quizId) => {
     // navigate(`/quizaccess/${quizId}`);
@@ -580,7 +597,8 @@ const Dashboard = () => {
                                     quizItem.quiz_id,
                                     quizItem.quiz_level_attempt_id,
                                     quizItem.complexity,
-                                    quizItem.quiz_duration
+                                    quizItem.quiz_duration,
+                                    quizItem.pass_percentage,
                                   )
                                 }
                               >
@@ -1125,8 +1143,9 @@ const Dashboard = () => {
                                   leaderboard1(
                                     quizItem.quiz_id,
                                     quizItem.quiz_level_attempt_id,
+                                    quizItem.complexity,
                                     quizItem.quiz_duration,
-                                    quizItem.complexity
+                                    quizItem.pass_percentage,
                                   )
                                 }
                               >

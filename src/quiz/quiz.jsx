@@ -287,12 +287,29 @@ const Quiz = () => {
     });
   };
 
-  const leaderboard1 = (quizId, attemptId, quizduration, complexity) => {
+  const leaderboard1 = (quizId, attemptId, complexity,quizduration,passpercentage) => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
-    localStorage.setItem("quiz_level_attempt_id", attemptId);
-    localStorage.setItem("quiz_duration", quizduration);
-    localStorage.setItem("complexity", complexity); // Store attempt_id in local storage
-    navigate(`/leaderboard`);
+    // localStorage.setItem("quiz_level_attempt_id", attemptId);
+    // localStorage.setItem("complexity", complexity); // Store attempt_id in local storage
+    // localStorage.setItem("quiz_duration", quizduration);
+    navigate(`/leaderboard`,{
+      state: {
+        quizId,
+        attemptId,
+        complexity,
+        quizduration,
+        passpercentage,
+        // quizdescription,
+        // createdby,
+        // numberofquestions,
+        // quizduration,
+        // complexity,
+        // mincompletiontime,
+        // quizattempts,
+        // avgscore,
+        // max_percentage,quizcreatedate
+      },
+    });
   };
   const quizresults = (quizId, attemptId) => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
@@ -660,7 +677,8 @@ const Quiz = () => {
                                     quizItem.quiz_id,
                                     quizItem.quiz_level_attempt_id,
                                     quizItem.complexity,
-                                    quizItem.quiz_duration
+                                    quizItem.quiz_duration,
+                                    quizItem.pass_percentage,
                                   )
                                 }
                               >
