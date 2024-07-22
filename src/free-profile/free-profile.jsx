@@ -151,7 +151,15 @@ const FreeProfile = () => {
       }
       fetchDetailsByPincode(postalCode);
     };
-
+    const handleCityChange = (event) => {
+      const selectedCity = event.target.value;
+      setCity(selectedCity);
+    
+      const selectedLocation = locations.find(location => location.location === selectedCity);
+      if (selectedLocation) {
+        setLocationId(selectedLocation.location_id);
+      }
+    };
   // Get profile details integration part******************
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -812,7 +820,7 @@ const handleLoginCancelClick1 = () =>{
                           focus:outline-none"
               type="text"
               value={city}
-              onChange={(e) => setCity(e.target.value)}
+              onChange={handleCityChange}
               disabled={!isEditing}
             >
               <option value={city}>{city}</option>
