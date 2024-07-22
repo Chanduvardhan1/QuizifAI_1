@@ -67,7 +67,7 @@ const leaderboard = () => {
  useEffect(() => {
     const userId = localStorage.getItem("user_id");
     const quizId = localStorage.getItem("quiz_id");
-    const attemptNo = localStorage.getItem("quiz_level_attempt_id");
+    // const attemptNo = localStorage.getItem("quiz_level_attempt_id");
     const {passPercentage} = location.state || {};
     const fetchQuizReport = async () => {
       try {
@@ -80,7 +80,7 @@ const leaderboard = () => {
           body: JSON.stringify({
             quiz_id: quizId,
             user_id: userId,
-            attempt_no: attemptNo
+            attempt_no: attemptId
           })
         });
 
@@ -161,9 +161,9 @@ const leaderboard = () => {
   //     sendQuizResult(); // Trigger the POST request only if quizId and attemptNo are available
   //   }
   // }, [quizId, attemptNo]);
-  const quizduration = localStorage.getItem("quiz_duration");
-  const complexity = localStorage.getItem("complexity");
-
+  // const quizduration = localStorage.getItem("quiz_duration");
+  // const complexity = localStorage.getItem("complexity");
+  const {passpercentage,complexity,quizduration,attemptId} = location.state || {};
   useEffect(() => {
     const quizId = localStorage.getItem("quiz_id");
     const attemptNo = localStorage.getItem("quiz_level_attempt_id");
@@ -179,7 +179,7 @@ const leaderboard = () => {
           body: JSON.stringify({
             user_id: userId,
             quiz_id: quizId,
-            attempt_id: attemptNo
+            attempt_id: attemptId
           })
         });
         const result = await response.json();
@@ -294,7 +294,7 @@ const leaderboard = () => {
 </div>
 
           <p className={styles.quizdescription}>{quizData.quiz_description}</p>
-          <div className={styles.Questionslines }>
+          {/* <div className={styles.Questionslines }>
         <div className={styles.Questions}>
 
         <span className={styles.Question} >Questions :</span>{" "}
@@ -303,7 +303,7 @@ const leaderboard = () => {
         <div>
 
         <span className={styles.Question} >Duration:</span>{" "}
-          <span className={styles.username1} >{quizduration} Min</span>
+          <span className={styles.username1} >{quizduration} min</span>
         </div>
         <div>
 
@@ -313,24 +313,62 @@ const leaderboard = () => {
 <div>
 
 <span className={styles.Question } >Pass Percentage :</span>{" "}
-  <span className={styles.username1} >{`${quizData.attempt_percentage}`}%</span>
+  <span className={styles.username1} >{passpercentage}%</span>
 </div>
 <div>
 
 <span className={styles.Question } >complexity :</span>{" "}
   <span className={styles.username1} >{complexity} </span>
 </div>
-        </div>
+        </div> */}
+        <div className={styles.flexrow}>
           <div className={styles.Createdbyupdated}>
+          <div className={styles.Questions}>
+
+<span className={styles.Question} >Questions :</span>{" "}
+  <span className={styles.username1} >{`${quizData.total_questions}`}</span>
+</div>
+<div>
+
+<span className={styles.Question} >Total Marks:</span>{" "}
+  <span className={styles.username1} >{`${quizData.quiz_total_marks}`}</span>
+</div>
         <div className={styles.Created}>
 
         <span className={styles.Createdby} >Created By:</span>{" "}
           <span className={styles.username} >{`${quizData.created_by}`}</span>
         </div>
+        
         <div>
 
         <span className={styles.Createdby} >Created On:</span>{" "}
           <span className={styles.username} >{`${quizData.created_on}`}</span>
+        </div>
+        </div>
+        <div className={styles.Questionslines }>
+      
+        <div>
+
+        <span className={styles.Question} >Duration:</span>{" "}
+          <span className={styles.username1} >{quizduration} min</span>
+        </div>
+       
+<div>
+
+<span className={styles.Question } >Pass Percentage :</span>{" "}
+  <span className={styles.username1} >{passpercentage}%</span>
+</div>
+
+        </div>
+        <div className={styles.Questionslines }>
+      
+    
+
+<div>
+
+<span className={styles.Question } >complexity :</span>{" "}
+  <span className={styles.username1} >{complexity} </span>
+</div>
         </div>
         </div>
         </div>

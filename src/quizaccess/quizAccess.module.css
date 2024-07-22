@@ -94,9 +94,9 @@ border: none;
   rgba(226, 239, 255, 0.5) 43.85%,
   rgba(238, 246, 255, 0.5) 97.11%
 ); */
-height: 700px;
+/* height: 700px; */
   /* Add any other styles you need for your main content */
-  padding: 20px;
+  padding: 10px;
   /* Example padding, adjust as needed */
 }
 
@@ -192,7 +192,7 @@ text-align: left;
 .horizontalLine {
   border: 1px dashed #555555; /* Add border style */
   margin-top: 20px; /* Adjust margin top for spacing */
-  width: 885px;
+  /* width: 885px; */
   margin-left: 40px;
 border: 1;
 
@@ -204,7 +204,7 @@ border: 1;
   margin-top: 20px;
   margin-left: 50px;
   align-items: flex-start;
-  gap: 154px;
+  gap: 150px;
 }
 .sentencesContainer {
   display: flex;
@@ -212,7 +212,7 @@ border: 1;
   /* margin-top: 20px;  */
   margin-left: 50px;
   align-items: flex-start;
-  gap: 33px;
+  gap: 10px;
 }
 .sentence1{
   display: flex;
@@ -328,7 +328,7 @@ text-align: left;
   /* justify-content: end; */
   margin-top: 36px;
   margin-bottom: 80px;
-  margin-left: 845px;
+  margin-left: 750px;
   /* padding-right: 130px; */
 }
 

@@ -49,8 +49,9 @@ const LogoutBar = (data) => {
  
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
   const [userName, setUserName] = useState('');
-  const [occupation, setOccupation] = useState(localStorage.getItem("occupation_name"));
+  // const [occupation, setOccupation] = useState(localStorage.getItem("occupation_name"));
   const [city, setCity] = useState("");
+  const [occupation, setOccupation] = useState("");
   const [country, setCountry] = useState("");
   const [district, setDistrict] = useState("")
   const [globalRank, setGlobalRank] = useState("");
@@ -63,7 +64,7 @@ const LogoutBar = (data) => {
   const [subscriptionStartDate, setSubscriptionStartDate] = useState('');
   const [subscriptionEndDate, setSubscriptionEndDate] = useState('');
   const [remainingDays, setRemainingDays] = useState('');
-  
+  const [otherOccupation, setOtherOccupation] = useState("");
   
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -91,7 +92,7 @@ const LogoutBar = (data) => {
 
         const auditDetails = data.data[0].audit_details;
         if (auditDetails) {
-          setCity(auditDetails.location_name || "");
+          // setCity(auditDetails.location_name || "");
           setCountry(auditDetails.country_name || "");
           setGlobalRank(auditDetails.global_rank || "");
           setRegisteredOn(auditDetails.created_date || "");
@@ -103,6 +104,9 @@ const LogoutBar = (data) => {
 
           const UserProfileDetails = data.data[0].user_profile_details;
           setDistrict(UserProfileDetails.district_name);
+          setOccupation(UserProfileDetails.occupation_name);
+          setCity(UserProfileDetails.location_name);
+          setOtherOccupation(UserProfileDetails.other_occupation_name);
 
           const subscriptionDetails = auditDetails.subscription_details && auditDetails.subscription_details[0];
           if (subscriptionDetails) {
@@ -148,7 +152,7 @@ const LogoutBar = (data) => {
     .then(data => {
       console.log('Logout response:', data);
       if (data.response === 'success') {
-        // alert(data.response_message)
+        
         navigate("/login");
       } else {
         console.error('Logout failed:', data.response_message);
@@ -215,7 +219,8 @@ const LogoutBar = (data) => {
               marginTop:"-5px",
             }}
           >
-            {occupation}
+                 {occupation === "Other" ? otherOccupation : occupation}
+
           </p>
 
           <div className="flex">
@@ -284,7 +289,7 @@ const LogoutBar = (data) => {
             <span className="text-[25px] text-[#E97132] ml-[35px] mt-[10px] font-semibold">{averageScorePercentage}%</span>
             <h1 className="mt-[23px] ml-[5px] text-[12px] font-normal">average</h1>
           </div>
-          <div className="h-[5px] w-full bg-white mt-[10px]"></div>
+          {/* <div className="h-[5px] w-full bg-white mt-[10px]"></div>
 
           <div>
             <h1 className="font-semibold mt-[10px] text-[15px]">Public User</h1>
@@ -294,13 +299,13 @@ const LogoutBar = (data) => {
             
             <div className="flex">
             {/* <span className="text-[25px] text-[#5E81F4] ml-[20px] mt-[10px] font-semibold"></span> */}
-            {remainingDays > 0 ?(
+            {/* {remainingDays > 0 ?(
               <p className="text-[13px] text-red-500 ml-[20px] mt-[3px]">{remainingDays}</p> 
             ):(             
               <img className="h-[40px] w-[35px] ml-5 -mt-2" src={infinity} />           
-            )}
-            <h1 className="mt-[2px] ml-[10px] text-[13px] font-normal">days remaining</h1>
-            </div>
+            )} */}
+            {/* <h1 className="mt-[2px] ml-[10px] text-[13px] font-normal">days remaining</h1> */}
+            {/* </div>
           </div>
           <div className="h-[5px] w-full bg-white mt-[10px]"></div>
         
@@ -309,7 +314,7 @@ const LogoutBar = (data) => {
             <h1 className="text-[13px] text-start">Last Login : <span className="text-[#5E81F4]">{lastLogin}</span></h1>
             <h1 className="text-[13px] text-start">Password Changed : <span className="text-[#5E81F4]">{passwordChanged}</span></h1>
           </div>
-                 
+                   */}
             
           </div>
         </div>

@@ -96,6 +96,7 @@ const FreeProfile = () => {
   const [isSendOtpSent,setIsSendOtpSent] = useState(false)
 
   const [showOtherInput, setShowOtherInput] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
 
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName);
@@ -223,7 +224,8 @@ const FreeProfile = () => {
         setInitialLoginData(initialData);
         setPreferredLoginMethod(userProfileDetails.preferred_login_method);
         setOtherccupation(userProfileDetails.other_occupation_name);
-         
+        setShowOtherInput(userProfileDetails.occupation_name === 'Other');
+
         const userDetails = data.data[0].audit_details;
         setUserName(userDetails.full_name);
 
@@ -270,7 +272,7 @@ const FreeProfile = () => {
       email_otp: emailOtp,
       user_phone_number: mobileNumber,
       otp: otp,
-      user_role: "Quiz User", 
+      user_role: "Quiz User", // Example value, adjust as needed
       user_type: "Public", 
       user_org_id: null,
       gender: gender,
@@ -310,9 +312,9 @@ const FreeProfile = () => {
       const data = await response.json();
       console.log("Updated Data:", data);
       if (data.detail && data.detail.response === "fail" && data.detail.response_message === "Invalid or incorrect OTP.") {
-        alert("Invalid or incorrect OTP. Please try again.");
+        setResponseMessage("Invalid or incorrect OTP. Please try again.");
       } else {
-        alert("Profile Updated successfully...!");
+        setResponseMessage("Profile Updated successfully...!");
         setIsEmailOtpSent(false);
         setIsMobileOtpSent(false);
         setIsEditing(false);
@@ -966,9 +968,9 @@ const handleLoginCancelClick1 = () =>{
             )}
           
         </div>
-     </div>
+  
   </div>
-       
+  </div>
   <div className="flex justify-start ml-[24%] mt-[20px] mb-[20px]">
   {isEditing ? (
     <>
@@ -993,6 +995,9 @@ const handleLoginCancelClick1 = () =>{
       Edit
     </button>
   )}
+  {responseMessage && (
+    <p className=" text-green-500 flex ml-[85px] mt-[5px]">{responseMessage}</p>
+  )}
 </div>
   </div>
 
@@ -1003,7 +1008,7 @@ const handleLoginCancelClick1 = () =>{
             className={styles.inputGroup1}
             style={{ marginLeft: "200px", textWrap: "nowrap",marginTop:"5px" }}
           >
-            <label className="text-blue-800 font-semibold">Login Method</label>
+            <label className="text-blue-800 font-semibold">login Method</label>
             <button
         className={`border-b-2 w-[77.5px] text-[11px] pl-[10px] ml-[10px] focus:outline-none ${
           preferredLoginMethod === 'Email' ? 'border-blue-200' : 'border-transparent'

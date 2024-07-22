@@ -125,32 +125,32 @@ const resetpasswordmobile = () => {
       .then((data) => {
         console.log("OTP resend successful:", data);
         // Handle successful OTP resend, e.g., show success message
-        alert("OTP has been successfully resent");
+        setResponseMessage("OTP has been successfully resent");
         setResendAvailable(false);
         setResendTime(600);
       })
       .catch((error) => {
         console.error("Error resending OTP:", error);
-        alert("Failed to resend OTP. Please try again."); // Show error message
+        setResponseMessage("Failed to resend OTP. Please try again."); // Show error message
       });
   };
 
   const handleSignUp2 = () => {
 
     if (password.length < 8) {
-        alert("Password must be at least 8 characters long");
+      setResponseMessage("Password must be at least 8 characters long");
         return;
       }
       if (!/[A-Z]/.test(password)) {
-        alert("Password must contain at least one uppercase letter");
+        setResponseMessage("Password must contain at least one uppercase letter");
         return;
       }
       if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-        alert("Password must contain at least one special character");
+        setResponseMessage("Password must contain at least one special character");
         return;
       }
       if (password !== confirmpassword) {
-        alert("New password and confirm password do not match. Please check again.");
+        setResponseMessage("New password and confirm password do not match. Please check again.");
         return;
       }
 
@@ -184,16 +184,16 @@ const resetpasswordmobile = () => {
         if (data.response === "success" && data.response_message === "Password has been successfully reset.") {
           setShowRegistrationSuccess(true);
         } else if (data.message === "Please click on Reset Password link to Email and try again.") {
-          alert(data.message);
+          setResponseMessage(data.message);
         } else if (data.response === "fail" && data.data === "OTP has Expired.") {
-          alert(data.data);
+          setResponseMessage(data.data);
         } else if (data.response === "fail" && data.response_message === "Please use a different password. You have used this password before.") {
-          alert(data.response_message);
+          setResponseMessage(data.response_message);
         }else if (data.response === "fail" && data.response_message === "OTP is Invalid Plase Enter valid OTP.") {
-          alert(data.response_message);
+          setResponseMessage(data.response_message);
         } 
          else {
-          alert("Error resetpassword");
+          setResponseMessage(data.response_message);
         }
       })
       .catch((error) => {
@@ -856,21 +856,27 @@ const resetpasswordmobile = () => {
               )} */}
 
               <div className={styles1.Button}>
-             
-                <button
+              <button
                   onClick={handlecancel}
                   className={styles1.loginButton}
                 >
-                  cancel
+                  Cancel
                 </button>
-                <button
+            
+              <button
                   onClick={handleSignUp2}
                   className={styles1.loginButton1}
                 >
-                  submit
+                  Submit
                 </button>
+               
              
               </div>
+              {responseMessage &&(
+                <>
+                <p className={styles.restpassword}>{responseMessage}</p>
+                </>
+              )}
             </>
           )}
         </div>

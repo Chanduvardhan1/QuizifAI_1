@@ -706,7 +706,7 @@ const register = () => {
       middle_name: middlename,
       last_name: lastname,
       date_of_birth: dateofbirth,
-      user_email: emailOrMobile,
+      user_email: emailOrMobile1,
       user_phone_number: userphonenumber,
       occupation_name: occupationname,
       other_occupation_name: occupationname1,
@@ -764,7 +764,10 @@ const register = () => {
               setErrorMessage("Password and confirm password did not match");
             } else if (error.type === "value_error" && error.msg === "Value error, Phone number must be exactly 10 digits and contain only numeric characters") {
               setErrorMessage("Phone number must be exactly 10 digits and contain only numeric characters");
-            }else {
+            }else if (error.type === "value_error" && error.msg === "Value error, User must be at least 8 years old to use the application") {
+              setErrorMessage("User must be at least 8 years old to use the application");
+            }
+            else {
               setErrorMessage(error.msg);
             }
           });
@@ -1086,258 +1089,6 @@ const register = () => {
                     onChange={(e) => setlastname(e.target.value)}
                   />
                 </div>
-                <div className={styles1.inputRow1}>
-                  <TextField
-                    // required
-                    id="email"
-                    label="Email"
-                    variant="outlined"
-                    // error={submitted && emailOrMobile.trim() === ""}
-                    // helperText={
-                    //   submitted && emailOrMobile.trim() === ""
-                    //     ? "email is required"
-                    //     : ""
-                    // }
-                    className={styles.iconInput}
-                    style={{
-                      width: "432px",
-                      height: "44px",
-                      // marginTop: "10px",
-                      marginBottom: "20px",
-                    }}
-                    InputLabelProps={{
-                      style: { fontFamily: "poppins" },
-                    }}
-                    InputrequiredProps={{
-                      style: { color:"red", },
-                    }}
-                    InputProps={{
-                      style: {
-                        backgroundImage: `url('/images/signup/emailIcon.png')`,
-                        //backgroundSize: "19px 16px",
-                        backgroundPosition: "400px center",
-                        backgroundRepeat: "no-repeat",
-                        width: "432px",
-                        height: "50px",
-                        //backgroundColor: "#F0EFFF",
-                        border: "none",
-                        fontFamily: "poppins",
-                        fontSize: "15px",
-
-                        borderRadius: "10px",
-                      },
-                      autoComplete: "off",
-                      // readOnly: true,
-                    }}
-                    // value={email}
-                    //onChange={(e) => handleEmailValidation(e.target.value)}
-                    name="user_email"
-                    value={emailOrMobile1}
-                    //onChange={(e) => setemailOrMobile(e.target.value)}
-                    // onChange={(e) => {
-                    //   const processedInput = e.target.value.trim().toLowerCase();
-                    //   setemailOrMobile(processedInput);
-                    //   handleEmailValidation(processedInput);
-                    // }}
-                    onChange={handleEmailChange}
-                  />
-                  {/* {renderEmailValidationIcon()}{" "} */}
-                </div>
-                <div className={styles.mobileNumber}> 
-                  <TextField
-                    id="mobileNumber"
-                    label="Mobile Number"
-                    variant="outlined"
-                    className={styles.iconInput}
-                    style={{
-                      width: "210px",
-                      height: "44px",
-                      marginBottom: "10px",
-                    }}
-                    // style={{
-                    //   backgroundImage: `url('images/signup/mobileIcon.png')`,
-                    //   backgroundRepeat: "no-repeat",
-                    //   width: "137px",
-                    //   height: "43px",
-                    //   paddingLeft: "40px",
-                    //   backgroundPosition: "10px center",
-                    // }}
-                    InputLabelProps={{
-                      style: { fontFamily: "poppins" },
-                    }}
-                    InputProps={{
-                      style: {
-                        backgroundImage: `url('images/signup/mobileIcon.png')`,
-                        //backgroundSize: "19px 16px",
-                        backgroundPosition: "182px center",
-                        backgroundRepeat: "no-repeat",
-                        width: "210px",
-                        height: "50px",
-                        //backgroundColor: "#F0EFFF",
-                        border: "none",
-                        fontFamily: "poppins",
-                        fontSize: "15px",
-
-                        borderRadius: "10px",
-                      },
-                      autoComplete: "off",
-                      
-                    }}
-                    
-                    onChange={handleMobileChange}
-                    //name="user_phone_number"
-                    // onChange={(e) => {
-                    //   handleMobileChange(e);
-                    //   setuserphonenumber(e.target.value);
-                    // }}
-                    value={userphonenumber}
-                    //onChange={(e) => setuserphonenumber(e.target.value)}
-                  /></div>
-                   <div className={styles.Occupation}>
-                  {/* <input
-                      type="date"
-                      className={styles.iconInput}
-                      placeholder="Date of birth"
-                      style={{
-                        backgroundImage: `url('images/signup/dateIcon.png')`,
-                        backgroundRepeat: "no-repeat",
-                        width: "179px",
-                        height: "44px",
-                        paddingLeft: "40px",
-                        backgroundPosition: "10px center",
-                      }}
-                      name="date_of_birth"
-                      value={dateofbirth}
-                      onChange={(e) => setdateofbirth(e.target.value)}
-                    />
-                    <select
-                      className={styles.iconInput1}
-                      style={{
-                        backgroundImage: `url('images/signup/occupationIcon.png')`,
-                        backgroundRepeat: "no-repeat",
-                        borderRadius: "10px",
-                        marginRight:"20px"
-                      }}
-                      value={occupationname}
-                      onChange={(e) => setoccupationname(e.target.value)}
-                    >
-                      <option value="" disabled selected>
-                        Occupation
-                      </option>
-                      <option value="Student">Student</option>
-                        <option value="Teacher">Teacher</option>
-                        <option value="Professional">Professional</option> */}
-                  {/* occupation options  */}
-                  {/* </select> */}
-                  {/* <select
-                    className={styles.countrySelect}
-                    defaultValue=""
-                    style={{
-                      backgroundImage: `url('images/signup/occupationIcon.png')`,
-                      backgroundRepeat: "no-repeat",
-                      borderRadius: "10px",
-                      width: "146px",
-                      height: "50px",
-                      border: "1px solid #c2c2c2",
-                      marginRight: "10px",
-                    }}
-                  >
-                    <option value="" disabled selected>
-                      Country
-                    </option>
-                    <option value="India">India +91</option>
-                    <option value="Bangladesh">Bangladesh +880</option>
-                    <option value="USA">USA +1</option>
-                    <option value="Sri Lanka">Sri Lanka +94</option>
-                    <option value="Germany">Germany +49</option>
-                    {/* country options*/}
-                  {/* </select>  */}
-
-                  <TextField
-                    id="outlined-select-currency-native"
-                    select
-                    label="Occupation"
-                    required
-                    error={submitted && occupationname.trim() === ""}
-                    // helperText={
-                    //   submitted && occupationname.trim() === ""
-                    //     ? "occupationname is required"
-                    //     : ""
-                    // }
-                    className={styles.iconInput1}
-                    style={{
-                      width: "210px",
-                      height: "44px",
-                      // marginTop: "10px",
-                      // marginBottom: "20px",
-                    }}
-                    InputLabelProps={{
-                      style: { fontFamily: "poppins",marginRight:'10px' },
-                    }}
-                    InputProps={{
-                      style: {
-                        // backgroundImage: `url('/images/signup/lastNameIcon.png')`,
-                        //backgroundSize: "19px 16px",
-                        backgroundImage: `url('images/signup/occupationIcon.png')`,
-                        backgroundRepeat: "no-repeat",
-                        borderRadius: "10px",
-                        width: "210px",
-                        height: "50px",
-                      },
-                    }}
-                    value={occupationname}
-                    onChange={(e) => setoccupationname(e.target.value)}
-                  >
-                  
-                       {occupations.map((occupation) => (
-        <MenuItem key={occupation.occupation_id} value={occupation.occupation_name}>
-          {occupation.occupation_name}
-        </MenuItem>
-      ))}
-                    {/* occupation options  */}
-                  </TextField>
-                  {occupationname === "Other" && (
-                  <TextField
-                  label="Other occupation"
-                  variant="outlined"
-                 
-                  // error={submitted && occupationname1.trim() === ""}
-                  // helperText={
-                  //   submitted && occupationname1.trim() === ""
-                  //     ? "Other_occupationname is required"
-                  //     : ""
-                  // }
-                  className={styles.iconInput}
-                  style={{
-                    width: "212px",
-                    height: "44px",
-                    // marginTop: "10px",
-                    // marginBottom: "20px",
-                  }}
-                  InputLabelProps={{
-                    style: { fontFamily: "poppins" },
-                  }}
-                  InputProps={{
-                    style: {
-                      backgroundImage: `url('/images/signup/lastNameIcon.png')`,
-                      //backgroundSize: "19px 16px",
-                      backgroundPosition: "355px center",
-                      backgroundRepeat: "no-repeat",
-                      width: "212px",
-                      height: "50px",
-                      //backgroundColor: "#F0EFFF",
-                      border: "none",
-                      fontFamily: "poppins",
-                      fontSize: "15px",
-                      borderRadius: "10px",
-                    },
-                    autoComplete: "off",
-                  }}
-                  value={occupationname1}
-                  onChange={(e) => setoccupationname1(e.target.value)}
-                />
-                  )}
-                </div>
                 <div className={styles.Dob}>
                   {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker"]}
@@ -1462,6 +1213,310 @@ const register = () => {
                 <div className={styles.line} ></div>
                 </div>
                 </div>
+                <div className={styles.Occupation}>
+                  {/* <input
+                      type="date"
+                      className={styles.iconInput}
+                      placeholder="Date of birth"
+                      style={{
+                        backgroundImage: `url('images/signup/dateIcon.png')`,
+                        backgroundRepeat: "no-repeat",
+                        width: "179px",
+                        height: "44px",
+                        paddingLeft: "40px",
+                        backgroundPosition: "10px center",
+                      }}
+                      name="date_of_birth"
+                      value={dateofbirth}
+                      onChange={(e) => setdateofbirth(e.target.value)}
+                    />
+                    <select
+                      className={styles.iconInput1}
+                      style={{
+                        backgroundImage: `url('images/signup/occupationIcon.png')`,
+                        backgroundRepeat: "no-repeat",
+                        borderRadius: "10px",
+                        marginRight:"20px"
+                      }}
+                      value={occupationname}
+                      onChange={(e) => setoccupationname(e.target.value)}
+                    >
+                      <option value="" disabled selected>
+                        Occupation
+                      </option>
+                      <option value="Student">Student</option>
+                        <option value="Teacher">Teacher</option>
+                        <option value="Professional">Professional</option> */}
+                  {/* occupation options  */}
+                  {/* </select> */}
+                  {/* <select
+                    className={styles.countrySelect}
+                    defaultValue=""
+                    style={{
+                      backgroundImage: `url('images/signup/occupationIcon.png')`,
+                      backgroundRepeat: "no-repeat",
+                      borderRadius: "10px",
+                      width: "146px",
+                      height: "50px",
+                      border: "1px solid #c2c2c2",
+                      marginRight: "10px",
+                    }}
+                  >
+                    <option value="" disabled selected>
+                      Country
+                    </option>
+                    <option value="India">India +91</option>
+                    <option value="Bangladesh">Bangladesh +880</option>
+                    <option value="USA">USA +1</option>
+                    <option value="Sri Lanka">Sri Lanka +94</option>
+                    <option value="Germany">Germany +49</option>
+                    {/* country options*/}
+                  {/* </select>  */}
+
+                  <TextField
+                    id="outlined-select-currency-native"
+                    select
+                    label="Occupation"
+                    required
+                    error={submitted && occupationname.trim() === ""}
+                    // helperText={
+                    //   submitted && occupationname.trim() === ""
+                    //     ? "occupationname is required"
+                    //     : ""
+                    // }
+                    className={styles.iconInput1}
+                    style={{
+                      width: "210px",
+                      height: "44px",
+                      // marginTop: "10px",
+                      // marginBottom: "20px",
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins",marginRight:'10px' },
+                    }}
+                    InputProps={{
+                      style: {
+                        // backgroundImage: `url('/images/signup/lastNameIcon.png')`,
+                        //backgroundSize: "19px 16px",
+                        backgroundImage: `url('images/signup/occupationIcon.png')`,
+                        backgroundRepeat: "no-repeat",
+                        borderRadius: "10px",
+                        width: "210px",
+                        height: "50px",
+                      },
+                    }}
+                    value={occupationname}
+                    onChange={(e) => setoccupationname(e.target.value)}
+                  >
+                  
+                       {occupations.map((occupation) => (
+        <MenuItem key={occupation.occupation_id} value={occupation.occupation_name}>
+          {occupation.occupation_name}
+        </MenuItem>
+      ))}
+                    {/* occupation options  */}
+                  </TextField>
+                  {/* {occupationname === "Other" && (
+                  <TextField
+                  label="Other occupation"
+                  variant="outlined"
+                 
+                  // error={submitted && occupationname1.trim() === ""}
+                  // helperText={
+                  //   submitted && occupationname1.trim() === ""
+                  //     ? "Other_occupationname is required"
+                  //     : ""
+                  // }
+                  className={styles.iconInput}
+                  style={{
+                    width: "212px",
+                    height: "44px",
+                    // marginTop: "10px",
+                    // marginBottom: "20px",
+                  }}
+                  InputLabelProps={{
+                    style: { fontFamily: "poppins" },
+                  }}
+                  InputProps={{
+                    style: {
+                      backgroundImage: `url('/images/signup/lastNameIcon.png')`,
+                      //backgroundSize: "19px 16px",
+                      backgroundPosition: "355px center",
+                      backgroundRepeat: "no-repeat",
+                      width: "212px",
+                      height: "50px",
+                      //backgroundColor: "#F0EFFF",
+                      border: "none",
+                      fontFamily: "poppins",
+                      fontSize: "15px",
+                      borderRadius: "10px",
+                    },
+                    autoComplete: "off",
+                  }}
+                  value={occupationname1}
+                  onChange={(e) => setoccupationname1(e.target.value)}
+                />
+                  )} */}
+                   <TextField
+                    id="mobileNumber"
+                    label="Mobile Number"
+                    variant="outlined"
+                    className={styles.iconInput}
+                    style={{
+                      width: "210px",
+                      height: "44px",
+                      marginBottom: "10px",
+                    }}
+                    // style={{
+                    //   backgroundImage: `url('images/signup/mobileIcon.png')`,
+                    //   backgroundRepeat: "no-repeat",
+                    //   width: "137px",
+                    //   height: "43px",
+                    //   paddingLeft: "40px",
+                    //   backgroundPosition: "10px center",
+                    // }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins" },
+                    }}
+                    InputProps={{
+                      style: {
+                        backgroundImage: `url('images/signup/mobileIcon.png')`,
+                        //backgroundSize: "19px 16px",
+                        backgroundPosition: "182px center",
+                        backgroundRepeat: "no-repeat",
+                        width: "210px",
+                        height: "50px",
+                        //backgroundColor: "#F0EFFF",
+                        border: "none",
+                        fontFamily: "poppins",
+                        fontSize: "15px",
+
+                        borderRadius: "10px",
+                      },
+                      autoComplete: "off",
+                      
+                    }}
+                    
+                    onChange={handleMobileChange}
+                    //name="user_phone_number"
+                    // onChange={(e) => {
+                    //   handleMobileChange(e);
+                    //   setuserphonenumber(e.target.value);
+                    // }}
+                    value={userphonenumber}
+                    //onChange={(e) => setuserphonenumber(e.target.value)}
+                  />
+                </div>
+                <div className={styles1.inputRow1}>
+                  <TextField
+                    // required
+                    id="email"
+                    label="Email"
+                    variant="outlined"
+                    // error={submitted && emailOrMobile.trim() === ""}
+                    // helperText={
+                    //   submitted && emailOrMobile.trim() === ""
+                    //     ? "email is required"
+                    //     : ""
+                    // }
+                    className={styles.iconInput}
+                    style={{
+                      width: "432px",
+                      height: "44px",
+                      // marginTop: "10px",
+                      marginBottom: "20px",
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins" },
+                    }}
+                    InputrequiredProps={{
+                      style: { color:"red", },
+                    }}
+                    InputProps={{
+                      style: {
+                        backgroundImage: `url('/images/signup/emailIcon.png')`,
+                        //backgroundSize: "19px 16px",
+                        backgroundPosition: "400px center",
+                        backgroundRepeat: "no-repeat",
+                        width: "432px",
+                        height: "50px",
+                        //backgroundColor: "#F0EFFF",
+                        border: "none",
+                        fontFamily: "poppins",
+                        fontSize: "15px",
+
+                        borderRadius: "10px",
+                      },
+                      autoComplete: "off",
+                      // readOnly: true,
+                    }}
+                    // value={email}
+                    //onChange={(e) => handleEmailValidation(e.target.value)}
+                    name="user_email"
+                    value={emailOrMobile1}
+                    //onChange={(e) => setemailOrMobile(e.target.value)}
+                    // onChange={(e) => {
+                    //   const processedInput = e.target.value.trim().toLowerCase();
+                    //   setemailOrMobile(processedInput);
+                    //   handleEmailValidation(processedInput);
+                    // }}
+                    onChange={handleEmailChange}
+                  />
+                  {/* {renderEmailValidationIcon()}{" "} */}
+                </div>
+                {/* <div className={styles.mobileNumber}> 
+                  <TextField
+                    id="mobileNumber"
+                    label="Mobile Number"
+                    variant="outlined"
+                    className={styles.iconInput}
+                    style={{
+                      width: "210px",
+                      height: "44px",
+                      marginBottom: "10px",
+                    }}
+                    // style={{
+                    //   backgroundImage: `url('images/signup/mobileIcon.png')`,
+                    //   backgroundRepeat: "no-repeat",
+                    //   width: "137px",
+                    //   height: "43px",
+                    //   paddingLeft: "40px",
+                    //   backgroundPosition: "10px center",
+                    // }}
+                    InputLabelProps={{
+                      style: { fontFamily: "poppins" },
+                    }}
+                    InputProps={{
+                      style: {
+                        backgroundImage: `url('images/signup/mobileIcon.png')`,
+                        //backgroundSize: "19px 16px",
+                        backgroundPosition: "182px center",
+                        backgroundRepeat: "no-repeat",
+                        width: "210px",
+                        height: "50px",
+                        //backgroundColor: "#F0EFFF",
+                        border: "none",
+                        fontFamily: "poppins",
+                        fontSize: "15px",
+
+                        borderRadius: "10px",
+                      },
+                      autoComplete: "off",
+                      
+                    }}
+                    
+                    onChange={handleMobileChange}
+                    //name="user_phone_number"
+                    // onChange={(e) => {
+                    //   handleMobileChange(e);
+                    //   setuserphonenumber(e.target.value);
+                    // }}
+                    value={userphonenumber}
+                    //onChange={(e) => setuserphonenumber(e.target.value)}
+                  />
+                  </div> */}
+                  
+               
                 <div className={styles.password1}>
                   <TextField
                     id="password"
