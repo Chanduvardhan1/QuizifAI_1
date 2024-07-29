@@ -37,6 +37,8 @@ import Delete from "../assets/Images/quiz-type/Delete.png";
 import Refresh from "../assets/Images/quiz-type/Refresh.png";
 import RefreshOptions from "../assets/Images/quiz-type/Refresh-options.png";
 import { Alert } from "@mui/material";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // const options1 =[
 //   {label: "Numbers"},
@@ -566,14 +568,17 @@ export default function editmanuly() {
     const isAnyFieldEmpty = requiredFields.some(field => !field);
     
     if (isAnyFieldEmpty) {
-      alert("Please fill in all the required fields before proceeding.");
+      toast.error("Please fill in all the required fields before proceeding.");
       return; // Prevent further execution
     }
     if (numQuestions < 5) {
-      alert("You need to have at least 5 questions.");
+      toast.error("You need to have at least 5 questions.");
       return;
     }
-    
+    if (questions.length < numQuestions) {
+      toast.error(`You have deleted some questions. You currently have ${questions.length} questions, but 'Number of questions' is set to ${numQuestions}. Please update the 'Number of questions' accordingly.`);
+      return; // Prevent further execution
+    }
     if (multiAnswer) {
       const hasInvalidMultiAnswer = questions.some(question => {
         if (question.multi_answer_flag) {
@@ -584,16 +589,16 @@ export default function editmanuly() {
       });
   
       if (hasInvalidMultiAnswer) {
-        alert("For multi-answer questions, there should be more than one correct answer.");
+        toast.error("For multi-answer questions, there should be more than one correct answer.");
         return;
       }
     }
   
-    const totalWeightage = questions.reduce((total, question) => total + question.question_weightage, 0);
-    if (totalWeightage !== quiztotalmarks) {
-      alert("Total question weightage does not match quiz total marks.");
-      return;
-    }
+    // const totalWeightage = questions.reduce((total, question) => total + question.question_weightage, 0);
+    // if (totalWeightage !== quiztotalmarks) {
+    //   toast.error("Total question weightage does not match quiz total marks.");
+    //   return;
+    // }
   
     try {
       const user_id = localStorage.getItem('user_id');
@@ -656,14 +661,14 @@ export default function editmanuly() {
           navigate("/quizcreated", { state: { quizData: responseData } });
         } else if (responseData.data && responseData.data.length > 0) {
           // Handle the specific message about the inactive quiz
-          alert(responseData.data[0]);
+          toast.error(responseData.data[0]);
         } else {
-          alert("An unexpected error occurred.");
+          toast.error("An unexpected error occurred.");
         }
       } else {
         if (responseData.detail) {
           if (responseData.detail === "'int' object has no attribute 'version_number'") {
-            alert("An error occurred due to an incorrect data type for 'version_number'. Please contact support.");
+            toast.error("An error occurred due to an incorrect data type for 'version_number'. Please contact support.");
             return;
           }
           const errorMessages = responseData.detail.map(error => {
@@ -685,14 +690,14 @@ export default function editmanuly() {
               return error.msg;
             }
           });
-          alert(errorMessages.join("\n"));
+          toast.error(errorMessages.join("\n"));
         } else {
-          alert("An unexpected error occurred.");
+          toast.error("An unexpected error occurred.");
         }
       }
     } catch (error) {
       console.error("Type-Quiz failed:", error);
-      alert("An error occurred while choosing the type of the quiz");
+      toast.error("An error occurred while choosing the type of the quiz");
     }
   };
   // useEffect(() => {
@@ -957,37 +962,6 @@ export default function editmanuly() {
   
 };
 
-// const handleNumQuestionsChange = (e) => {
-//   const value = parseInt(e.target.value, 10);
-//   setNumQuestions(value);
-
-//   if (value === quizData?.num_questions) {
-//     fetchQuizData();
-//   } else if (value > questions.length) {
-//     const additionalQuestions = Array.from({ length: value - questions.length }, () => ({
-//       question_text: "",
-//       question_weightage: 0,
-//       multi_answer_flag: false,
-//       question_duration: 0,
-//       options: [
-//         { answer_option_text: "" },
-//         { answer_option_text: "" },
-//         { answer_option_text: "" },
-//         { answer_option_text: "" },
-//       ]
-//     }));
-//     setQuestions([...questions, ...additionalQuestions]);
-//   } else if (value === 0) {
-//     setQuestions([]); // Clear questions if number of questions is set to zero
-//   } else {
-//     setQuestions(questions.slice(0, value));
-//   }
-// };
-// useEffect(() => {
-//   if (numQuestions > 0 && questions.length === 0) {
-//     fetchQuizData();
-//   }
-// }, [numQuestions]);
 
 const updateQuestionWeightage = (totalMarks, numQuestions) => {
   if (numQuestions > 0) {
@@ -1001,15 +975,15 @@ const updateQuestionWeightage = (totalMarks, numQuestions) => {
   }
 };
 
-// const handleNumQuestionsChange = (e) => {
 
+// const handleNumQuestionsChange = (e) => {
 //   const value = parseInt(e.target.value, 10);
 //   setNumQuestions(value);
 //   updateQuestionWeightage(quiztotalmarks, value);
 
-//   if (value >= quizData.num_questions) {
+//   if (value >= quizData.questions.length) {
 //     // If increasing or equal to the originally fetched number of questions
-//     const newQuestions = quizData.questions.slice(0, quizData.num_questions).map(question => ({
+//     const newQuestions = quizData.questions.slice(0, quizData.questions.length).map(question => ({
 //       ...question,
 //       options: [
 //         { answer_option_text: question.quiz_ans_option_1_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_1_text },
@@ -1020,7 +994,7 @@ const updateQuestionWeightage = (totalMarks, numQuestions) => {
 //       question_duration: question.question_duration || 0, // Provide default value if missing
 //     }));
 
-//     for (let i = quizData.num_questions; i < value; i++) {
+//     for (let i = quizData.questions.length; i < value; i++) {
 //       // Add empty question structure for new questions
 //       newQuestions.push({
 //         quiz_question_id: `new_question_${i + 1}`,
@@ -1051,52 +1025,29 @@ const updateQuestionWeightage = (totalMarks, numQuestions) => {
 //   }
 // };
 
+
+// const handleNumQuestionsChange = (e) => {
+//   const value = parseInt(e.target.value, 10);
+//   setNumQuestions(value);
+//   updateQuestionWeightage(quiztotalmarks, value);
+  
+//   if (value > questions.length) {
+//     // If increasing, just update the state without modifying questions
+//     setQuestions([...questions]);
+//   } else {
+//     // If decreasing, slice the existing questions array to the new value
+//     const updatedQuestions = questions.slice(0, value);
+//     setQuestions(updatedQuestions);
+//   }
+// };
+
 const handleNumQuestionsChange = (e) => {
   const value = parseInt(e.target.value, 10);
-  setNumQuestions(value);
-  updateQuestionWeightage(quiztotalmarks, value);
-
-  if (value >= quizData.questions.length) {
-    // If increasing or equal to the originally fetched number of questions
-    const newQuestions = quizData.questions.slice(0, quizData.questions.length).map(question => ({
-      ...question,
-      options: [
-        { answer_option_text: question.quiz_ans_option_1_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_1_text },
-        { answer_option_text: question.quiz_ans_option_2_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_2_text },
-        { answer_option_text: question.quiz_ans_option_3_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_3_text },
-        { answer_option_text: question.quiz_ans_option_4_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_4_text }
-      ],
-      question_duration: question.question_duration || 0, // Provide default value if missing
-    }));
-
-    for (let i = quizData.questions.length; i < value; i++) {
-      // Add empty question structure for new questions
-      newQuestions.push({
-        quiz_question_id: `new_question_${i + 1}`,
-        quiz_question_text: '',
-        question_duration: 0, // Default value for new questions
-        options: [
-          { answer_option_text: '', correct_answer_flag: false },
-          { answer_option_text: '', correct_answer_flag: false },
-          { answer_option_text: '', correct_answer_flag: false },
-          { answer_option_text: '', correct_answer_flag: false }
-        ]
-      });
-    }
-    setQuestions(newQuestions);
+  if (value > questions.length) {
+    setErrorMessage('The number of questions cannot exceed the fetched questions.');
   } else {
-    // If decreasing, retain the originally fetched questions up to the new value
-    const updatedQuestions = quizData.questions.slice(0, value).map(question => ({
-      ...question,
-      options: [
-        { answer_option_text: question.quiz_ans_option_1_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_1_text },
-        { answer_option_text: question.quiz_ans_option_2_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_2_text },
-        { answer_option_text: question.quiz_ans_option_3_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_3_text },
-        { answer_option_text: question.quiz_ans_option_4_text || '', correct_answer_flag: question.correct_option_text === question.quiz_ans_option_4_text }
-      ],
-      question_duration: question.question_duration || 0, // Provide default value if missing
-    }));
-    setQuestions(updatedQuestions);
+    setNumQuestions(value);
+    setErrorMessage('');
   }
 };
 const toggleQuestionSelection = (index) => {
@@ -1112,7 +1063,7 @@ const toggleQuestionSelection = (index) => {
 const handleDeleteSelected = () => {
   const newQuestions = questions.filter((_, index) => !selectedQuestions.includes(index));
   setQuestions(newQuestions);
-  setNumQuestions(newQuestions.length);
+  // setNumQuestions(newQuestions.length);
   setSelectedQuestions([]);
   setIsAllSelected(false);
 };
@@ -1217,6 +1168,7 @@ const handleQuizTotalMarksChange = (e) => {
             </a>
           </div> */}
           <Navigation />
+          <ToastContainer/>
         </header>
         <div className="absolute top-[30px] left-[1260px] cursor-pointer text-[#eeb600f0] " onClick={Back}><MdOutlineCancel /></div>
 
@@ -1289,6 +1241,8 @@ const handleQuizTotalMarksChange = (e) => {
         placeholder="No of questions"
         value={numQuestions}
         onChange={handleNumQuestionsChange}
+        // onChange={(e) => setNumQuestions(e.target.value)}
+        // onChange={handleNumQuestionsChange}
       />
               </div>
               {/* <div className=" rounded-lg absolute top-[99px] left-[1200px]">
@@ -1759,7 +1713,7 @@ const handleQuizTotalMarksChange = (e) => {
 
             {/* Questions and options */}
             <div className="absolute top-[210px] left-[284px] ">
-              <div className=" flex  items-center mb-[10px] pl-[20px] ">
+              <div className=" flex  items-center mb-[10px] pr-[40px] ">
               {/* <div className="ml-[-20px] mr-[5px]" >
         <input 
           type="checkbox"
@@ -1777,7 +1731,6 @@ const handleQuizTotalMarksChange = (e) => {
            <RiDeleteBinLine className=" text-orange-500 w-[20px] h-[20px] ml-[-5px]"  /> <span className=" text-[#214082]">Delete</span>
         </button>
       )}
-       
       </div>
   
       </div>
@@ -1805,7 +1758,7 @@ const handleQuizTotalMarksChange = (e) => {
       <input
         type="text"
         placeholder="Question"
-        className="w-[90%] h-[37px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] p-[15px] text-[14px] text-[#214082] font-bold"
+        className="w-[90%] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] p-[10px] text-[14px] text-[#214082] font-bold"
         value={question.question_text}
         onChange={(e) => {
           const newQuestions = [...questions];
@@ -1819,7 +1772,7 @@ const handleQuizTotalMarksChange = (e) => {
       <input
         type="number"
         placeholder="Marks"
-        className="w-[80px] h-[37px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mx-2 p-[10px] font-normal "
+        className="w-[80px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mx-2 p-[10px] font-normal "
         value={question.question_weightage}
         // onChange={(e) => {
         //   const value = parseInt(e.target.value,10);
@@ -1840,7 +1793,7 @@ const handleQuizTotalMarksChange = (e) => {
         type="text"
         hidden
         placeholder="Duration"
-        className="w-[130px] h-[37px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal"
+        className="w-[130px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal"
         value={question.question_duration}
         onChange={(e) => {
           const value = parseInt(e.target.value) * 60;
@@ -1862,7 +1815,7 @@ const handleQuizTotalMarksChange = (e) => {
        <RiDeleteBinLine onClick={() => {
           const newQuestions = questions.filter((_, index) => index !== questionIndex);
           setQuestions(newQuestions);
-          setNumQuestions(newQuestions.length);
+          // setNumQuestions(newQuestions.length);
           setIsModified(true);
         }}  
         className="w-[25px] h-[25px] text-orange-500"
@@ -1874,13 +1827,13 @@ const handleQuizTotalMarksChange = (e) => {
     {question.options.map((option, optionIndex) => (
       <div key={optionIndex} className="flex items-center mb-2">
         {/* Option input field */}
-        <div className="mr-2 text-xl font-normal">
-          {String.fromCharCode(97 + optionIndex)}.
+        <div className="mr-2 font-normal w-[40px] rounded-[5px] p-[8px] border-[1px] border-solid border-[#B8BBC2] flex justify-center text-center justify-items-center items-center text-[14px]">
+        {String.fromCharCode(97 + optionIndex).toUpperCase()}
         </div>
         <input
           type="text"
           placeholder="Option Text"
-          className="w-[850px] h-[37px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[15px] font-normal text-[12px]"
+          className="w-[850px]  rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal text-[12px]"
           value={option.answer_option_text}
           onChange={(e) => {
             const newOptions = [...question.options];
