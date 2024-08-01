@@ -269,7 +269,7 @@ const Quiz = () => {
     avgscore,
     max_percentage
   ) => {
-    localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
+    localStorage.setItem("quiz_id", quizId); 
     navigate("/quiz-results1", {
       state: {
         quizId,
