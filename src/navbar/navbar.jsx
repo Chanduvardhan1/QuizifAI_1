@@ -7,8 +7,8 @@ import quizIcon from "../assets/Images/images/dashboard/quiz1.png";
 import profileIcon from "../assets/Images/images/dashboard/profile1.png";
 import Settings from "../assets/Images/images/dashboard/Settings1.png";
 import rocket from "../assets/Images/images/dashboard/rocket.png";
-import infinity from "../assets/Images/images/dashboard/infinity.png"
-
+import infinity from "../assets/Images/images/dashboard/infinity.png";
+import mail from "../assets/Images/images/dashboard/mail.png";
 const Navigation = () => {
   // Initialize activePage state to the current pathname
   const [activePage, setActivePage] = useState(window.location.pathname);
@@ -152,13 +152,21 @@ const Navigation = () => {
           <img src={profileIcon} alt="Profile Icon" className={styles.pageIcon} />
           <span className={styles.pageLink}>Profile</span>
         </NavLink>
-        {/* <NavLink
+        <NavLink
           to="/configure"
           className={`${styles.pageItem} ${activePage === '/configure' ? styles.bold : ''}`}
           onClick={() => handleNavigation('/configure')}
         >
           <img src={Settings} alt="Settings Icon" className={styles.pageIcon} />
           <span className={styles.pageLink}>Settings</span>
+        </NavLink>
+        {/* <NavLink
+          to="/contact"
+          className={`${styles.pageItem} ${activePage === '/contact' ? styles.bold : ''}`}
+          onClick={() => handleNavigation('/contact')}
+        >
+          <img src={mail} alt="Settings Icon" className={styles.pageIcon} />
+          <span className={styles.pageLink}>Contact US</span>
         </NavLink> */}
         {/* <img className="h-[122px] w-[60px] ml-[35px] mt-[50px]" src={rocket} alt="rocket"/> */}
       </div>
@@ -167,20 +175,24 @@ const Navigation = () => {
       <div className="h-[5px] w-full bg-white mt-[10px]"></div>
 
 <div className="p-[10px] ml-2">
-  <h1 className="font-semibold mt-[10px] text-[15px]">Public User</h1>
-  <h1 className="text-[12px] mt-[5px] px-[1px]">Subscribed Date : 
-    <span className="text-[#5E81F4] text-nowrap">{subscriptionStartDate}</span></h1>
-  <h1 className="font-semibold -mt-[3px] text-[15px] pt-2">Subscribed</h1>
-  
-  <div className="flex">
+  <h1 className="font-semibold mt-[10px] text-[15px] text-[#002366]">Subscription Type : <span className=" text-black text-[12px] font-normal">Public/Subscribed</span> </h1>
+  <h1 className=" mt-[5px] px-[1px] font-semibold text-[15px] text-[#002366]">Subscribed Date :
+  <span className=" text-black text-[12px] font-normal">{subscriptionStartDate} for public</span> 
+    </h1>
+  <h1 className="font-semibold  text-[15px] text-[#002366]"> Days Remaining:
+  <span className="text-black text-[12px] font-normal">
   {/* <span className="text-[25px] text-[#5E81F4] ml-[20px] mt-[10px] font-semibold"></span> */}
   {remainingDays > 0 ?(
     <p className="text-[13px] text-red-500 ml-[20px] mt-[3px]">{remainingDays}</p> 
   ):(             
-    <img className="h-[40px] w-[35px] ml-5 -mt-2" src={infinity} />           
+           
+  <h1 className="mt-[2px] ml-[10px] text-[13px] font-normal"><img className="h-[40px] w-[35px] ml-5 -mt-2" src={infinity} />days remaining for public</h1>
   )}
-  <h1 className="mt-[2px] ml-[10px] text-[13px] font-normal">days remaining</h1>
-  </div>
+  </span>
+  </h1>
+ 
+
+
 </div>
 <div className="h-[5px] w-full bg-white mt-[10px]"></div>
 

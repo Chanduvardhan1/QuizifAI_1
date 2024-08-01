@@ -19,6 +19,8 @@ import Attempt1 from "../../public/images/dashboard/Attempt1.png";
 import NoOfQuestion from "../../public/images/dashboard/NoOfQuestion.png";
 import Easy from "../../public/images/dashboard/Easy.png";
 import Clock from "../../public/images/dashboard/Clock.png";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Quiz = () => {
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
@@ -322,6 +324,16 @@ const Quiz = () => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     navigate(`/quizaccess`);
   };
+  const handleStartQuiz1 = (quizId, attemptsCount, retakeFlag) => {
+    if (attemptsCount >= retakeFlag) {
+      toast.error('You have reached the maximum number of retake attempts for this quiz.');
+    } else {
+      localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
+      navigate(`/quizaccess`);
+      setMessage(''); // Clear any previous messages
+    }
+  };
+  const currentDate = new Date();
 
   useEffect(() => {
     const filtered = allquizzes.filter((quizItem) => {
@@ -437,6 +449,7 @@ const Quiz = () => {
   return (
     <div className={styles.container}>
       <Navigation />
+      <ToastContainer />
       <div className={styles.mainContent}>
         <div className={styles.header}>
           {/* Header content */}
@@ -584,7 +597,13 @@ const Quiz = () => {
           <div className="mx-auto">
             <div className="flex flex-wrap mx-auto ml-[35px] -mt-[10px]">
               {filteredQuizzes
-                .filter((quizItem) => quizItem.active_flag === true)
+                .filter((quizItem) => {
+                  const quizCreateDate = new Date(quizItem.quiz_create_date);
+                  const quizEndDate = new Date(quizItem.quiz_end_date);
+                  return quizItem.active_flag === true &&         
+                         currentDate >= quizCreateDate &&
+                         currentDate <= quizEndDate;
+                } )
                 .map((quizItem, index) => (
                   <div key={index} className="">
                     {quizItem.attempt_flag === "Y" ? (
@@ -648,6 +667,8 @@ const Quiz = () => {
                                 View
                               </span>
                               </div>
+                              {quizItem.attempts_count < quizItem.retake_flag && (
+
                               <div className={styles.retake}>
                               <img
                                 className=" h-[10px] w-[10px] "
@@ -663,6 +684,22 @@ const Quiz = () => {
                                 Retake
                               </span>
                               </div>
+                              )}
+                              {userRole === "Quiz Master" && (
+                                <div className={styles.edit}>
+                                  <img
+                                    className={styles.editimage}
+                                    src={Edit_button}
+                                    alt="Edit icon"
+                                  />
+                                  <span
+                                    className={styles.edittext}
+                                    onClick={() => Edit(quizItem.quiz_id)}
+                                  >
+                                    Edit
+                                  </span>
+                                </div>
+                                )}
                               <div className={styles.leaderboard}>
                               <img
                                 className={styles.leaderboardimage}
@@ -725,7 +762,7 @@ const Quiz = () => {
                           </span>
                           <button
                             className="cursor-pointer ml-auto relative -top-[18px] right-1"
-                            onClick={() => handleStartQuiz(quizItem.quiz_id)}
+                            onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
                           >
                             <img
                               className="h-8 w-[34px]"

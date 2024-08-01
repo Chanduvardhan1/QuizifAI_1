@@ -167,7 +167,7 @@ const quiz_results = () => {
 
     const sendQuizResult = async () => {
       try {
-        const response = await fetch('https://quizifai.com:8010/quiz_result', {
+        const response = await fetch('https://quizifai.com:8010/quiz_result_view', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -301,7 +301,7 @@ const quiz_results = () => {
 </div>
 
           <p className={styles.quizdescription}>{quizData.quiz_description}</p>
-          <div className={styles.Questionslines }>
+          {/* <div className={styles.Questionslines }>
         <div className={styles.Questions}>
 
         <span className={styles.Question} >Questions :</span>{" "}
@@ -309,30 +309,80 @@ const quiz_results = () => {
         </div>
         <div>
 
-        <span className={styles.Question} >Duration:</span>{" "}
+        <span className={styles.Question} >Duration :</span>{" "}
           <span className={styles.username1} >{`${quizData.attempt_duration}`}</span>
         </div>
         <div>
 
-<span className={styles.Question} >Total Score:</span>{" "}
+<span className={styles.Question} >Total Marks :</span>{" "}
   <span className={styles.username1} >{`${quizData.quiz_total_marks}`}</span>
 </div>
 <div>
 
-<span className={styles.Question } >Pass Score :</span>{" "}
-  <span className={styles.username1} >{`${quizData.attempt_percentage}`}</span>
+<span className={styles.Question } >Pass Percentage :</span>{" "}
+  <span className={styles.username1} >{`${quizData.attempt_percentage}`}%</span>
 </div>
-        </div>
-          <div className={styles.Createdbyupdated}>
+        </div> */}
+          {/* <div className={styles.Createdbyupdated}>
         <div className={styles.Created}>
 
-        <span className={styles.Createdby} >Created By:</span>{" "}
+        <span className={styles.Createdby} >Created By :</span>{" "}
           <span className={styles.username} >{`${quizData.created_by}`}</span>
         </div>
         <div>
 
-        <span className={styles.Createdby} >Created On:</span>{" "}
+        <span className={styles.Createdby} >Created On :</span>{" "}
           <span className={styles.username} >{`${quizData.created_on}`}</span>
+        </div>
+        </div> */}
+         <div className={styles.flexrow}>
+          <div className={styles.Createdbyupdated}>
+          <div className={styles.Questions}>
+
+<span className={styles.Question} >Questions&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>{" "}
+  <span className={styles.username1} >{`${quizData.total_questions}`}</span>
+</div>
+<div>
+
+<span className={styles.Question} >Total Marks&nbsp;&nbsp;:</span>{" "}
+  <span className={styles.username1} >{`${quizData.quiz_total_marks}`}</span>
+</div>
+        <div className={styles.Created}>
+
+        <span className={styles.Createdby} >Created By&nbsp;&nbsp;&nbsp;&nbsp;:</span>{" "}
+          <span className={styles.username} >{`${quizData.created_by}`}</span>
+        </div>
+        
+        <div>
+
+        <span className={styles.Createdby} >Created On&nbsp;&nbsp;&nbsp;&nbsp;:</span>{" "}
+          <span className={styles.username} >{`${quizData.created_on}`}</span>
+        </div>
+        </div>
+        <div className={styles.Questionslines }>
+      
+        <div>
+
+        <span className={styles.Question} >Duration :</span>{" "}
+          <span className={styles.username1} >{`${quizData.quiz_duration}`} min</span>
+        </div>
+       
+<div>
+
+<span className={styles.Question } >Pass Percentage :</span>{" "}
+  <span className={styles.username1} >{`${quizData.pass_percentage}`}</span>
+</div>
+
+        </div>
+        <div className={styles.Questionslines }>
+      
+    
+
+<div>
+
+<span className={styles.Question } >complexity :</span>{" "}
+  <span className={styles.username1} >{`${quizData.complexity}`}</span>
+</div>
         </div>
         </div>
         </div>
@@ -583,19 +633,19 @@ const quiz_results = () => {
       </div>
       <div className={styles.columns}>
     <span className={styles.column}>Rank</span>
-    <span className={styles.column}>User Name</span>
+    <span className={`${styles.column} ${styles.userName}`}>User Name</span>
     <span className={styles.column}>Percentage</span>
     <span className={styles.column}>Attempts</span>
     <span className={styles.column}>Duration</span>
   </div>
       {leaderboardData.slice(0,10).map((entry, index) => (
         <div key={entry.rank} className={styles.values}>
-          <div className={styles.value}>{entry.rank}</div>
-          <div className={styles.value}>{entry.user_name}</div>
-          <div className={styles.value}>{entry.attained_percentage}</div>
-          <div className={styles.value}>{entry.attempts_count}</div>
-          <div className={styles.value}>{entry.attempt_duration_mins}</div>
-        </div>
+        <div className={`${styles.value} ${styles.rank}`}>{entry.rank}</div>
+        <div className={`${styles.value} ${styles.userName}`}>{entry.user_name}</div>
+        <div className={`${styles.value} ${styles.percentage}`}>{entry.attained_percentage}</div>
+        <div className={`${styles.value} ${styles.attempts}`}>{entry.attempts_count}</div>
+        <div className={`${styles.value} ${styles.duration}`}>{entry.attempt_duration_mins}</div>
+      </div>
       ))}
     </div>
     </div>

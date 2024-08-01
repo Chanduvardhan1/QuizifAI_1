@@ -7,6 +7,8 @@ import Navigation from "../navbar/navbar";
 import { FiAlertCircle } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
 import { FaXmark } from "react-icons/fa6";
+import { RiDeleteBinLine } from "react-icons/ri";
+
 
 import PDF from "../assets/Images/quiz-type/PDF.png";
 import Next from "../assets/Images/quiz-type/Next.png";
@@ -149,7 +151,7 @@ export default function quiztype() {
   const [retakeOption, setRetakeOption] = useState("");
   const [retake, setRetake] = useState(0);
   const [duration, setDuration] = useState("");
-  const [timings, setTimings] = useState();
+  const [timings, setTimings] = useState("No");
   const [minutes, setMinutes] = useState("");
   const [availablefrom, setavailablefrom] = useState("");
   const [disabledon, setdisabledon] = useState("");
@@ -161,7 +163,7 @@ export default function quiztype() {
   const [selectedValue, setSelectedValue] = useState("0");
   const [showRegistrationSuccess, setShowRegistrationSuccess] = useState(false);
 
-  const [quiztotalmarks, setquiztotalmarks] = useState("");
+  const [quiztotalmarks, setquiztotalmarks] = useState("100");
   const [questionWeightage, setquestionWeightage] = useState("");
   const [multiAnswerFlag, setmultiAnswerFlag] = useState("");
   const [questionDuration, setquestionDuration] = useState("");
@@ -203,6 +205,8 @@ export default function quiztype() {
   const [selectedClass, setSelectedClass] = useState("");
   const [classes, setClasses] = useState([]);
 
+  const [selectedQuestions, setSelectedQuestions] = useState([]); 
+
   const [questions, setQuestions] = useState([]);
   useEffect(() => {
     fetchCategories();
@@ -221,7 +225,24 @@ export default function quiztype() {
       console.error("Error fetching categories:", error);
     }
   };
-
+  useEffect(() => {
+    // Set default category to 'General'
+    const generalCategory = categories.find(category => category.category_name === 'General');
+    if (generalCategory) {
+      setSelectedCategory(generalCategory.category_name);
+      setSubCategories(generalCategory.sub_categories.map(sub => sub.sub_category_name));
+    }
+  }, [categories]);
+  
+  useEffect(() => {
+    // Set default sub-category to 'General' if available
+    if (subCategories.length > 0) {
+      const generalSubCategory = subCategories.find(subCategory => subCategory === 'General');
+      if (generalSubCategory) {
+        setSelectedSubCategory(generalSubCategory);
+      }
+    }
+  }, [subCategories]);
   // Handle category selection
   const handleSelectCategory = (event) => {
     const selectedCategory = event.target.value;
@@ -236,7 +257,11 @@ export default function quiztype() {
       );
     }
   };
-
+  useEffect(() => {
+    // Get the current date and format it as YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
+    setavailablefrom(today);
+  }, []);
   // Handle subcategory selection
   const handleSelectSubCategory = (event) => {
     const selectedSubCategory = event.target.value;
@@ -881,11 +906,27 @@ if (isAnyFieldEmpty) {
     return selectedOptions;
   };
 
-  // const handleDeleteQuestion = (questionIndex) => {
-  //   const updatedQuestions = questions.filter((_, index) => index !== questionIndex);
-  //   setQuestions(updatedQuestions);
-  // };
+  const handleDeleteQuestion = (questionIndex) => {
+    const updatedQuestions = questions.filter((_, index) => index !== questionIndex);
+    setQuestions(updatedQuestions);
+  };
   
+  const toggleQuestionSelection = (index) => {
+    setSelectedQuestions(prevSelected => {
+      if (prevSelected.includes(index)) {
+        return prevSelected.filter(i => i !== index);
+      } else {
+        return [...prevSelected, index];
+      }
+    });
+  };
+  const handleDeleteSelected = () => {
+    const newQuestions = questions.filter((_, index) => !selectedQuestions.includes(index));
+    setQuestions(newQuestions);
+    // setNumQuestions(newQuestions.length);
+    setSelectedQuestions([]);
+    // setIsAllSelected(false);
+  };
   const handleOptionChange = (questionIndex, optionIndex, value) => {
     const updatedQuestions = [...questions];
     updatedQuestions[questionIndex].options[optionIndex].answer_option_text = value;
@@ -981,10 +1022,10 @@ if (isAnyFieldEmpty) {
 
         {!showRegistrationSuccess && (
           <main className="w-max-auto mt-[100px]">
-            <div className="w-[844px] h-[48px] absolute top-[30px] left-[161px] rounded-[10px] bg-[#fee2e2] z-0">
-              <h1 className="font-Poppins font-semibold text-[25px] leading-[37.5px] text-[#214082] flex justify-center items-center mt-2 ml-20">
-                Configure and click next to import your pdf file
-              </h1>
+             <div className="w-[79%] p-[5px] absolute top-[30px] left-[200px] rounded-[10px] bg-[#fee2e2] z-0">
+              <h className="font-Poppins font-semibold text-[20px] leading-[37.5px] text-[#214082] flex justify-center items-center mt-1l">
+              Finalize the configuration and click 'Next' to proceed with adding your quiz questions.
+              </h>
             </div>
             <div className="">
             <div className="flex">
@@ -1483,17 +1524,44 @@ if (isAnyFieldEmpty) {
 
             {/* Questions and options */}
             <div className="absolute top-[210px] left-[298px] w-[1212px] h-[450px] ">
+            <div className=" flex  items-center mb-[10px] pr-[40px] ">
+              {/* <div className="ml-[-20px] mr-[5px]" >
+        <input 
+          type="checkbox"
+          checked={isAllSelected}
+          onChange={handleSelectAll}
+        />
+        <label className="ml-[5px] font-normal text-[#214082]">Select</label>
+      </div> */}
+                <div >
+            {selectedQuestions.length > 0 && (
+        <button
+          onClick={handleDeleteSelected}
+          className="  text-black p-2 text-[14px] rounded-full  flex justify-center items-center gap-[3px]"
+        >
+           <RiDeleteBinLine className=" text-orange-500 w-[20px] h-[20px] ml-[-5px]"  /> <span className=" text-[#214082]">Delete</span>
+        </button>
+      )}
+      </div>
+  
+      </div>
               {questions.map((question, questionIndex) => (
                 <div key={questionIndex} className="mb-8 ">
                   {/* Input field for question */}
                   <div className="flex items-center mb-4">
+                  <input
+    className="ml-[-20px] mr-[5px] mt-1 flex justify-center text-center"
+            type="checkbox"
+            checked={selectedQuestions.includes(questionIndex)}
+            onChange={() => toggleQuestionSelection(questionIndex)}
+          />
                     <div className="mr-2 text-xl font-bold text-[#214082]">
                       {questionIndex + 1}.
                     </div>
                     <input
                       type="text"
                       placeholder={`Question`}
-                      className="w-[70%] h-[35px] font-bold text-[#214082] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] p-[15px] "
+                      className="w-[70%] h-[40px] font-bold text-[#214082] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] p-[10px] text-[14px]"
                       value={question.question_text}
                       onChange={(e) => {
                         const newQuestions = [...questions];
@@ -1507,7 +1575,7 @@ if (isAnyFieldEmpty) {
                     <input
                       type="number"
                       placeholder="Marks"
-                      className="w-[85px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mx-2 p-[10px] font-normal"
+                      className="w-[85px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mx-2 p-[10px] font-normal"
                       value={question.question_weightage}
                       onChange={(e) => {
                         const value = parseInt(e.target.value);
@@ -1526,7 +1594,7 @@ if (isAnyFieldEmpty) {
                       type="text"
                       hidden
                       placeholder="Duration"
-                      className="w-[130px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal"
+                      className="w-[130px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal"
                       value={question.question_duration}
                       onChange={(e) => {
                         const value = parseInt(e.target.value) * 60;
@@ -1537,10 +1605,12 @@ if (isAnyFieldEmpty) {
                       }}
                     />
                   
-      {/* <FaXmark 
-       onClick={() => handleDeleteQuestion(questionIndex)}  
-        className="w-[30px] h-[30px] text-orange-500"
-/> */}
+                  <RiDeleteBinLine onClick={() => {
+          const newQuestions = questions.filter((_, index) => index !== questionIndex);
+          setQuestions(newQuestions);
+        }}  
+        className="w-[25px] h-[25px] text-orange-500"
+/>
                     {/* <input
   type="number"
   placeholder="Duration"
@@ -1566,22 +1636,23 @@ if (isAnyFieldEmpty) {
                 <div className="mr-2 text-xl font-normal" style={{
                   width: '40px',
                   marginRight: '10px',
-                  padding: '3px',
+                  padding: '5px',
                   textAlign: 'center' ,
                   border: '1px solid #ccc',
-                  borderRadius: '10px',
+                  borderRadius: '5px',
                   backgroundColor: '#f9f9f9',
                   justifycontent: 'center',
                   display: 'flex',
                   alignitems: 'center',
                  justifyContent:"center",
+                 fontSize:"14px"
                 }}>
-                  {String.fromCharCode(97 + optionIndex)}.
+                 {String.fromCharCode(97 + optionIndex).toUpperCase()}
                 </div>
                 <input
                   type="text"
                   placeholder="Option Text"
-                  className="w-[836px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[15px] font-normal"
+                  className="w-[836px]  rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal text-[12px]"
                   value={option.answer_option_text}
                   onChange={(e) => handleOptionChange(questionIndex, optionIndex, e.target.value)}
                 />

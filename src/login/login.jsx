@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import styles from "../signup/email.module.css";
 import quizifailogo from "../../src/assets/Images/images/home/home.jpg";
 import butterflyImg from "../assets/Images/images/butterfly1.png";
@@ -17,6 +17,7 @@ import googleLogo from "../assets/Images/images/gmail/google.png";
 import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbarhome from "../navbarhome/navbarhome";
+import { AuthContext } from "../Authcontext/AuthContext.jsx"
 
 
 const LoginPage = () => {
@@ -44,6 +45,7 @@ const LoginPage = () => {
   const [platform, setplatform] = useState("")
   const [Forgotmassage, setForgotmassage] = useState("")
   const [Forgotmobile, setForgotmobile] = useState("")
+  const { login } = useContext(AuthContext)
   const validateEmail = () => {
     return /\S+@\S+\.\S+/.test(email);
   };
@@ -201,7 +203,7 @@ const LoginPage = () => {
       return;
     }
     try {
-      console.log("email - ", email);
+      // console.log("email - ", email);
       // console.log("password before storing:", password);
 
       const platform = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -227,6 +229,7 @@ const LoginPage = () => {
           const userId = responseData.data && responseData.data[0] && responseData.data[0].user_id;
         const userRole = responseData.data && responseData.data[0] && responseData.data[0].user_role;
         if (userId && userRole) {
+          login({ userId, userRole });
           localStorage.setItem('user_id', userId);
           localStorage.setItem('user_role', userRole);
           localStorage.setItem('password', password);
@@ -237,7 +240,7 @@ const LoginPage = () => {
             setErrorMessage("An unknown error occurred while logging in.");
           }
         } else if (responseData.response === "fail") {
-          let errorMessage = responseData.message || "An unknown error occurred while logging in.";
+          let errorMessage = responseData.response_message;
           if (responseData.response_message === "Password is incorrect.Please try again.") {
             errorMessage = "Password is incorrect. Please try again.";
           } else if (responseData.response_message === "Email is not valid.Please check your email") {
@@ -260,6 +263,10 @@ const LoginPage = () => {
             errorMessage = "Mobile Number is incorrect or account doesn't exist. Please sign up.";
           }else if (responseData.response_message === "Mobile Number is not valid. Please check your number") {
             errorMessage = "Mobile Number is not valid. Please check your number";
+          }else if (responseData.response_message === "Password is incorrect. Please try again.") {
+            errorMessage = "Password is incorrect. Please try again.";
+          }else if (responseData.response_message === "You've chosen mobile as your login method, so please log in using your mobile number.") {
+            errorMessage = "You've chosen mobile as your login method, so please log in using your mobile number.";
           }
 
           setErrorMessage(errorMessage);

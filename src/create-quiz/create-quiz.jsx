@@ -20,8 +20,23 @@ import Pdf from "../assets/Images/Create-Quiz/pdf.svg"
 import Books from "../assets/Images/Create-Quiz/books.svg"
 import createicon from "../assets/Images/Create-Quiz/Createicon.svg"
 import Navigation from "../navbar/navbar.jsx"
+import { useNavigate } from "react-router-dom";
 
 export default function createquiz() {
+
+  const navigate = useNavigate();
+  const quiztype = () => {
+    navigate("/quiz-type");
+  };
+  const Csv = () => {
+    navigate("/csv");
+  };
+  const Pdf = () => {
+    navigate("/pdf");
+  };
+  const Textbook = () => {
+    navigate("/textbook");
+  };
   return ( 
     <>
       <div>
@@ -139,7 +154,7 @@ export default function createquiz() {
             </div>
 
             <div className="flex">
-            <a href="/quiz-type" className="w-[140.02px] h-[142.72px] absolute top-[465px] left-[380.95px] rounded-[20px] bg-[#E0FFE8]">
+            <a  onClick={quiztype} className="w-[140.02px] h-[142.72px] absolute top-[465px] left-[380.95px] rounded-[20px] bg-[#E0FFE8]">
   <div className="flex justify-center mx-12 mt-4">
     <img className="w-[36.47px] h-[36.47px] ml-2" src={TypeInUrQuiz} alt="create in your quiz icon"/>
   </div>
@@ -152,7 +167,7 @@ export default function createquiz() {
 </a>
 
 
-<a href="/csv" className="w-[150.02px] h-[142.72px] absolute top-[465px] left-[585.48px] rounded-[20px] bg-[#FCE7E7]">
+<a onClick={Csv} className="w-[150.02px] h-[142.72px] absolute top-[465px] left-[585.48px] rounded-[20px] bg-[#FCE7E7]">
   <div className="flex justify-center mx-12 mt-4">
     <img className="w-[36.47px] h-[36.47px] ml-2" src={Download} alt="Download icon"/>
   </div>
@@ -164,7 +179,7 @@ export default function createquiz() {
   </h1>
 </a>
 
-<a href="/pdf" className="w-[150.02px] h-[142.72px] absolute top-[465px] left-[815.95px] rounded-[20px] bg-[#B1FB9B]">
+<a onClick={Pdf} className="w-[150.02px] h-[142.72px] absolute top-[465px] left-[815.95px] rounded-[20px] bg-[#B1FB9B]">
   <div className="flex justify-center mx-12 mt-4">
     <img className="w-[36.47px] h-[36.47px] ml-2" src={Pdf} alt="Pdf icon"/>
   </div>
@@ -177,7 +192,7 @@ export default function createquiz() {
 </a>
 
 
-<a href="/textbook" className="w-[150.02px] h-[142.72px] absolute top-[465px] left-[1015.48px] rounded-[20px] bg-[#FFEDCD]">
+<a onClick={Textbook} className="w-[150.02px] h-[142.72px] absolute top-[465px] left-[1015.48px] rounded-[20px] bg-[#FFEDCD]">
   <div className="flex justify-center mx-12 mt-4">
     <img className="w-[36.47px] h-[36.47px] ml-2" src={Books} alt="Books icon"/>
   </div>

@@ -166,7 +166,7 @@ export default function quiztype() {
   const [retakeOption, setRetakeOption] = useState("");
   const [retake, setRetake] = useState(0);
   const [duration, setDuration] = useState("");
-  const [timings, setTimings] = useState();
+  const [timings, setTimings] = useState("No");
   const [minutes, setMinutes] = useState("");
   const [availablefrom, setavailablefrom] = useState("");
   const [disabledon, setdisabledon] = useState("");
@@ -178,7 +178,7 @@ export default function quiztype() {
   const [selectedValue, setSelectedValue] = useState("0");
   const [showRegistrationSuccess, setShowRegistrationSuccess] = useState(false);
 
-  const [quiztotalmarks, setquiztotalmarks] = useState("");
+  const [quiztotalmarks, setquiztotalmarks] = useState("100");
   const [questionWeightage, setquestionWeightage] = useState("");
   const [multiAnswerFlag, setmultiAnswerFlag] = useState("");
 
@@ -233,7 +233,31 @@ export default function quiztype() {
       console.error('Error fetching categories:', error);
     }
   };
+  useEffect(() => {
+    // Set default category to 'General'
+    const generalCategory = categories.find(category => category.category_name === 'General');
+    if (generalCategory) {
+      setSelectedCategory(generalCategory.category_name);
+      setSubCategories(generalCategory.sub_categories.map(sub => sub.sub_category_name));
+    }
+  }, [categories]);
+  
+  useEffect(() => {
+    // Set default sub-category to 'General' if available
+    if (subCategories.length > 0) {
+      const generalSubCategory = subCategories.find(subCategory => subCategory === 'General');
+      if (generalSubCategory) {
+        setSelectedSubCategory(generalSubCategory);
+      }
+    }
+  }, [subCategories]);
 
+
+  useEffect(() => {
+    // Get the current date and format it as YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
+    setavailablefrom(today);
+  }, []);
   // Handle category selection
   const handleSelectCategory = (event) => {
     const selectedCategory = event.target.value;
@@ -797,9 +821,9 @@ export default function quiztype() {
         <div className="absolute top-[30px] left-[1260px] cursor-pointer text-[#eeb600f0] " onClick={Back}><MdOutlineCancel /></div>
         {!showRegistrationSuccess && (
           <main className="w-max-auto">
-            <div className="w-[719px] h-[48px] absolute top-[30px] left-[200px] rounded-[10px] bg-[#fee2e2] z-0">
-              <h className="font-Poppins font-semibold text-[25px] leading-[37.5px] text-[#214082] flex justify-center items-center mt-1l">
-                Configure and click next to type in your Quiz
+            <div className="w-[79%] p-[5px] absolute top-[30px] left-[200px] rounded-[10px] bg-[#fee2e2] z-0">
+              <h className="font-Poppins font-semibold text-[20px] leading-[37.5px] text-[#214082] flex justify-center items-center mt-1l">
+              Finalize the configuration and click 'Next' to proceed with adding your quiz questions.
               </h>
             </div>
             <div className="flex">
@@ -1332,7 +1356,7 @@ export default function quiztype() {
       <input
         type="text"
         placeholder={`Question`}
-        className="w-[70%] h-[35px] text-[#214082] font-bold rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] p-[15px] "
+        className="w-[70%] h-[40px] text-[#214082] font-bold rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] p-[10px] text-[14px]"
         value={question.question_text}
         onChange={(e) => {
           const newQuestions = [...questions];
@@ -1345,7 +1369,7 @@ export default function quiztype() {
     <input
         type="number"
         placeholder="Marks"
-        className="w-[85px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mx-2 p-[10px] font-normal"
+        className="w-[85px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mx-2 p-[10px] font-normal"
         value={calculateWeightage(numQuestions, quiztotalmarks)}
         onChange={(e) => {
           const value = parseInt(e.target.value);
@@ -1374,7 +1398,7 @@ export default function quiztype() {
       
           type="number"
           placeholder="Duration"
-          className="w-[130px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal hidden"
+          className="w-[130px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal hidden"
           value={duration}
           onChange={(e) => setDuration(parseInt(e.target.value))}
           disabled
@@ -1384,7 +1408,7 @@ export default function quiztype() {
         <input
           type="number"
           placeholder="Duration"
-          className="w-[130px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal"
+          className="w-[130px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal"
           value={calculateQuizDuration()}
           onChange={() => {}}
           disabled
@@ -1392,7 +1416,7 @@ export default function quiztype() {
       ) : (
         // Each question has different time
         <select
-        className="w-[130px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[2px] font-normal"
+        className="w-[130px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[2px] font-normal"
         value={questionDuration}
         onChange={(e) => {
           const newQuestionDuration = parseInt(e.target.value);
@@ -1417,13 +1441,13 @@ export default function quiztype() {
     {/* Input fields for options */}
     {question.options.map((option, optionIndex) => (
       <div key={optionIndex} className="flex items-center mb-2 ">
-        <div className="mr-2 text-xl font-normal w-[25px] rounded-[10px] p-2 border-[1px] border-solid border-[#B8BBC2] flex justify-center text-center h-[35px] justify-items-center items-center">
-          {String.fromCharCode(97 + optionIndex)}.
+        <div className="mr-2 text-[14px] font-normal w-[40px] rounded-[5px] p-[8px] border-[1px] border-solid border-[#B8BBC2] flex justify-center text-center  justify-items-center items-center">
+        {String.fromCharCode(97 + optionIndex).toUpperCase()}
         </div>
         <input
           type="text"
           placeholder={`Option Text`}
-          className="w-[70%] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[15px] font-normal"
+          className="w-[70%]  rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal text-[12px]"
           value={option.answer_option_text}
           onChange={(e) => {
             const newOptions = [...questions[questionIndex].options];
