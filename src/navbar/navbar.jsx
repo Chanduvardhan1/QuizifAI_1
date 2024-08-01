@@ -175,9 +175,9 @@ const Navigation = () => {
       <div className="h-[5px] w-full bg-white mt-[10px]"></div>
 
 <div className="p-[10px] ml-2">
-  <h1 className="font-semibold mt-[10px] text-[15px] text-[#002366]">Subscription Type : <span className=" text-black text-[12px] font-normal">Public/Subscribed</span> </h1>
+  <h1 className="font-semibold mt-[10px] text-[15px] text-[#002366]">Subscription Type : <span className=" text-black text-[12px] font-normal">Public</span> </h1>
   <h1 className=" mt-[5px] px-[1px] font-semibold text-[15px] text-[#002366]">Subscribed Date :
-  <span className=" text-black text-[12px] font-normal">{subscriptionStartDate} for public</span> 
+  <span className=" text-black text-[12px] font-normal">{subscriptionStartDate}</span> 
     </h1>
   <h1 className="font-semibold  text-[15px] text-[#002366]"> Days Remaining:
   <span className="text-black text-[12px] font-normal">
@@ -186,7 +186,7 @@ const Navigation = () => {
     <p className="text-[13px] text-red-500 ml-[20px] mt-[3px]">{remainingDays}</p> 
   ):(             
            
-  <h1 className="mt-[2px] ml-[10px] text-[13px] font-normal"><img className="h-[40px] w-[35px] ml-5 -mt-2" src={infinity} />days remaining for public</h1>
+  <h1 className="mt-[2px] ml-[10px] text-[13px] font-normal"><img className="h-[40px] w-[35px] ml-5 -mt-2" src={infinity} />days remaining </h1>
   )}
   </span>
   </h1>
