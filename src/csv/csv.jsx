@@ -808,10 +808,10 @@ export default function quiztype() {
         <div className="absolute top-[30px] left-[1260px] cursor-pointer text-[#eeb600f0] " onClick={Back}><MdOutlineCancel /></div>
         {!showRegistrationSuccess && (
           <main className="w-max-auto">
-            <div className="w-[844px] h-[48px] absolute top-[30px] left-[125px] rounded-[10px] bg-[#fee2e2] z-0">
-              <h1 className="font-Poppins font-semibold text-[25px] leading-[37.5px] text-[#214082] flex justify-center items-center mt-2 ml-20">
-                Configure and click next to import your Excel file
-              </h1>
+            <div className="w-[79%] p-[5px] absolute top-[30px] left-[200px] rounded-[10px] bg-[#fee2e2] z-0">
+              <h className="font-Poppins font-semibold text-[20px] leading-[37.5px] text-[#214082] flex justify-center items-center mt-1l">
+              Finalize the configuration and click 'Next' to proceed with adding your quiz questions.
+              </h>
             </div>
 
             <div className=" absolute top-[100px]">
@@ -1339,7 +1339,7 @@ export default function quiztype() {
                     <input
                       type="text"
                       placeholder={`Question`}
-                      className="w-[70%] h-[35px] text-[#214082] font-bold rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] p-[15px] "
+                      className="w-[70%] h-[40px] text-[#214082] font-bold rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] p-[10px] text-[14px] "
                       value={question.question_text}
                       onChange={(e) => {
                         const newQuestions = [...questions];
@@ -1353,7 +1353,7 @@ export default function quiztype() {
                     <input
                       type="number"
                       placeholder="Marks"
-                      className="w-[85px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mx-2 p-[10px] font-normal"
+                      className="w-[85px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mx-2 p-[10px] font-normal"
                       value={question.question_weightage}
                       onChange={(e) => {
                         const value = parseInt(e.target.value);
@@ -1372,7 +1372,7 @@ export default function quiztype() {
                       type="text"
                       hidden
                       placeholder="Duration"
-                      className="w-[130px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal"
+                      className="w-[130px] h-[40px] rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal"
                       value={question.question_duration}
                       onChange={(e) => {
                         const value = parseInt(e.target.value) * 60;
@@ -1405,13 +1405,13 @@ export default function quiztype() {
                   {question.options.map((option, optionIndex) => (
                     <div key={optionIndex} className="flex items-center mb-2">
                       {/* Option input field */}
-                      <div className="mr-2 text-xl font-normal w-[25px] rounded-[10px] p-2 border-[1px] border-solid border-[#B8BBC2] flex justify-center text-center h-[35px] justify-items-center items-center">
-                        {String.fromCharCode(97 + optionIndex)}.
-                      </div>
+                        <div className="mr-2  font-normal w-[40px] rounded-[5px] p-[8px] border-[1px] border-solid border-[#B8BBC2] flex justify-center text-center justify-items-center items-center text-[14px]">
+                        {String.fromCharCode(97 + optionIndex).toUpperCase()}
+                        </div>
                       <input
                         type="text"
                         placeholder={`Option Text`}
-                        className="w-[850px] h-[35px] rounded-[10px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[15px] font-normal"
+                        className="w-[850px]  rounded-[5px] border-solid border-[#B8BBC2] border-[1.8px] mr-2 p-[10px] font-normal text-[12px]"
                         value={option.answer_option_text}
                         onChange={(e) => {
                           const newOptions = [...question.options];

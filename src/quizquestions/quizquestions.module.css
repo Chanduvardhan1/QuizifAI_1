@@ -1,69 +1,69 @@
 .container {
-  display: flex;
-  font-family: "Poppins";
-  /* gap: 40px; */
-}
- 
+    display: flex;
+    font-family: "Poppins";
+    /* gap: 40px; */
+  }
+   
 
 .leftBar {
-  width: 78px;
-  height: 1089px;
-  top: -36px;
-  border-radius: 20px 0 0 20px;
-  box-shadow: 0px 4px 4px 0px #00000040;
-  background: #F5F5FB;
-  position: absolute;
-  left: 0;
-}
-
-.pageList{
-  margin-top: 100px;
-}
-/* .mainContent{
-  margin-left: 150px;
-  margin-top: 30px;
-} */
-
-.mainContent{
-  display: flex;
-  flex-direction: column;
-  padding: 25px;
-}
+    width: 78px;
+    height: 1089px;
+    top: -36px;
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    background: #F5F5FB;
+    position: absolute;
+    left: 0;
+  }
+  
+  .pageList{
+    margin-top: 100px;
+  }
+  /* .mainContent{
+    margin-left: 150px;
+    margin-top: 30px;
+  } */
+  
+  .mainContent{
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+  }
 .currentQuestion{
-  display: flex;
-  flex-direction: column;
-  gap: 0px;  
+    display: flex;
+    flex-direction: column;
+    gap: 0px;  
 }
 
 .pageItem {
-  display: flex;
-  align-items: center;
-  font-family: "poppins";
-  margin-top: 30px;
-  font-size: 15px;
-  font-weight: 500;
-  margin-left: 40px;
-  margin-right: 20px; 
+    display: flex;
+    align-items: center;
+    font-family: "poppins";
+    margin-top: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-left: 40px;
+    margin-right: 20px; 
 }
 
 
 
 
 .pageIcon {
-  width: 15px; 
-  height: 15px; 
-  margin-top: 10px;
+    width: 15px; 
+    height: 15px; 
+    margin-top: 10px;
 
 }
 
 .pageLink {
-  text-decoration: none;
-  color: #000; 
-  cursor: pointer;
+    text-decoration: none;
+    color: #000; 
+    cursor: pointer;
 }
 
 .quizTitle{
-  font-family: Poppins;
+    font-family: Poppins;
 font-size: 20px;
 font-weight: 600;
 line-height: 30px;
@@ -73,24 +73,24 @@ text-align: left;
 }
 
 .imageContainer {
-  position: relative;
+    position: relative;
 }
 
 .logoImage {
-  width: 59px;
-  height: 59px;
-  position: absolute;
-  top: 25px;
-  left: 0px;
-  padding: 7px 7px 7px 5px;
+    width: 59px;
+    height: 59px;
+    position: absolute;
+    top: 25px;
+    left: 0px;
+    padding: 7px 7px 7px 5px;
 }
 
 .textContainer {
-  /* position: absolute; */
-  /* top: 15px; 
-  left: 0px; */
-  white-space: nowrap;
-  font-family: Poppins;
+    /* position: absolute; */
+    /* top: 15px; 
+    left: 0px; */
+    white-space: nowrap;
+    font-family: Poppins;
 font-size: 14px;
 font-weight: 700;
 line-height: 27px;
@@ -106,69 +106,69 @@ padding-top: 10px;
 }
 
 .boxesContainer {
-  display: flex;
-  flex-direction: column;
-  /* margin-top: 85px;  */
+    display: flex;
+    flex-direction: column;
+    /* margin-top: 85px;  */
 }
 
 .box {
-  width: 540px;
-  height: 59px;
-  background-color: #eceff0; /* Example background color */
-  margin-bottom: 10px; /* Adjust spacing between boxes */
-  border-radius: 10px;
-  border: 1px solid #000000;
+    width: 540px;
+    height: 59px;
+    background-color: #eceff0; /* Example background color */
+    margin-bottom: 10px; /* Adjust spacing between boxes */
+    border-radius: 10px;
+    border: 1px solid #000000;
 }
 
 .icon {
-  
- 
-  background-repeat: no-repeat;
- 
-  margin-top: 30px;
-  
-  transform: translateY(-50%);
-  padding: 9px 7px 8px 8px;
+    
+   
+    background-repeat: no-repeat;
+   
+    margin-top: 30px;
+    
+    transform: translateY(-50%);
+    padding: 9px 7px 8px 8px;
 }
 .icon1 {
-  
- 
-  background-repeat: no-repeat;
- 
-  margin-top: 32px;
-  margin-left: 8px;
-  transform: translateY(-50%);
-  padding: 9px 7px 8px 8px;
+    
+   
+    background-repeat: no-repeat;
+   
+    margin-top: 32px;
+    margin-left: 8px;
+    transform: translateY(-50%);
+    padding: 9px 7px 8px 8px;
 }
 .icon2 {
-  
- 
-  background-repeat: no-repeat;
- 
-  margin-top: 32px;
-  margin-left: 7px;
-  transform: translateY(-50%);
-  padding: 9px 7px 8px 8px;
+    
+   
+    background-repeat: no-repeat;
+   
+    margin-top: 32px;
+    margin-left: 7px;
+    transform: translateY(-50%);
+    padding: 9px 7px 8px 8px;
 }
 .icon3 {
-  
- 
-  background-repeat: no-repeat;
- 
-  margin-top: 30px;
-  margin-left: 8px;
-  transform: translateY(-50%);
-  padding: 9px 7px 8px 8px;
+    
+   
+    background-repeat: no-repeat;
+   
+    margin-top: 30px;
+    margin-left: 8px;
+    transform: translateY(-50%);
+    padding: 9px 7px 8px 8px;
 }
 
 .iconText{
-  color: #ABABAB;
-  margin-left: 10px;
+    color: #ABABAB;
+    margin-left: 10px;
 }
 
 
 .button {
-  width: 110px;
+    width: 110px;
 }
 .button1{
 
@@ -180,26 +180,27 @@ padding-top: 10px;
 
 }
 .buttonsContainer {
-  display: flex;
-  /* justify-content: space-between; */
-  margin-top: 50px;
-  margin-bottom: 10px; /* Adjust as needed */
+    display: flex;
+    /* justify-content: space-between; */
+    margin-top: 50px;
+    margin-bottom: 10px; /* Adjust as needed */
 }
 
 .verticalLine {
-  width: 1px;
-  height: 375px;
-  margin-top: 160px;
-  background-color: black; /* Adjust as needed */
-  margin-right: 20px; 
-  /* margin-left: 170px; */
+    width: 1px;
+    height: 375px;
+    margin-top: 160px;
+    background-color: black; /* Adjust as needed */
+    /* margin-right: 20px;  */
+    /* margin-left: 170px; */
 }
 .Totaltimer{
-  /* width: 400px; */
+    /* width: 400px; */
+    padding: 5px;
 }
 .sentence1{
-  font-family: Poppins;
-  margin-top: 100px;
+    font-family: Poppins;
+    margin-top: 100px;
 font-size: 14px;
 font-weight: 700;
 line-height: 30px;
@@ -209,31 +210,32 @@ color: #F4774B;
 width: 152px;
 }
 .quiztitle{
-  font-family: Poppins;
-  font-size: 18px;
-  font-weight: 700;   
-  display: flex;
-  align-items: center;
+    font-family: Poppins;
+    font-size: 18px;
+    font-weight: 700;   
+    display: flex;
+    align-items: center;
 }
 .quizdescription{
-  width: 650px;
+    width: 600px;
 }
 .Createdbyandupdated{
-  display: flex;
-  gap: 110px;
+    display: flex;
+    /* gap: 110px; */
+    flex-direction: column;
 }
 .Created{
-  align-items: center;
-  font-family: Poppins;
-  font-size: 14px;
-  font-weight: 600;
+    align-items: center;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: 600;
 }
 .quizdescription{
-  font-family: Poppins;
-  font-size: 15px;
+    font-family: Poppins;
+    font-size: 15px;
 }
 .sentence2{
-  font-family: Poppins;
+    font-family: Poppins;
 font-size: 14px;
 font-weight: 500;
 line-height: 30px;
@@ -247,18 +249,18 @@ width: 285px; */
 width: 200px;
 }
 .back1{
-  display: flex;
-  cursor: pointer;
-  justify-content: end;
-  /* margin-left: 95px; */
-  z-index: 1;
-  justify-items: end;
-  /* flex-direction: column; */
-  margin-top: 10;
-  margin-top: 17px;
-}
+    display: flex;
+    cursor: pointer;
+    justify-content: end;
+    /* margin-left: 95px; */
+    z-index: 1;
+    justify-items: end;
+    /* flex-direction: column; */
+    margin-top: 10;
+    margin-top: 17px;
+  }
 .sentence3{
-  font-family: Poppins;
+    font-family: Poppins;
 font-size: 14px;
 font-weight: 500;
 line-height: 45px;
@@ -270,7 +272,7 @@ color:black;
 }
 
 .sentence4{
-  font-family: Poppins;
+    font-family: Poppins;
 font-size: 20px;
 font-weight: 500;
 line-height: 30px;
@@ -281,92 +283,164 @@ margin-left: -130px;
 }
 
 .imageContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.textContainer {
-
-  display: flex;
-  align-items: start;
-}
-
-.boxesContainer {
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-}
-
-.box {
-  margin: 10px 0;
-  /* padding: 10px 20px; */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.buttonsContainer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  /* padding-left: 10px;
-  padding-right: 130px; */
-}
-
-.button {
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-.optionItem {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  gap: 5px;
-}
-.Questionslines{
-  display:flex;
-  gap:40px;
-}
-.Question{
-  font-family: Poppins;
-  font-size: 14px;
-  font-weight: 700;
-  color: #214082;
-}
-.username{
-  font-size: 14px;
-}
-.username1{
-  font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .textContainer {
  
-}
+    display: flex;
+    align-items: start;
+  }
+  
+  .boxesContainer {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+  }
+  
+  .box {
+    margin: 10px 0;
+    /* padding: 10px 20px; */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .buttonsContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    /* padding-left: 10px;
+    padding-right: 130px; */
+  }
+  
+  .button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .optionItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 5px;
+  }
+  .Questionslines{
+    display:flex;
+    /* gap:40px; */
+    flex-direction: column;
+  }
+  .flexrow{
+    display: flex;
+    /* flex-direction: column; */
+    gap: 30px;
+  
+  }
+  .Question{
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: 700;
+    color: #214082;
+  }
+  .username{
+    font-size: 14px;
+  }
+  .username1{
+    font-size: 14px;
+   
+  }
+  .questionNumbersContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 20px;
+   
+    max-width: 600px;
+  }
+  
+  .questionNumber {
+    flex: 0 0 auto; /* Ensures that the flex items do not shrink or grow */
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+  }
+  
+  .questionNumber.selected {
+    background-color: lightgreen;
+    font-weight: bold;
+    border-color: green;
+  }
+  /* QuizComponent.module.css */
+/* QuizComponent.module.css */
+
 .questionNumbersContainer {
   display: flex;
   flex-wrap: nowrap;
   margin-bottom: 20px;
- 
   max-width: 600px;
 }
 
-.questionNumber {
-  flex: 0 0 auto; /* Ensures that the flex items do not shrink or grow */
-  width: 30px;
-  height: 30px;
+.questionNumber1 {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 5px;
+  margin: 2px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   background-color: #f9f9f9;
 }
 
-.questionNumber.selected {
+.questionNumber1.selected {
   background-color: lightgreen;
   font-weight: bold;
   border-color: green;
+}
+
+.skippedQuestionsContainer {
+  display: flex;
+  flex-wrap:wrap;
+  margin-top: 20px;
+  max-width: 600px;
+}
+
+.questionNumber1.skipped {
+  background-color: #F4774B;
+  font-weight: bold;
+  border-color: red;
+  font-size: 10px;
+  color: #214082;;
+}
+
+.skipped{
+  font-size: 14px;
+  color: #214082;
+}
+.backgroundbox{
+  background-color: white;
+  
+  border: 1px solid;
+  padding: 10px;
+  border-radius: 10px;
+  color: #214082;;
+}
+.innerbox{
+  display: flex;
+    border: 1px solid;
+    flex-wrap: wrap;
+    border-color: #214082;;
+    border-radius: 10px;
+    padding: 5px;
 }

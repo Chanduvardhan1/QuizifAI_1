@@ -549,25 +549,7 @@ padding: 10px;
   /* justify-content: end; */
   /* align-items: end; */
 }
-.columns {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  /* margin-left: 100px; */
-  /* margin-top: -300px; */
-  z-index: 1;
-  gap: 0px;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
-}
 
-.column {
-  margin-top: 10px; 
-  text-align: center;
-  margin: 0 12px;
-  white-space: nowrap;
-}
 .lines{
   display: flex;
   justify-content: center;
@@ -697,23 +679,49 @@ height: 23px;
 }
 
 
+.columns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1;
+  /* gap: 25px; */
+  /* padding-left: 1px; */
+  font-size: 12px;
+  width: 455px;
+  
+  font-weight: 700;
+}
+
+.column {
+  margin-top: 10px;
+  text-align: center;
+  /* margin: 0 12px; */
+  white-space: nowrap;
+  flex: 1;
+}
+
 .values {
   display: flex;
-  /* justify-content: space-between; */
-  width: 100%;
-  /* margin-bottom: 5px; */
-  /* border-bottom: 1px solid #ddd; */
-  padding: 5px;
-  z-index: 1;
-  /* margin-left: 59px; */
-  gap: 35px;
-  font-size: 12px;
+  justify-content: space-between;
+  padding: 0px;
   border-bottom: 1px solid #ccc;
+  font-size: 12px;
+  width: 450px;
+  margin: 7px 0;
 }
 
 .value {
-  flex: 1;
   text-align: center;
+  flex: 1; /* Ensures values take up equal space */
+}
+
+/* Specific widths for each column to ensure proper alignment */
+.rank, .percentage, .attempts, .duration {
+  flex: 1; /* Adjust this value as needed for specific widths */
+}
+
+.userName {
+  flex: 2; /* User Name column is wider */
 }
 
 .newContainer {

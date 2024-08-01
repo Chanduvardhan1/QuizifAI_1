@@ -244,23 +244,7 @@ font-size: 14px;
   .downbutton:hover{
     background-color: rgb(239,81,48);
   }
-  .columns {
-    /* display: flex;
-    flex-direction: row;
-    align-items: center; */
-    /* margin-left: 100px;
-    margin-top: -300px; */
-    z-index: 1;
-    gap: 25px;
-    padding-left: 13px;
-}
   
-  .column {
-    margin-top: 10px; 
-    text-align: center;
-    margin: 0 12px;
-    white-space: nowrap;
-  }
   .sentence span {
     margin-left: 5px; /* Adjust margin left for text */
   }
@@ -543,16 +527,49 @@ border: none;
   align-items: center;
   position: absolute;
 }
+.columns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1;
+  /* gap: 25px; */
+  /* padding-left: 1px; */
+  font-size: 12px;
+  width: 455px;
+  
+  font-weight: 700;
+}
+
+.column {
+  margin-top: 10px;
+  text-align: center;
+  /* margin: 0 12px; */
+  white-space: nowrap;
+  flex: 1;
+}
+
 .values {
-  /* display: flex;
-  justify-content: space-between; */
+  display: flex;
+  justify-content: space-between;
   padding: 0px;
   border-bottom: 1px solid #ccc;
+  font-size: 12px;
+  width: 450px;
+  margin: 7px 0;
 }
 
 .value {
-  flex: 1;
   text-align: center;
+  flex: 1; /* Ensures values take up equal space */
+}
+
+/* Specific widths for each column to ensure proper alignment */
+.rank, .percentage, .attempts, .duration {
+  flex: 1; /* Adjust this value as needed for specific widths */
+}
+
+.userName {
+  flex: 2; /* User Name column is wider */
 }
 .rank1{
 font-size: 20px;
@@ -826,41 +843,10 @@ display: flex;
   /* Add additional styles as needed */
 }
 
-.columns {
-  display: flex;
-  flex-direction: row;
-  /* align-items: center; */
-  /* margin-left: 850px;
-  margin-top: -339px; */
-  z-index: 1;
-  font-size: 12px;
-  font-weight: 700;
-}
 
-.column {
-  margin-top: 10px; /* Adjust spacing between columns */
-  text-align: center;
-  margin: 0 5px;
-  white-space: nowrap;
-}
-.values {
-  display: flex;
-  flex-direction: row;
-  /* margin-left: 826px; */
-  z-index: 1;
-  font-size: 12px;
-  /* background: #FFFFFF; */
-  /* box-shadow: 0px 4px 4px 0px #00000040; */
-  gap: 30px;
-}
 
-.value {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 10px;
-/* Adjust padding as needed */
-}
+
+
 .righticon{
   width: 22.98px;
 height: 23px;

@@ -13,6 +13,7 @@ import ranks from "../assets/Images/images/dashboard/ranks.png";
 import infinity from "../assets/Images/images/dashboard/infinity.png"
 import questionmark from "../assets/Images/images/dashboard/questionmark.png";
 import profileimg from "../assets/Images/images/profile/profileImage.png";
+import rocket from "../assets/Images/images/dashboard/rocket.png";
 
 
 const currentValue1 = 50; 
@@ -55,6 +56,7 @@ const LogoutBar = (data) => {
   const [country, setCountry] = useState("");
   const [district, setDistrict] = useState("")
   const [globalRank, setGlobalRank] = useState("");
+  const [globalscore, setGlobalscore] = useState("");
   const [totalQuizzes, setTotalQuizzes] = useState("");
   const [totalMinutes, setTotalMinutes] = useState("");
   const [averageScorePercentage, setAverageScorePercentage] = useState("");
@@ -94,7 +96,8 @@ const LogoutBar = (data) => {
         if (auditDetails) {
           // setCity(auditDetails.location_name || "");
           setCountry(auditDetails.country_name || "");
-          setGlobalRank(auditDetails.global_rank || "");
+          setGlobalRank(auditDetails.global_score_rank || "");
+          setGlobalscore(auditDetails.global_score || "");
           setRegisteredOn(auditDetails.created_date || "");
           setLastLogin(auditDetails.last_login_timestamp || "");
           setPasswordChanged(auditDetails.user_password_change_date || "");
@@ -122,10 +125,10 @@ const LogoutBar = (data) => {
 
         const usermetrics = data.data[0].user_metrics;
         if (usermetrics) {
-          setTotalQuizzes(usermetrics.total_quizzes || 0);
+          setTotalQuizzes(usermetrics.countofquizes || 0);
           setTotalMinutes(usermetrics.total_minutes || 0);
           setAverageScorePercentage(usermetrics.average_total_percentage || 0);
-          setGlobalRank(usermetrics.global_rank || "");
+          // setGlobalRank(usermetrics.global_score_rank || "");
         } else {
           console.error("No user metrics found.");
         }
@@ -166,7 +169,7 @@ const LogoutBar = (data) => {
   };
   return (
     <div className={styles.logout}>
-     <div style={{ marginTop: "10px", display: "flex", alignItems: "center" , marginLeft:"30px"}}> 
+     <div style={{ marginTop: "-20px", display: "flex", alignItems: "center" , marginLeft:"20px",position:"relative",top:"25px"}}> 
        <div>
        <img
     src={LogoutIcon}
@@ -266,28 +269,44 @@ const LogoutBar = (data) => {
          
           <div className="h-[5px] w-full bg-white mt-2"></div>
 
-          <div style={{ marginTop: "10px" }}>
+          <div style={{ marginTop: "0px" }}>
             
-            <div className="flex">
-              <img className="h[60px] w-[60px] ml-7 mt-1" src={ranks}/>
-              <div>
-              <p className="text-[30px] text-[#5E81F4]  text-start mt-1 font-bold">{globalRank}</p>
+            <div className="flex justify-center">
+              <img className="h-[60px] w-[60px]  mt-1" src={ranks}/>
+              <div className=" flex flex-col">
+              <div className=" flex items-center gap-[5px]">
+              <p className="text-[25px] text-[#5E81F4]  text-start mt-1 font-bold">{globalRank}</p>
               <h1 className="relative font-Poppins text-[13px]">global rank</h1>
+              </div>
+              <div className="flex items-center gap-[5px]">
+              <p className="text-[20px] text-[#5E81F4]  text-start  font-bold">{globalscore}</p>
+              <h1 className="relative font-Poppins text-[13px]">global Score</h1>
+              </div>
               </div>
             </div>
             <div className="h-[5px] w-full bg-white mt-[10px]"></div>
 
           <div className="flex">
-            <span className="text-[25px] text-[#E97132] ml-[35px] mt-[5px] font-semibold">{totalQuizzes}</span>
+            <span className="text-[25px] text-[#E97132] ml-[25px] mt-[5px] font-semibold">{totalQuizzes}</span>
             <h1 className="text-[12px] mt-[20px] ml-[5px] font-medium">quizzes</h1>
           </div>
           <div className="flex -mt-[15px]">
-            <span className="text-[25px] text-[#E97132] ml-[35px] mt-[10px] font-semibold">{totalMinutes}</span>
+            <span className="text-[25px] text-[#E97132] ml-[25px] mt-[10px] font-semibold">{totalMinutes}</span>
             <h1 className="mt-[23px] ml-[5px] text-[12px] text-nowrap font-normal">total minutes</h1>
 
           </div><div className="flex -mt-[15px]">
-            <span className="text-[25px] text-[#E97132] ml-[35px] mt-[10px] font-semibold">{averageScorePercentage}%</span>
+            <span className="text-[25px] text-[#E97132] ml-[25px] mt-[10px] font-semibold">{averageScorePercentage}%</span>
             <h1 className="mt-[23px] ml-[5px] text-[12px] font-normal">average</h1>
+          </div>
+          <div className=" flex items-center justify-center z-50 ">
+              <img src={rocket} alt="" className=" w-[49px] h-[112px] z-50"/>
+            </div>
+          <div className=" flex flex-col justify-center items-center p-[10px] bg-white rounded-[25px] w-[90%] ml-[10px] pt-[80px] relative top-[-75px]">
+         
+            <div>
+              <p className=" text-[#9696BB] ">Upgrade to <span className=" text-black font-bold">Pro</span>  for more resources</p>
+            </div>
+            <button className=" bg-[#5E81F4] p-[5px] px-[20px] rounded-[10px] text-white">Upgrade</button>
           </div>
           {/* <div className="h-[5px] w-full bg-white mt-[10px]"></div>
 

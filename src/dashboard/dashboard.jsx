@@ -21,6 +21,8 @@ import Easy from "../../public/images/dashboard/Easy.png";
 import Clock from "../../public/images/dashboard/Clock.png";
 import arrow from "../../src/assets/Images/dashboard/rightArrow.png";
 import "react-sweet-progress/lib/style.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
   const getFormattedDate = () => {
@@ -120,7 +122,15 @@ const Dashboard = () => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     navigate(`/quizaccess`);
   };
-
+  const handleStartQuiz1 = (quizId, attemptsCount, retakeFlag) => {
+    if (attemptsCount >= retakeFlag) {
+      toast.error('You have reached the maximum number of retake attempts for this quiz.');
+    } else {
+      localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
+      navigate(`/quizaccess`);
+      setMessage(''); // Clear any previous messages
+    }
+  };
   // const leaderboard = (quizId) => {
   //   localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
   //   navigate('/quiz-results1', { state: { quizId } })
@@ -189,6 +199,8 @@ const Dashboard = () => {
       },
     });
   };
+
+ 
   const Edit = (quizId) => {
     // navigate(`/quizaccess/${quizId}`);
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
@@ -198,6 +210,10 @@ const Dashboard = () => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     localStorage.setItem("quiz_level_attempt_id", attemptId); // Store attempt_id in local storage
     navigate(`/quizview_results`);
+  };
+  const createQuiz = () => {
+
+    navigate(`/create-quiz`);
   };
 
   // const quizresults = () => {
@@ -257,6 +273,9 @@ const Dashboard = () => {
       return updatedStates;
     });
   };
+  const handleDelete = (index) => {
+    setAllquizzes(prevAllquizzes => prevAllquizzes.filter((_, i) => i !== index));
+  };
 
   const handleBackToQuizzes = () => {
     navigate("/quiz");
@@ -297,10 +316,18 @@ const Dashboard = () => {
       return "#808080"; // Gray color for invalid percentages
     }
   }
+  const currentDate = new Date();
+
   const userRole = localStorage.getItem('user_role');
 
   const results = (latestResult || []).map((result, index) => {
     const percentColor = getColorPercentage(result?.quiz_percentage);
+    const handleQuizClick = () => {
+      leaderboard1(
+        result?.quiz_id,
+        result?.quiz_level_attempt_id
+      );
+    };
     return (
       <div key={index}>
         <div className={styles.infoLine}>
@@ -310,7 +337,8 @@ const Dashboard = () => {
           >
             {result?.attempt_date}
             <span className="relative group">
-              <span className="absolute ml-[10px] w-[100px] cursor-pointer z-0 truncate">
+              <span className="absolute ml-[10px] w-[100px] cursor-pointer z-0 truncate"
+              onClick={handleQuizClick}>
                 {result?.quiz_name}
               </span>
               <span className="cursor-pointer hidden group-hover:inline-block absolute left-0 top-5 w-auto z-30 bg-black text-white px-1 border border-black-300 rounded">
@@ -351,6 +379,7 @@ const Dashboard = () => {
   return (
     <div className={styles.container}>
       <Navigation />
+      <ToastContainer />
       <div className={styles.mainContent}>
         <div className={styles.header}>
           {/* Header content */}
@@ -382,7 +411,8 @@ const Dashboard = () => {
               alt="Plus Icon"
             />
             <a
-              href="./create-quiz"
+            
+              onClick={createQuiz}
               className="hover:underline underline-offset-2 cursor-pointer font-Poppins font-medium text-[12px] leading-[18px] text-[#214082] ml-2 mt-3"
             >
               Quiz
@@ -502,8 +532,14 @@ const Dashboard = () => {
           <div className="flex flex-wrap mx-auto ml-[15px] -mt-[20px]">
             {allquizzes
               .filter(
-                (quizItem) =>
-                  quizItem.active_flag === true && quizItem.latest_flag === "Y"
+                (quizItem) =>{
+                  const quizCreateDate = new Date(quizItem.quiz_start_date);
+                  const quizEndDate = new Date(quizItem.quiz_end_date);
+                  return quizItem.active_flag === true &&
+                         quizItem.latest_flag === "Y" &&
+                         currentDate >= quizCreateDate &&
+                         currentDate <= quizEndDate;
+                }
               )
               .slice(0, 3)
               .map((quizItem, index) => (
@@ -566,7 +602,8 @@ const Dashboard = () => {
                                 View
                               </span>
                               </div>
-                              {quizItem.retake_flag > 0 && (
+                              {quizItem.attempts_count < quizItem.retake_flag && (
+
                               <div className={styles.retake}>
                               <img
                                 className=" h-[10px] w-[10px] "
@@ -581,6 +618,21 @@ const Dashboard = () => {
                               >
                                 Retake
                               </span>
+                              </div>
+                              )}
+                                {userRole === "Quiz Master" && (
+                              <div className={styles.edit}>
+                                <img
+                                  className={styles.editimage}
+                                  src={Edit_button}
+                                  alt="Edit icon"
+                                />
+                                <span
+                                  className={styles.edittext}
+                                  onClick={() => Edit(quizItem.quiz_id)}
+                                >
+                                  Edit
+                                </span>
                               </div>
                               )}
                               <div className={styles.leaderboard}>
@@ -605,6 +657,21 @@ const Dashboard = () => {
                                 Leaderboard
                               </span>
                               </div>
+                              {/* {userRole === "Quiz Master" && (
+                              <div className={styles.edit}>
+                                <img
+                                  className={styles.editimage}
+                                  src={Edit_button}
+                                  alt="Edit icon"
+                                />
+                                <span
+                                  className={styles.edittext}
+                                  onClick={() => handleDelete(index)}
+                                >
+                                  Delete
+                                </span>
+                              </div>
+                              )} */}
                               {/* <img
                             className={styles.shareimage} style={{marginTop:"2px"}}
                             
@@ -640,7 +707,7 @@ const Dashboard = () => {
 
                           <button
                             className="cursor-pointer ml-auto relative -top-[10px] right-1"
-                            onClick={() => handleStartQuiz(quizItem.quiz_id)}
+                            onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
                           >
                             <img
                               className="h-8 w-[34px]"
@@ -851,7 +918,7 @@ const Dashboard = () => {
                                   Edit
                                 </span>
                               </div>
-                              )}
+                               )}
                               <div className={styles.leaderboard}>
                                 <img
                                   className={styles.leaderboardimage}
@@ -884,6 +951,21 @@ const Dashboard = () => {
                                   Leaderboard
                                 </span>
                               </div>
+                              {/* {userRole === "Quiz Master" && (
+                              <div className={styles.edit}>
+                                <img
+                                  className={styles.editimage}
+                                  src={Edit_button}
+                                  alt="Edit icon"
+                                />
+                                <span
+                                  className={styles.edittext}
+                                  onClick={() => handleDelete(index)}
+                                >
+                                  Delete
+                                </span>
+                              </div>
+                              )} */}
                               {/* <div className={styles.share}>
                       <img className={styles.shareimage} src={Share_button} alt="Share icon" />
                       <span className={styles.sharetext}>Share</span>
@@ -914,7 +996,9 @@ const Dashboard = () => {
 
                           <button
                             className="cursor-pointer ml-auto relative -top-[10px] right-1"
-                            onClick={() => handleStartQuiz(quizItem.quiz_id)}
+                            onClick={() =>
+                              handleStartQuiz(quizItem.quiz_id)
+                            }
                           >
                             <img
                               className="h-8 w-[34px]"
@@ -1046,8 +1130,14 @@ const Dashboard = () => {
             {allquizzes
               .filter(
                 (quizItem) =>
-                  quizItem.active_flag === true &&
-                  quizItem.popularity_flag === "Y"
+                  {
+                    const quizCreateDate = new Date(quizItem.quiz_start_date);
+                    const quizEndDate = new Date(quizItem.quiz_end_date);
+                    return quizItem.active_flag === true &&
+                           quizItem.latest_flag === "Y" &&
+                           currentDate >= quizCreateDate &&
+                           currentDate <= quizEndDate;
+                  }
               )
               .sort((a,b) =>b.quiz_attempts - a.quiz_attempts)
               .slice(0, 3)
@@ -1113,7 +1203,8 @@ const Dashboard = () => {
                                 View
                               </span>
                               </div>
-                              {quizItem.retake_flag > 0 && (
+                              {quizItem.attempts_count < quizItem.retake_flag && (
+
                               <div className={styles.retake}>
                               <img
                                 className=" h-[10px] w-[10px] "
@@ -1128,6 +1219,21 @@ const Dashboard = () => {
                               >
                                 Retake
                               </span>
+                              </div>
+                              )}
+                                {userRole === "Quiz Master" && (
+                              <div className={styles.edit}>
+                                <img
+                                  className={styles.editimage}
+                                  src={Edit_button}
+                                  alt="Edit icon"
+                                />
+                                <span
+                                  className={styles.edittext}
+                                  onClick={() => Edit(quizItem.quiz_id)}
+                                >
+                                  Edit
+                                </span>
                               </div>
                               )}
                               <div className={styles.leaderboard}>
@@ -1152,6 +1258,21 @@ const Dashboard = () => {
                                 Leaderboard
                               </span>
                               </div>
+                              {/* {userRole === "Quiz Master" && (
+                              <div className={styles.edit}>
+                                <img
+                                  className={styles.editimage}
+                                  src={Edit_button}
+                                  alt="Edit icon"
+                                />
+                                <span
+                                  className={styles.edittext}
+                                  onClick={() => handleDelete(index)}
+                                >
+                                  Delete
+                                </span>
+                              </div>
+                              )} */}
                               {/* <img
                             className={styles.shareimage} style={{marginTop:"2px"}}
                             
@@ -1189,8 +1310,9 @@ const Dashboard = () => {
 
                           <button
                             className="cursor-pointer ml-auto relative -top-[10px] right-1"
-                            onClick={() => handleStartQuiz(quizItem.quiz_id)}
+                            onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
                           >
+                            
                             <img
                               className="h-8 w-[34px]"
                               src={start}
@@ -1436,6 +1558,21 @@ const Dashboard = () => {
                                   Leaderboard
                                 </span>
                               </div>
+                              {/* {userRole === "Quiz Master" && (
+                              <div className={styles.edit}>
+                                <img
+                                  className={styles.editimage}
+                                  src={Edit_button}
+                                  alt="Edit icon"
+                                />
+                                <span
+                                  className={styles.edittext}
+                                  onClick={() => handleDelete(index)}
+                                >
+                                  Delete
+                                </span>
+                              </div>
+                              )} */}
                               {/* <div className={styles.share}>
                                 <img
                                   className={styles.shareimage}

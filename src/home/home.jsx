@@ -226,11 +226,7 @@ function Home() {
               Pricing
             </li> */}
           
-            <li  onClick={handleClick3} className="navItem">
-         
-              Contact Us
-             
-            </li>
+          
 
             <li className="buttons">
               <Link to={"/signup"}>
@@ -274,6 +270,11 @@ function Home() {
                 </button>
               </Link>
             </li>
+            <li  onClick={handleClick3} className="navItem">
+         
+         Contact Us
+        
+       </li>
           </ul>
         </nav>
       </header>

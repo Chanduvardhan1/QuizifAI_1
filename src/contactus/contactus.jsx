@@ -200,9 +200,7 @@ function contact() {
               Pricing
             </li> */}
 
-            <li onClick={handleClick} className="navItem">
-              Contact Us
-            </li>
+         
             <li className="buttons">
               <Link to={"/signup"}>
                 <button
@@ -244,6 +242,9 @@ function contact() {
                   Login
                 </button>
               </Link>
+            </li>
+            <li onClick={handleClick} className="navItem">
+              Contact Us
             </li>
           </ul>
         </nav>

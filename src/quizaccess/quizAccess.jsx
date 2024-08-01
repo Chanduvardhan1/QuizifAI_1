@@ -112,7 +112,9 @@ const quizAccess = () => {
           quiz_duration: quizData.quiz_duration,
           pass_percentage: quizData.pass_percentage,
           num_questions: quizData.num_questions,
-          quiz_total_marks: quizData.quiz_total_marks
+          quiz_total_marks: quizData.quiz_total_marks,
+          quiz_complexity_name:quizData.quiz_complexity_name
+
         }
       });
     }
@@ -340,7 +342,7 @@ const quizAccess = () => {
     className={styles.icon2}
   /> */}
           <span  className={styles.sentence5} style={{color:"#214082"}}>Pass Percentage :</span>
-          <span  className={styles.sentence3}>{`${quizData.pass_percentage}%`}</span>
+          <span  className={styles.sentence3}>{`${quizData.pass_percentage}`}</span>
         </div>
         <div className={styles.sentence4}>
         {/* <img

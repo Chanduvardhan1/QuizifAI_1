@@ -13,6 +13,8 @@ import searchIcon from "../assets/Images/images/dashboard/searchBar.png";
 import search from "../assets/Images/images/dashboard/Search.png";
 import profileimg from "../assets/Images/images/profile/profileImage.png";
 import "react-sweet-progress/lib/style.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const FreeProfile = () => {
   const getFormattedDate = () => {
@@ -97,6 +99,7 @@ const FreeProfile = () => {
 
   const [showOtherInput, setShowOtherInput] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
+  const [rolename, setrolename] = useState("");
 
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName);
@@ -214,6 +217,7 @@ const FreeProfile = () => {
           preferredLoginMethod: userProfileDetails.preferred_login_method,
           address: userProfileDetails.user_address_line_1,
           otheroccupation: userProfileDetails.other_occupation_name,
+          rolename:userProfileDetails.role_name
         };
         setFirstName(userProfileDetails.first_name);
         setMiddleName(userProfileDetails.middle_name);
@@ -233,7 +237,7 @@ const FreeProfile = () => {
         setPreferredLoginMethod(userProfileDetails.preferred_login_method);
         setOtherccupation(userProfileDetails.other_occupation_name);
         setShowOtherInput(userProfileDetails.occupation_name === 'Other');
-
+        setrolename(userProfileDetails.role_name)
         const userDetails = data.data[0].audit_details;
         setUserName(userDetails.full_name);
 
@@ -280,7 +284,7 @@ const FreeProfile = () => {
       email_otp: emailOtp,
       user_phone_number: mobileNumber,
       otp: otp,
-      user_role: "Quiz User", // Example value, adjust as needed
+      user_role: rolename, // Example value, adjust as needed
       user_type: "Public", 
       user_org_id: null,
       gender: gender,
@@ -455,7 +459,7 @@ handleEditClick();
       }
   
       if (alertMessage) {
-        alert(alertMessage);
+        toast.error(alertMessage);
       }
   
       if (!alertMessage.includes('Error')) {
@@ -467,7 +471,7 @@ handleEditClick();
       console.error("Error sending OTP:", error.message);
       if (!alertMessage) {
         alertMessage = "Error sending OTP. Please try again.";
-        alert(alertMessage);
+        toast.error(alertMessage);
       }
     }
   };
@@ -562,7 +566,7 @@ const handleUpdatePassword = async (e) => {
     });
 
     if (response.data.response === "success") {
-      alert(response.data.response_message);
+      toast.error(response.data.response_message);
       localStorage.setItem('password', newPassword); // Store the new password in localStorage
 
       setOldPassword(newPassword);
@@ -577,11 +581,11 @@ const handleUpdatePassword = async (e) => {
       setOldPasswordError('Incorrect old password.');
     }
      else {
-      alert("Failed to update password. Please try again.");
+      toast.error("Failed to update password. Please try again.");
     }
   } catch (error) {
     console.error("Error updating password", error);
-    alert("An error occurred while updating the password");
+    toast.error("An error occurred while updating the password");
   }
 };
 
@@ -600,6 +604,7 @@ const handleLoginCancelClick1 = () =>{
   return (
     <div className={styles.container}>
       <Navigation />
+      <ToastContainer/>
       <div className={styles.mainContent} style={{backgroundColor:"#F5F5F5"}}>
         <div className={styles.header}>
           {/* Header content */}
@@ -964,6 +969,7 @@ const handleLoginCancelClick1 = () =>{
                           focus:outline-none"
               type="text"
               value={otheroccupation}
+              disabled={!isEditingLogin}
               onChange={(e) => setOtherccupation(e.target.value)}
 
             />
