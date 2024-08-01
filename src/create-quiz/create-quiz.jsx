@@ -16,7 +16,7 @@ import Profile from "../assets/Images/Create-Quiz/Profile.png";
 import CreateAi from "../assets/Images/Create-Quiz/createai.svg"
 import TypeInUrQuiz from "../assets/Images/Create-Quiz/type-in-ur-quiz.svg"
 import Download from "../assets/Images/Create-Quiz/download.svg"
-import Pdf from "../assets/Images/Create-Quiz/pdf.svg"
+import Pdf1 from "../assets/Images/Create-Quiz/pdf.svg"
 import Books from "../assets/Images/Create-Quiz/books.svg"
 import createicon from "../assets/Images/Create-Quiz/Createicon.svg"
 import Navigation from "../navbar/navbar.jsx"
@@ -181,7 +181,7 @@ export default function createquiz() {
 
 <a onClick={Pdf} className="w-[150.02px] h-[142.72px] absolute top-[465px] left-[815.95px] rounded-[20px] bg-[#B1FB9B]">
   <div className="flex justify-center mx-12 mt-4">
-    <img className="w-[36.47px] h-[36.47px] ml-2" src={Pdf} alt="Pdf icon"/>
+    <img className="w-[36.47px] h-[36.47px] ml-2" src={Pdf1} alt="Pdf icon"/>
   </div>
   <h1 className="font-Poppins font-bold text-[12px] leading-[18px] text-[#575757] flex justify-center mt-4">
     Use pdf
