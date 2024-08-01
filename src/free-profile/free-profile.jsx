@@ -969,7 +969,7 @@ const handleLoginCancelClick1 = () =>{
                           focus:outline-none"
               type="text"
               value={otheroccupation}
-              disabled={!isEditingLogin}
+              disabled={!isEditing}
               onChange={(e) => setOtherccupation(e.target.value)}
 
             />

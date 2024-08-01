@@ -152,14 +152,14 @@ const Navigation = () => {
           <img src={profileIcon} alt="Profile Icon" className={styles.pageIcon} />
           <span className={styles.pageLink}>Profile</span>
         </NavLink>
-        <NavLink
+        {/*<NavLink
           to="/configure"
           className={`${styles.pageItem} ${activePage === '/configure' ? styles.bold : ''}`}
           onClick={() => handleNavigation('/configure')}
         >
           <img src={Settings} alt="Settings Icon" className={styles.pageIcon} />
           <span className={styles.pageLink}>Settings</span>
-        </NavLink>
+        </NavLink>*/}
         {/* <NavLink
           to="/contact"
           className={`${styles.pageItem} ${activePage === '/contact' ? styles.bold : ''}`}
