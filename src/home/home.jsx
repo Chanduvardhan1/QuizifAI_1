@@ -270,11 +270,11 @@ function Home() {
                 </button>
               </Link>
             </li>
-            <li  onClick={handleClick3} className="navItem">
+            {/* <li  onClick={handleClick3} className="navItem">
          
          Contact Us
         
-       </li>
+       </li> */}
           </ul>
         </nav>
       </header>

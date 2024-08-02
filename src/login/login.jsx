@@ -17,7 +17,7 @@ import googleLogo from "../assets/Images/images/gmail/google.png";
 import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbarhome from "../navbarhome/navbarhome";
-// import { AuthContext } from "../Authcontext/AuthContext.jsx"
+import { AuthContext } from "../Authcontext/AuthContext.jsx"
 
 
 const LoginPage = () => {
@@ -45,7 +45,7 @@ const LoginPage = () => {
   const [platform, setplatform] = useState("")
   const [Forgotmassage, setForgotmassage] = useState("")
   const [Forgotmobile, setForgotmobile] = useState("")
-  // const { login } = useContext(AuthContext)
+  const { login } = useContext(AuthContext)
   const validateEmail = () => {
     return /\S+@\S+\.\S+/.test(email);
   };
@@ -229,7 +229,7 @@ const LoginPage = () => {
           const userId = responseData.data && responseData.data[0] && responseData.data[0].user_id;
         const userRole = responseData.data && responseData.data[0] && responseData.data[0].user_role;
         if (userId && userRole) {
-          // login({ userId, userRole });
+          login({ userId, userRole });
           localStorage.setItem('user_id', userId);
           localStorage.setItem('user_role', userRole);
           localStorage.setItem('password', password);

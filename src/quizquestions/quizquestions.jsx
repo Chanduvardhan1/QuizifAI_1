@@ -513,11 +513,11 @@ const QuizQuestions = () => {
       .map((question, index) => selectedOptions[index] === undefined ? index + 1 : null)
       .filter(questionNumber => questionNumber !== null);
 
-    if (unansweredQuestions.length > 0) {
-      toast.error(`Please answer all questions before submitting. You have skipped questions: ${unansweredQuestions.join(', ')}`);
-      setSkippedQuestionsDisplay(unansweredQuestions);
-      return;
-    }
+    // if (unansweredQuestions.length > 0) {
+    //   toast.error(`Please answer all questions before submitting. You have skipped questions: ${unansweredQuestions.join(', ')}`);
+    //   setSkippedQuestionsDisplay(unansweredQuestions);
+    //   return;
+    // }
 
     setValidationMessage('');
     const answers = Object.keys(selectedOptions).map(questionIndex => ({

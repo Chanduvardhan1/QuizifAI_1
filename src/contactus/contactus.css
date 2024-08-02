@@ -259,6 +259,7 @@ left: -100px !important;
 .content4{
   padding: 20px;
   width: 100%; 
+  padding-top: 100px;
 }
 .sendbutton1{
   display: flex;
