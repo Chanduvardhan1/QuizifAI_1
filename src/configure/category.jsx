@@ -20,13 +20,16 @@ const category = () => {
   const [parentCategoryId, setParentCategoryId] = useState('');
   const [isToggleEnabled, setIsToggleEnabled] = useState(false);
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  const [isNavbarOpen1, setIsNavbarOpen1] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [createdBy, setCreatedBy] = useState(0);
   const [parentCategories, setParentCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
+  const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
   const handleBanckToDashbaord = () =>{
     navigate('/dashboard');
@@ -49,11 +52,15 @@ const category = () => {
     fetchCategories();
   }, []);
   const handleToggleChange = (checked) => {
-    setIsToggleEnabled(checked);
     setParentCategoryFlag(checked ? 'Y' : 'N');
+    setIsToggleEnabled(checked);
     if (!checked) {
       setParentCategoryId(''); // Clear parent category ID if toggle is off
     }
+  };
+  const handleToggleChange1 = (checked) => {
+    setIsToggleEnabled(checked);
+    setParentCategoryFlag(checked ? 'Y' : 'N');
   };
 
   const toggleNavbar = () => {
@@ -62,10 +69,10 @@ const category = () => {
 
   useEffect(() => {
     if (isToggleEnabled) {
-      setParentCategory('YES');
+      setParentCategoryFlag('Y');
       setParentCategoryId(null);
-    } else if (parentCategory !== '') {
-      setParentCategory('NO');
+    } else if (parentCategoryFlag !== '') {
+      setParentCategoryFlag('N');
     }
   }, [isToggleEnabled]);
   
@@ -168,7 +175,7 @@ const category = () => {
       category_id: categoryId,
       category_name: categoryName,
       parent_category_flag: parentCategoryFlag,
-      parent_category_id: parentCategoryId,
+      // parent_category_id: parentCategoryId,
       user_id: createdBy,
     };
   
@@ -210,22 +217,36 @@ const category = () => {
   };
   
 
-  const handleEdit = (index) => {
-    const category = categories[index];
-    setCategoryId(category.category_id);
-    setCategoryName(category.category_name);
-    setParentCategory(category.parent_category_flag);
-    setParentCategoryId(category.parent_category_id);
-    setCreatedBy(category.user_id);
-    setIsEditing(true);
-    setEditIndex(index);
-    setIsNavbarOpen(true);
+  const handleEdit = (category) => {
+    if (selectedCategoryId === category.category_id) {
+      // Toggle the form visibility if the same category ID is clicked
+      setIsNavbarOpen(!isNavbarOpen);
+    } else {
+      // Open the form with new category details
+      setCategoryId(category.category_id);
+      setCategoryName(category.category_name);
+      setParentCategoryFlag(category.parent_category_flag);
+      setParentCategoryId(category.parent_category_id);
+      setIsToggleEnabled(category.parent_category_flag === 'Y');
+      setIsNavbarOpen(true);
+      setIsEditing(true);
+      setSelectedCategoryId(category.category_id);
+    }
   };
+ 
+  useEffect(() => {
+    // Convert search query to lowercase for case-insensitive search
+    const lowercasedQuery = searchQuery.toLowerCase();
+    const filtered = data.filter(category =>
+      category.category_name.toLowerCase().includes(lowercasedQuery) ||
+      category.category_id.toString().includes(lowercasedQuery) ||
+      (category.parent_category_name && category.parent_category_name.toLowerCase().includes(lowercasedQuery)) ||
+      category.parent_category_flag.toLowerCase().includes(lowercasedQuery)
+    );
 
-  const filteredData = data.filter(category => 
-    category.category_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+    // Sort filtered data: matched items come first
+    setFilteredData(filtered);
+  }, [searchQuery, data]);
  
   return (
     <>
@@ -303,6 +324,66 @@ const category = () => {
 </button>
         </div>
       )}
+        {/* {isNavbarOpen1 && (
+        <div className='text-[10px] mx-[10px] text-[#214082] h-[50px] mt-[30px] rounded-md bg-[#CBF2FB] flex flex-row justify-around p-4'>
+          <input
+            type='text'
+            placeholder='Category ID'
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            className=' w-[75px] -mt-[10px] text-center rounded-3xl py-[14px] pl-1 text-[#214082] placeholder:text-[#214082] outline-[#214082]'
+            style={{ '::placeholder': { color: '#214082' } }}
+            
+          />
+          <input
+            type='text'
+            placeholder='Category Name'
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+            className=' w-[95px] rounded-3xl text-center -mt-[10px]  py-[14px] text-[#214082] placeholder:text-[#214082] outline-[#214082]'
+          />
+           <input
+        type='text'
+        placeholder='N'
+        value={parentCategoryFlag}
+        onChange={(e) => setParentCategoryFlag(e.target.value)}
+        className='w-[120px] rounded-3xl text-center -mt-[10px] py-[14px] text-[#214082] placeholder:text-[#214082] outline-[#214082]'
+        readOnly
+      />
+          <div className='h-[2px] w-[2px] -mt-[10px] -ml-[40px] mr-[20px]'>
+          <Switch
+              onChange={handleToggleChange1}
+              checked={isToggleEnabled}
+              offColor="#888"
+              onColor="#008800"
+              checkedIcon={<span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: "white" }}>✔</span>}
+              uncheckedIcon={<span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: "white" }}>✖</span>}
+            />
+           </div>
+           {parentCategoryFlag === 'N' && (
+        <select
+          onChange={handleParentCategoryChange}
+          value={parentCategoryId || ''}
+          className="rounded-3xl text-center  -mt-[10px] w-[150px] text-[#214082] placeholder:text-[#214082] outline-[#214082]"
+        >
+          <option value="">Select a parent category</option>
+          {data
+            .filter(category => category.parent_category_flag === 'Y')
+            .map(category => (
+              <option key={category.category_id} value={category.category_id}>
+                {category.category_name}
+              </option>
+            ))}
+        </select>
+      )}
+         <button
+  onClick={handleSubmit}
+  className='bg-[#214082] w-[80px] -mt-[10px] ml-[20px] py-[14px] rounded-3xl text-white flex items-center justify-center'
+>
+  {isEditing ? 'Update' : 'Add'}
+</button>
+        </div>
+      )} */}
 
       <table className='h-[20px] table-auto mt-[30px] mx-[20px] rounded text-left bg-[#F7E0E3] text-[#2b51a1] text-[13px] font-light'>
         <thead>
@@ -340,7 +421,7 @@ const category = () => {
                   className='h-[13px] w-[13px] mr-1 cursor-pointer'
                   src={Edit}
                   alt="Edit"
-                  onClick={() => handleEdit(index)}
+                  onClick={() => handleEdit(category)}
                 />
               </td>
             </tr>
