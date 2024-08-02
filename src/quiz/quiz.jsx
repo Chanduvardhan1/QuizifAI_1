@@ -269,7 +269,7 @@ const Quiz = () => {
     avgscore,
     max_percentage
   ) => {
-    localStorage.setItem("quiz_id", quizId); 
+    localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     navigate("/quiz-results1", {
       state: {
         quizId,
@@ -597,13 +597,13 @@ const Quiz = () => {
           <div className="mx-auto">
             <div className="flex flex-wrap mx-auto ml-[35px] -mt-[10px]">
               {filteredQuizzes
-                .filter((quizItem) => {
-                  const quizCreateDate = new Date(quizItem.quiz_create_date);
-                  const quizEndDate = new Date(quizItem.quiz_end_date);
-                  return quizItem.active_flag === true &&         
-                         currentDate >= quizCreateDate &&
-                         currentDate <= quizEndDate;
-                } )
+               .filter(quizItem => {
+                const quizCreateDate = new Date(quizItem.quiz_start_date);
+                const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
+                return quizItem.active_flag === true &&
+                       currentDate >= quizCreateDate &&
+                       (quizEndDate === null || currentDate <= quizEndDate);
+              })
                 .map((quizItem, index) => (
                   <div key={index} className="">
                     {quizItem.attempt_flag === "Y" ? (

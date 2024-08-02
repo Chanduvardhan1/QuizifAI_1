@@ -531,16 +531,14 @@ const Dashboard = () => {
 
           <div className="flex flex-wrap mx-auto ml-[15px] -mt-[20px]">
             {allquizzes
-              .filter(
-                (quizItem) =>{
-                  const quizCreateDate = new Date(quizItem.quiz_start_date);
-                  const quizEndDate = new Date(quizItem.quiz_end_date);
-                  return quizItem.active_flag === true &&
-                         quizItem.latest_flag === "Y" &&
-                         currentDate >= quizCreateDate &&
-                         currentDate <= quizEndDate;
-                }
-              )
+              .filter(quizItem => {
+                const quizCreateDate = new Date(quizItem.quiz_start_date);
+                const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
+                return quizItem.active_flag === true &&
+                       quizItem.latest_flag === "Y" &&
+                       currentDate >= quizCreateDate &&
+                       (quizEndDate === null || currentDate <= quizEndDate);
+              })
               .slice(0, 3)
               .map((quizItem, index) => (
                 <div key={index}>
@@ -1128,17 +1126,14 @@ const Dashboard = () => {
 
           <div className="flex flex-wrap mx-auto ml-[15px] -mt-[20px]">
             {allquizzes
-              .filter(
-                (quizItem) =>
-                  {
-                    const quizCreateDate = new Date(quizItem.quiz_start_date);
-                    const quizEndDate = new Date(quizItem.quiz_end_date);
-                    return quizItem.active_flag === true &&
-                           quizItem.latest_flag === "Y" &&
-                           currentDate >= quizCreateDate &&
-                           currentDate <= quizEndDate;
-                  }
-              )
+               .filter(quizItem => {
+                const quizCreateDate = new Date(quizItem.quiz_start_date);
+                const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
+                return quizItem.active_flag === true &&
+                       quizItem.latest_flag === "Y" &&
+                       currentDate >= quizCreateDate &&
+                       (quizEndDate === null || currentDate <= quizEndDate);
+              })
               .sort((a,b) =>b.quiz_attempts - a.quiz_attempts)
               .slice(0, 3)
               .map((quizItem, index) => (
