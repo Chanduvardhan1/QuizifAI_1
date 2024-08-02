@@ -276,11 +276,11 @@ const LogoutBar = (data) => {
               <div className=" flex flex-col">
               <div className=" flex items-center gap-[5px]">
               <p className="text-[25px] text-[#5E81F4]  text-start mt-1 font-bold">{globalRank}</p>
-              <h1 className="relative font-Poppins text-[13px]">global rank</h1>
+              <h1 className="relative font-Poppins text-[13px]">Global Rank</h1>
               </div>
               <div className="flex items-center gap-[5px]">
               <p className="text-[20px] text-[#5E81F4]  text-start  font-bold">{globalscore}</p>
-              <h1 className="relative font-Poppins text-[13px]">global Score</h1>
+              <h1 className="relative font-Poppins text-[13px]">Global Score</h1>
               </div>
               </div>
             </div>
@@ -288,15 +288,15 @@ const LogoutBar = (data) => {
 
           <div className="flex">
             <span className="text-[25px] text-[#E97132] ml-[25px] mt-[5px] font-semibold">{totalQuizzes}</span>
-            <h1 className="text-[12px] mt-[20px] ml-[5px] font-medium">quizzes</h1>
+            <h1 className="text-[12px] mt-[20px] ml-[5px] font-medium">Quizzes</h1>
           </div>
           <div className="flex -mt-[15px]">
             <span className="text-[25px] text-[#E97132] ml-[25px] mt-[10px] font-semibold">{totalMinutes}</span>
-            <h1 className="mt-[23px] ml-[5px] text-[12px] text-nowrap font-normal">total minutes</h1>
+            <h1 className="mt-[23px] ml-[5px] text-[12px] text-nowrap font-normal">Total Minutes</h1>
 
           </div><div className="flex -mt-[15px]">
             <span className="text-[25px] text-[#E97132] ml-[25px] mt-[10px] font-semibold">{averageScorePercentage}%</span>
-            <h1 className="mt-[23px] ml-[5px] text-[12px] font-normal">average</h1>
+            <h1 className="mt-[23px] ml-[5px] text-[12px] font-normal">Average</h1>
           </div>
           <div className=" flex items-center justify-center z-50 ">
               <img src={rocket} alt="" className=" w-[49px] h-[112px] z-50"/>

@@ -444,7 +444,7 @@ if (!Array.isArray(leaderboardData)) {
 
 <div>
 
-<span className={styles.Question } >complexity :</span>{" "}
+<span className={styles.Question } >Complexity :</span>{" "}
   <span className={styles.username1} >{`${quizData.complexity}`}</span>
 </div>
         </div>

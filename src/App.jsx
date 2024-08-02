@@ -287,8 +287,8 @@ import PrivateRoute from './privateRoute/privateRoute.jsx';
         <Route path="quiz-type" element={<PrivateRoute><Quiztype /></PrivateRoute>} />
         <Route path="pdf" element={<PrivateRoute><Pdf /></PrivateRoute>} />
 
-        <Route path="contact" element={<Contact />} />
-        <Route path="contact1" element={<Contact1 />} />
+        <Route path="contact" element={<PrivateRoute><Contact /></PrivateRoute>} />
+        <Route path="contact1" element={<PrivateRoute><Contact1 /></PrivateRoute>} />
         <Route path="termsandconditions" element={<Termsandconditions />} />
 
         <Route path="leaderboard" element={<PrivateRoute><Leaderboard /></PrivateRoute>} />
@@ -302,18 +302,18 @@ import PrivateRoute from './privateRoute/privateRoute.jsx';
         <Route path="quizcreated2" element={<PrivateRoute><Quizcreated2 /></PrivateRoute>} />
         <Route path="/quizaccess" element={<PrivateRoute><QuizAccess /></PrivateRoute>} />
 
-        <Route path="register" element={<Register />} />
-        <Route path="navbar" element={<Navigation />} />
-        <Route path="logoutbar" element={<LogoutBar />} />
+        <Route path="register" element={<PrivateRoute><Register /></PrivateRoute>} />
+        <Route path="navbar" element={<PrivateRoute><Navigation /></PrivateRoute>} />
+        <Route path="logoutbar" element={<PrivateRoute><LogoutBar /> </PrivateRoute>}/>
 
         <Route path="quiz" element={<PrivateRoute><Quiz /></PrivateRoute>} />
 
-        <Route path="free-profile" element={<FreeProfile />} />
+        <Route path="free-profile" element={<PrivateRoute><FreeProfile /></PrivateRoute>} />
         <Route path="configure" element={<PrivateRoute><Configure /></PrivateRoute>} />
         <Route path="category" element={<PrivateRoute><Category /></PrivateRoute>} />
 
         <Route path="quiz-view" element={<PrivateRoute><QuizView /></PrivateRoute>} />
-        <Route path="leftbar" element={<LeftBar />} />
+        <Route path="leftbar" element={<PrivateRoute><LeftBar /></PrivateRoute>} />
         <Route path="navbarhome" element={<Navbarhome />} />
         <Route path="quiz-results1" element={<PrivateRoute><Questions /></PrivateRoute>} />
         <Route path="/quizquestions/:quizId" element={<PrivateRoute><QuizQuestions /></PrivateRoute>} />
