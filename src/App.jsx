@@ -6,6 +6,7 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import { AuthProvider } from '../src/Authcontext/AuthContext.jsx';
 import Home from "./home/home.jsx";
 import NoPage from "./pages/NoPage.jsx";
 import Signup from "./signup/signup.jsx";
@@ -270,74 +271,63 @@ import PrivateRoute from './privateRoute/privateRoute.jsx';
     
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="*" element={<NoPage />} />
-            <Route path="signup" element={<Signup />} />
-            <Route path="login" element={<Login />} />
-            <Route path="contact" element={<Contact />} />
+      <AuthProvider>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="*" element={<NoPage />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="login" element={<Login />} />
+        <Route path="contact" element={<PrivateRoute><Contact /></PrivateRoute>} />
 
+        <Route path="create-quiz" element={<PrivateRoute><Createquiz /></PrivateRoute>} />
+        <Route path="csv" element={<PrivateRoute><Csv /></PrivateRoute>} />
+        <Route path="textbook" element={<PrivateRoute><Textbook /></PrivateRoute>} />
+        <Route path="quiz-type" element={<PrivateRoute><Quiztype /></PrivateRoute>} />
+        <Route path="pdf" element={<PrivateRoute><Pdf /></PrivateRoute>} />
 
-         
-            <Route path="create-quiz" element={<Createquiz />} />
-            <Route path="csv" element={<Csv />} />
-            {/* <Route path="enter-quiz" element={<Enterquiz />} /> */}
-            {/* <Route path="free-quiz" element={<Freequiz />} /> */}
-            <Route path="textbook" element={<Textbook />} />
-            <Route path="quiz-type" element={<Quiztype />} />
-            <Route path="pdf" element={<Pdf />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="contact1" element={<Contact1 />} />
+        <Route path="termsandconditions" element={<Termsandconditions />} />
 
-            <Route path="contact" element={<Contact />} />
-            <Route path="contact1" element={<Contact1 />} />
-            <Route path="termsandconditions" element={<Termsandconditions />} />
+        <Route path="leaderboard" element={<PrivateRoute><Leaderboard /></PrivateRoute>} />
+        <Route path="dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="quizcreated" element={<PrivateRoute><Quizcreated /></PrivateRoute>} />
+        <Route path="quizresults" element={<PrivateRoute><Quizresults /></PrivateRoute>} />
+        <Route path="quizview_results" element={<PrivateRoute><Quizresults1 /></PrivateRoute>} />
+        <Route path="quizview" element={<PrivateRoute><Quizview /></PrivateRoute>} />
+        <Route path="quizview1" element={<PrivateRoute><Quizview1 /></PrivateRoute>} />
+        <Route path="quizcreated1" element={<PrivateRoute><Quizcreated1 /></PrivateRoute>} />
+        <Route path="quizcreated2" element={<PrivateRoute><Quizcreated2 /></PrivateRoute>} />
+        <Route path="/quizaccess" element={<PrivateRoute><QuizAccess /></PrivateRoute>} />
 
-            
-            <Route path="leaderboard" element={<Leaderboard />} />
+        <Route path="register" element={<Register />} />
+        <Route path="navbar" element={<Navigation />} />
+        <Route path="logoutbar" element={<LogoutBar />} />
 
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="quizcreated" element={<Quizcreated />} />
-            <Route path="quizresults" element={<Quizresults />} />
-            <Route path="quizview_results" element={<Quizresults1 />} />
-            <Route path="quizview" element={<Quizview />} />
-            <Route path="quizview1" element={<Quizview1 />} />
-            <Route path="quizcreated1" element={<Quizcreated1 />} />
-            {/* <Route path="/quizaccess/:quizId" element={<QuizAccess />} /> */}
-            <Route path="quizcreated2" element={<Quizcreated2 />} />
-            <Route path="/quizaccess" element={<QuizAccess />} />
+        <Route path="quiz" element={<PrivateRoute><Quiz /></PrivateRoute>} />
 
-            <Route path="Register" element={<Register />} />
-            <Route path="navbar" element={<Navigation />} />
-            <Route path="logoutbar" element={<LogoutBar />} />
+        <Route path="free-profile" element={<FreeProfile />} />
+        <Route path="configure" element={<PrivateRoute><Configure /></PrivateRoute>} />
+        <Route path="category" element={<PrivateRoute><Category /></PrivateRoute>} />
 
-            <Route path="quiz" element={<Quiz/>} />
+        <Route path="quiz-view" element={<PrivateRoute><QuizView /></PrivateRoute>} />
+        <Route path="leftbar" element={<LeftBar />} />
+        <Route path="navbarhome" element={<Navbarhome />} />
+        <Route path="quiz-results1" element={<PrivateRoute><Questions /></PrivateRoute>} />
+        <Route path="/quizquestions/:quizId" element={<PrivateRoute><QuizQuestions /></PrivateRoute>} />
+        <Route path="resendotp" element={<ResendOTP />} />
 
-            <Route path="free-profile" element={<FreeProfile/>} />
-            {/* <Route path="old-password" element={<OldPassword/>} /> */}
-            <Route path="configure" element={<Configure/>} />
-            <Route path="category" element={<Category/>} />
-           
-            <Route path="quiz-view" element={<QuizView/>} />
-            {/* <Route path="quiz-view" element={<QuizView />} /> */}
-            <Route path="leftbar" element={<LeftBar/>} />
-            <Route path="navbarhome" element={<Navbarhome/>} />
-            <Route path="quiz-results1" element={<Questions/>} />
-            <Route path="/quizquestions/:quizId" element={<QuizQuestions/>} />
-            <Route path="resendotp" element={<ResendOTP/>} />
+        <Route path="resetpassword" element={<Resetpassword />} />
+        <Route path="resetpasswordmobile" element={<Resetpasswordmobile />} />
+        <Route path="editmanuly" element={<PrivateRoute><Editmanuly /></PrivateRoute>} />
+      </Route>
+    </Routes>
+    {/* <VerificationHandler /> */}
+  </BrowserRouter>
+</AuthProvider>
 
-            <Route path="resetpassword" element={<Resetpassword/>} />
-            <Route path="resetpasswordmobile" element={<Resetpasswordmobile/>} />
-            {/* <Route path="create-editquiz" element={<Createeditquiz/>} /> */}
-
-            <Route path="editmanuly" element={<Editmanuly/>} />
-
-
-            
-          </Route>
-        </Routes>
-        {/* <VerificationHandler /> */}
-      </BrowserRouter>
     </>
   );
 }

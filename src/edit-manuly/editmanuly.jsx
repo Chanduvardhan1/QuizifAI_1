@@ -124,6 +124,7 @@ const options6 = [
 
 const options7 = [
   { label: "Duration" },
+  // { label: 5 },
   { label: 10 },
   { label: 20 },
   { label: 30 },
@@ -1173,9 +1174,9 @@ const handleQuizTotalMarksChange = (e) => {
         <div className="absolute top-[30px] left-[1260px] cursor-pointer text-[#eeb600f0] " onClick={Back}><MdOutlineCancel /></div>
 
           <main className="w-max-auto">
-            <div className="w-[719px] h-[48px] absolute top-[30px] left-[200px] rounded-[10px] bg-[#E0FFE8] z-0">
-              <h className="font-Poppins text-[#214082]  font-semibold text-[25px] leading-[37.5px] flex justify-center items-center mt-1l">
-                Configure and click next to type in your Quiz
+          <div className="w-[79%] p-[5px] absolute top-[30px] left-[200px] rounded-[10px] bg-[#fee2e2] z-0">
+              <h className="font-Poppins font-semibold text-[20px] leading-[37.5px] text-[#214082] flex justify-center items-center mt-1l">
+              Finalize the configuration and click 'Next' to proceed with adding your quiz questions.
               </h>
             </div>
 

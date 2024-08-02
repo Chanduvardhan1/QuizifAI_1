@@ -211,9 +211,9 @@ function navbarhome() {
                 </button>
               </Link>
             </li>
-            <li  onClick={handleClick} className="navItem">
+            {/* <li  onClick={handleClick} className="navItem">
               Contact Us
-            </li>
+            </li> */}
           </ul>
         </nav>
       </header>
