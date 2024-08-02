@@ -220,7 +220,7 @@ const topThree = leaderboardData.slice(0, 3);
 
 <div>
 
-<span className={styles.Question } >complexity :</span>{" "}
+<span className={styles.Question } >Complexity :</span>{" "}
   <span className={styles.username1} >{numberofquestions} </span>
 </div>
         </div>
