@@ -1,5 +1,5 @@
 // quizzes.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import Select from "react-select";
 import styles from "./quiz.module.css";
 import Navigation from "../navbar/navbar.jsx";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Plus from "../../src/assets/Images/dashboard/Plus.png";
 import Start_button from "../../public/images/dashboard/Start-button.png";
 import start from "../../src/assets/Images/dashboard/non-attempted-start.png";
+import PlayButton from "../../src/assets/Images/dashboard/playButton.png";
 import Share_button from "../../public/images/dashboard/Share-button.png";
 import leaderboard_button from "../../public/images/dashboard/leaderboard-button.png";
 import Edit_button from "../../src/assets/Images/dashboard/Edit-button.png";
@@ -21,6 +22,7 @@ import Easy from "../../public/images/dashboard/Easy.png";
 import Clock from "../../public/images/dashboard/Clock.png";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../Authcontext/AuthContext.jsx"
 
 const Quiz = () => {
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
@@ -66,42 +68,70 @@ const Quiz = () => {
   const [timeData, setTimeData] = useState(null);
   const [weeklyQuizCount, setWeeklyQuizCount] = useState(null);
   const [averageScorePercentage, setAverageScorePercentage] = useState(null);
+  const { authToken } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const userRole = localStorage.getItem('user_role');
 
   const sortAlphabetically = (arr) => {
-    return arr.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    return arr.sort((a, b) => {
+      const valueA = a ? a.toLowerCase() : '';
+      const valueB = b ? b.toLowerCase() : '';
+      return valueA.localeCompare(valueB);
+    });
   };
+
   useEffect(() => {
     const fetchDropdownValues = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+        if (!authToken) {
+          throw new Error('No authentication token found');
+        }
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        };
+
         // Fetch date range and popularity
-        const dateRangeResponse = await fetch('https://quizifai.com:8010/get_date_rnge/');
+        const dateRangeResponse = await fetch('https://quizifai.com:8010/get_date_rnge/', {
+          headers,
+        });
         const dateRangeResult = await dateRangeResponse.json();
         console.log("Date Range and Popularity data:", dateRangeResult);
         setDateRanges(sortAlphabetically(dateRangeResult["Date Range"]));
         setPopularity(sortAlphabetically(dateRangeResult["Popularity"]));
 
         // Fetch categories and subcategories
-        const categoriesResponse = await fetch('https://quizifai.com:8010/categories&sub_categories/');
+        const categoriesResponse = await fetch('https://quizifai.com:8010/categories&sub_categories/', {
+          headers,
+        });
         const categoriesResult = await categoriesResponse.json();
         console.log("Categories and Subcategories data:", categoriesResult);
         setCategories(sortAlphabetically(categoriesResult.data.map(item => item.category_name)));
         setAllSubCategories(categoriesResult.data);
 
         // Fetch complexities
-        const complexitiesResponse = await fetch('https://quizifai.com:8010/complexities/');
+        const complexitiesResponse = await fetch('https://quizifai.com:8010/complexities/', {
+          headers,
+        });
         const complexitiesResult = await complexitiesResponse.json();
         console.log("Complexities data:", complexitiesResult);
         setComplexities(complexitiesResult.data.map(item => item.complexity_name));
 
         // Fetch courses and classes
-        const coursesResponse = await fetch('https://quizifai.com:8010/courses-clsses/');
+        const coursesResponse = await fetch('https://quizifai.com:8010/courses-clsses/', {
+          headers,
+        });
         const coursesResult = await coursesResponse.json();
         console.log("Courses and Classes data:", coursesResult);
-        setCourses(sortAlphabetically(coursesResult.data.map(item => item.course_name)));
-        setAllClasses(coursesResult.data);
+
+        const uniqueCourseNames = Array.from(new Set(coursesResult.data.map(item => item.course_name)));
+        setCourses(sortAlphabetically(uniqueCourseNames));
+
+        const uniqueClasses = Array.from(new Set(coursesResult.data.map(item => JSON.stringify(item)))).map(item => JSON.parse(item));
+        setAllClasses(uniqueClasses);
 
       } catch (error) {
         console.error('Error fetching dropdown values:', error);
@@ -119,6 +149,7 @@ const Quiz = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             user_id: userId,
@@ -175,7 +206,7 @@ const Quiz = () => {
     };
 
     fetchQuizData();
-  }, [userId]);
+  }, [userId,authToken]);
 
 
   useEffect(() => {
@@ -247,6 +278,9 @@ const Quiz = () => {
       return updatedStates;
     });
   };
+const createquiz=() =>{
+  navigate('/create-quiz')
+}
 
   const Edit = (quizId) => {
     // navigate(`/quizaccess/${quizId}`);
@@ -464,7 +498,8 @@ const Quiz = () => {
               alt="Plus Icon"
             />
             <a
-              href="./create-quiz"
+            onClick={createquiz}
+              // href="./create-quiz"
               className="hover:underline underline-offset-2 cursor-pointer font-Poppins font-medium text-[12px] leading-[18px] text-[#214082] ml-2 mt-3"
             >
               Quiz
@@ -537,7 +572,6 @@ const Quiz = () => {
                 <div className="flex-1 min-w-[150px]">
                 <Select
             isMulti
-            options={filteredSubCategories.map(subcat => ({ value: subcat, label: subcat }))}
             value={selectedSubCategory.map(subcat => ({ value: subcat, label: subcat }))}
             onChange={selected => setSelectedSubCategory(selected.map(item => item.value))}
             styles={customStyles}
@@ -616,19 +650,19 @@ const Quiz = () => {
                           paddingTop: "20px",
                           marginTop: "20px",
                           marginRight: "10px",
-                          backgroundColor: "#fee2e2",
+                          backgroundColor: quizItem.attempts_count < quizItem.retake_flag ? "#fee2e2" : "#55505026",
                         }}
                       >
                         <span className="relative group">
-                          <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate -mt-[10px]">
+                          <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate -mt-[13px]">
                             {highlightText(quizItem.quiz_name, searchQuery)}
                           </span>
-                          <span className="text-nowrap cursor-pointer hidden group-hover:inline-block absolute left-2 top-4 w-auto z-30 bg-black text-white px-1 border border-black-300 rounded">
+                          <span className="text-nowrap cursor-pointer hidden group-hover:inline-block absolute left-2 top-[2px] w-auto z-30 bg-black text-white px-1 border border-black-300 rounded">
                             {highlightText(quizItem.quiz_name, searchQuery)}
                           </span>
                         </span>
                         <div className={styles.iconContainer}>
-                          <div className="z-20 mb-[2px] pl-[36px] font-normal rounded -mt-[13px]">
+                          <div className="z-20 mb-[2px] pl-[45px] font-normal rounded -mt-[13px]">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -734,9 +768,9 @@ const Quiz = () => {
                           </div>
                         </div>
 
-                        <div className="flex mt-[9px] relative top-[21px]">
-                          <span className="relative group -top-[8px]">
-                            <span className="text-[#002366] ml-[10px] mt-4 w-[50px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                        <div className="flex mt-[9px] mb-[19px] relative top-[19px]">
+                          <span className="relative group -top-[13px]">
+                            <span className="text-[#002366] ml-[10px] mt-4 w-[50px] cursor-pointer z-0 truncate text-[9px] font-semibold">
                               {highlightText(quizItem.category, searchQuery)}
                             </span>
                             <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-2 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
@@ -744,34 +778,38 @@ const Quiz = () => {
                             </span>
                           </span>
 
-                          <p className="px-[2px] font-normal relative -top-[8px]">|</p>
+                          <p className="px-[2px] font-normal relative -top-[13px]">|</p>
 
-                          <span className="relative group -top-[8px]">
-                            <span className="text-[#002366] w-[100px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                          <span className="relative group -top-[13px]">
+                            <span className="text-[#002366] w-[100px] cursor-pointer z-0 truncate text-[9px] font-semibold">
                               {highlightText(
                                 quizItem.sub_category,
                                 searchQuery
                               )}
                             </span>
-                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[10px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
+                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
                               {highlightText(
                                 quizItem.sub_category,
                                 searchQuery
                               )}
                             </span>
                           </span>
+                          
                           <button
-                            className="cursor-pointer ml-auto relative -top-[18px] right-1"
+                            className="cursor-pointer ml-auto relative -top-[5px] right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
                             onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
                           >
                             <img
-                              className="h-8 w-[34px]"
-                              src={start}
+                              className="h-[5.5px] w-[4.5px] relative top-[3.5px] left-[2px]"
+                              src={PlayButton}
                               alt="Start button"
                             />
+                            <h1 className="text-[#472E86] text-[6px] relative top-[2px] pl-[1px] font-bold">Retake</h1>
                           </button>
                         </div>
-
+                           <div className="h-1 -mt-[8px] pl-[10px] text-[7px] font-normal text-[#002366] relative -top-[6px]">
+                            <h3>Quiz ID : {highlightText(quizItem.quiz_id, searchQuery)}</h3>
+                          </div>
                         {/* <div className="h-[1px] w-full bg-white"></div> */}
                         {/* <div className="h-[3px] w-full bg-white"></div> */}
                         <div className="relative group mt-1">
@@ -931,7 +969,7 @@ const Quiz = () => {
                         }}
                       >
                         <span className="relative group">
-                          <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate">
+                          <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate -mt-[1px]">
                             {highlightText(quizItem.quiz_name, searchQuery)}
                           </span>
                           <span className="text-nowrap cursor-pointer hidden group-hover:inline-block absolute left-2 top-4 w-auto z-30 bg-black text-white px-1 border border-black-300 rounded">
@@ -940,7 +978,7 @@ const Quiz = () => {
                         </span>
 
                         <div className={styles.iconContainer}>
-                          <div className="z-40 mb-[2px] pl-[10px] font-normal rounded">
+                          <div className="z-40 mb-[2px] pl-[17px] font-normal rounded">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -1037,9 +1075,9 @@ const Quiz = () => {
                           </div>
                         </div>
 
-                        <div className="flex mt-[9px] relative top-[22px]">
+                        <div className="flex mt-[9px] relative top-[17px]">
                           <span className="relative group">
-                            <span className="text-[#002366] ml-[10px] w-[30px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                            <span className="text-[#002366] ml-[10px] w-[30px] cursor-pointer z-0 truncate text-[9px] font-semibold">
                               {highlightText(quizItem.category, searchQuery)}
                             </span>
                             <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-2 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
@@ -1048,7 +1086,7 @@ const Quiz = () => {
                           </span>
                           <p className="px-[2px] font-normal">|</p>
                           <span class="relative group">
-                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-normal inline-block w-[80px] overflow-hidden whitespace-nowrap">
+                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {highlightText(
                                 quizItem.sub_category,
                                 searchQuery
@@ -1062,7 +1100,7 @@ const Quiz = () => {
                             </span>
                           </span>
                           <button
-                            className="cursor-pointer ml-auto relative -top-[10px] right-1"
+                            className="cursor-pointer ml-auto relative -top-[1px] right-1"
                             onClick={() => handleStartQuiz(quizItem.quiz_id)}
                           >
                             <img
@@ -1072,6 +1110,9 @@ const Quiz = () => {
                             />
                           </button>
                         </div>
+                        <div className="h-1 -mt-[3px] pl-[10px] text-[7px] text-[#002366] font-normal relative top-[3px]">
+                            <h3>Quiz ID : {highlightText(quizItem.quiz_id, searchQuery)}</h3>
+                          </div>
                         <div className="text-[#002366] flex font-semibold text-[6px] gap-[60px] relative top-[75px] left-[12px]">
                           <div>
                             Created By :
@@ -1127,7 +1168,7 @@ const Quiz = () => {
                                     height={10}
                                   />
                                   <p>{quizItem.quiz_attempts}</p>
-                                  <span className="text-[8px] ml-1">
+                                  <span className="text-[8px] -ml-1">
                                     attempts
                                   </span>
                                 </div>

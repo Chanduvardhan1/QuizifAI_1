@@ -10,6 +10,8 @@ import Plus from "../../src/assets/Images/dashboard/Plus.png";
 import Edit from "../../src/assets/Images/Assets/Edit.png"
 import Delete from "../../src/assets/Images/Assets/Delete.png"
 import Line from "../../src/assets/Images/Assets/Line.png"
+import { RiDeleteBinLine } from "react-icons/ri";
+
 const category = () => {
   const [categories, setCategories] = useState([]);
   const [data, setData] = useState([]);
@@ -28,8 +30,9 @@ const category = () => {
   const [parentCategories, setParentCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-
   const [filteredData, setFilteredData] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
+
   const navigate = useNavigate();
   const handleBanckToDashbaord = () =>{
     navigate('/dashboard');
@@ -37,12 +40,24 @@ const category = () => {
   
   // toggle button for parent category 
   const fetchCategories = () => {
-    fetch('https://quizifai.com:8010/categories/')
+    const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+    if (!authToken) {
+      console.error('No authentication token found');
+      return;
+    }
+    fetch('https://quizifai.com:8010/categories/', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+      },
+    })
       .then(response => response.json())
       .then(data => {
         if (data.response === "success") {
           setData(data.data);
           setParentCategories(data.data.filter(category => category.parent_category_flag === 'Y'));
+          setFilteredData(data.data); 
         }
       })
       .catch(error => console.error('Error fetching data:', error));
@@ -146,10 +161,17 @@ const category = () => {
     };
   
     try {
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found');
+        return;
+      }
       const response = await fetch('https://quizifai.com:8010/create_category/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
         },
         body: JSON.stringify(categoryData),
       });
@@ -180,10 +202,17 @@ const category = () => {
     };
   
     try {
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+  if (!authToken) {
+    console.error('No authentication token found');
+    return;
+  }
       const response = await fetch('https://quizifai.com:8010/update_category/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
         },
         body: JSON.stringify(categoryData),
       });
@@ -233,21 +262,37 @@ const category = () => {
       setSelectedCategoryId(category.category_id);
     }
   };
- 
   useEffect(() => {
-    // Convert search query to lowercase for case-insensitive search
-    const lowercasedQuery = searchQuery.toLowerCase();
-    const filtered = data.filter(category =>
-      category.category_name.toLowerCase().includes(lowercasedQuery) ||
-      category.category_id.toString().includes(lowercasedQuery) ||
-      (category.parent_category_name && category.parent_category_name.toLowerCase().includes(lowercasedQuery)) ||
-      category.parent_category_flag.toLowerCase().includes(lowercasedQuery)
-    );
+    const searchInputLower = searchInput.toLowerCase();
 
-    // Sort filtered data: matched items come first
-    setFilteredData(filtered);
-  }, [searchQuery, data]);
- 
+    // Filter and sort data
+    const filteredAndSortedData = data
+      .filter(category => 
+        category.category_id.toString().includes(searchInputLower) ||
+        category.category_name.toLowerCase().includes(searchInputLower) ||
+        category.parent_category_flag.toLowerCase().includes(searchInputLower) ||
+        (category.parent_category_name && category.parent_category_name.toLowerCase().includes(searchInputLower))
+      )
+      .sort((a, b) => {
+        const aIncludes = a.category_name.toLowerCase().includes(searchInputLower);
+        const bIncludes = b.category_name.toLowerCase().includes(searchInputLower);
+        return bIncludes - aIncludes; // Ensure matching rows come first
+      });
+
+    setFilteredData(filteredAndSortedData);
+  }, [searchInput, data]);
+
+  const highlightText = (text, highlight) => {
+    if (!highlight) return text;
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    return parts.map((part, index) =>
+      part.toLowerCase() === highlight.toLowerCase() ? (
+        <span key={index} style={{ backgroundColor: 'yellow' }}>{part}</span>
+      ) : (
+        part
+      )
+    );
+  };
   return (
     <>
     <div className='flex w-full font-Poppins'>
@@ -397,8 +442,8 @@ const category = () => {
                 className='mt-[15px] text-[10px] pl-[30px] pr-[10px] rounded-[20px] h-[28px] mr-[10px] w-fit bg-[#FFFFFF] text-left placeholder-[#214082] border-none focus:border-none outline-none'
                 type='text'
                 placeholder='Search'
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                value={searchInput}
+              onChange={e => setSearchInput(e.target.value)}
             />
             <img
                 className='h-[12px] w-[12px] relative top-[25px] right-[160px]'
@@ -408,27 +453,35 @@ const category = () => {
           </tr>
         </thead>
         <tbody className='bg-white border-gray-500 '>
-          {filteredData.map(category => (
-              <tr key={category.category_id}>
-              <td className='px-4 py-2 border text-[#214082] font-bold text-[10px] text-center'>{category.category_id}</td>
-              <td className='px-4 py-2 border text-[#214082] font-medium text-[10px]'>{category.category_name}</td>
-              <td className='px-4 py-2 border text-[#214082] font-medium text-[10px] text-center'>{category.parent_category_flag}</td>
-              <td className='px-4 py-2 border text-[#214082] font-medium text-[10px]'>
-              {category.parent_category_name ? category.parent_category_name : ''}
-              </td>
-              <td className='h-full border text-[#214082] flex gap-2 pl-[40px] pt-2 text-[12px] cursor-pointer hover:font-medium hover:underline'>         
-                <img
-                  className='h-[13px] w-[13px] mr-1 cursor-pointer'
-                  src={Edit}
-                  alt="Edit"
-                  onClick={() => handleEdit(category)}
-                />
-              </td>
-            </tr>
-          ))}
+        {filteredData.map(category => (
+          <tr key={category.category_id}>
+            <td className='px-4 py-2 border text-[#214082] font-bold text-[10px] text-center'>
+              {highlightText(category.category_id.toString(), searchInput)}
+            </td>
+            <td className='px-4 py-2 border text-[#214082] font-medium text-[10px]'>
+              {highlightText(category.category_name, searchInput)}
+            </td>
+            <td className='px-4 py-2 border text-[#214082] font-medium text-[10px] text-center'>
+              {highlightText(category.parent_category_flag, searchInput)}
+            </td>
+            <td className='px-4 py-2 border text-[#214082] font-medium text-[10px]'>
+              {highlightText(category.parent_category_name ? category.parent_category_name : '', searchInput)}
+            </td>
+            <td className='h-full border text-[#214082] flex gap-2 pl-[40px] pt-2 text-[12px] cursor-pointer hover:font-medium hover:underline'>         
+              <img
+                className='h-[13px] w-[13px] mr-1 cursor-pointer'
+                src={Edit}
+                alt="Edit"
+                onClick={() => handleEdit(category)}
+              />
+             <button className='flex text-orange-500 w-[30px] h-[30px]' ><RiDeleteBinLine/></button>
+
+            </td>
+          </tr>
+        ))}
         </tbody>
         
-        <tbody>
+        {/* <tbody>
           {categories.map((category, index) => (
             <tr key={index} className='bg-white text-[#214082] font-medium text-[10px]'>
               <td className='px-4 py-2 border '>{category.id}</td>
@@ -445,7 +498,7 @@ const category = () => {
               </td>
             </tr>
           ))}
-        </tbody>
+        </tbody> */}
         
       </table>
     </div>

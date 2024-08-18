@@ -1,6 +1,6 @@
 // profile.js
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 //import { useRouter } from 'next/router';
 import Navigation from "../navbar/navbar.jsx";
 import axios from "axios";
@@ -100,6 +100,8 @@ const FreeProfile = () => {
   const [showOtherInput, setShowOtherInput] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
   const [rolename, setrolename] = useState("");
+  const inputReff = useRef(null);
+  const [image, setImage] = useState("");
 
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName);
@@ -127,9 +129,19 @@ const FreeProfile = () => {
   
     const fetchDetailsByPincode = async (pincode) => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+        if (!authToken) {
+          throw new Error('No authentication token found');
+        }
         const response = await axios.post('https://quizifai.com:8010/location_details/', {
-          pincode: pincode
-        });
+          pincode: pincode },
+          {
+            headers: {
+              'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+            },
+          }
+        );
         const data = response.data.data[0];
         setCountry(data.country);
         setState(data.state);
@@ -168,12 +180,18 @@ const FreeProfile = () => {
     const fetchQuizData = async () => {
       console.log("User ID:", userId);     
       try {
+        const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+        if (!authToken) {
+          throw new Error('No authentication token found');
+        }
         const response = await fetch(
           `https://quizifai.com:8010/dashboard`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              'Authorization': `Bearer ${authToken}`,
             },
             body: JSON.stringify({
               user_id: userId,
@@ -304,12 +322,18 @@ const FreeProfile = () => {
     console.log("Updating profile with payload:", payload);
 
     try {
+      const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+      if (!authToken) {
+        throw new Error('No authentication token found');
+      }
       const response = await fetch(
         `https://quizifai.com:8010/edt_prfl_dtls`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify(payload),
         }
@@ -369,11 +393,17 @@ handleEditClick();
 
   };
   useEffect(() => {
+    const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+    if (!authToken) {
+      throw new Error('No authentication token found');
+    }
     // Fetch the data from the API
     fetch('https://quizifai.com:8010/occupations/', {
       method: 'GET',
       headers: {
-        'accept': 'application/json'
+        'accept': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
       }
     })
       .then(response => response.json())
@@ -406,12 +436,18 @@ handleEditClick();
     let alertMessage = ''; // Initialize alertMessage
   
     try {
+      const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+      if (!authToken) {
+        throw new Error('No authentication token found');
+      }
       const response = await fetch(
         `https://quizifai.com:8010/chnge_email_mobile`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify(payload),
         }
@@ -558,11 +594,21 @@ const handleUpdatePassword = async (e) => {
   }
 
   try {
+    const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+    if (!authToken) {
+      throw new Error('No authentication token found');
+    }
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken}`,
+    };
     const response = await axios.post('https://quizifai.com:8010/update_password', {
       user_id: userId, // Replace with your user ID
       old_password: oldPassword,
       new_password: newPassword,
       confirm_password: confirmPassword,
+      headers,
     });
 
     if (response.data.response === "success") {
@@ -601,6 +647,18 @@ const handleLoginCancelClick1 = () =>{
   setShowNewPasswords(false);
 
 }
+function handleImageClick() {
+  if (inputReff.current && typeof inputReff.current.click === 'function') {
+      inputReff.current.click(); // Correct method name
+  } else {
+      console.error('click method is not available on inputReff.current');
+  }
+}
+function handleImageChange(event) {
+const file = event.target.files[0];
+console.log(file);
+setImage(event.target.files[0]);
+};
   return (
     <div className={styles.container}>
       <Navigation />
@@ -631,12 +689,14 @@ const handleLoginCancelClick1 = () =>{
             <h1 className=" text-[13px] text-[#EF5130] font-semibold relative top-3 left-2 text-nowrap">
                   Personal Information
                 </h1>
-              <img
-                src={profileimg}
-                alt="img"
-                className={styles.profileimg}
-                style={{ width: "113px", height: "110px", marginLeft: "20px",position:"relative", top:"35px"}}
-              />
+              <div className="rounded-full w-[100px] ml-[25px] mt-8 h-[100px]" onClick={handleImageClick} style={{ position: "relative"}}>         
+        {image ? (
+        <img className="w-[100px]  h-[100px] rounded-full border-2 border-white" src={URL.createObjectURL(image)} alt="Background Image"/>
+        ): (
+          <img className="w-[100px]  h-[100px] rounded-full border-2 border-white" src={profileimg} alt="Background Image"/>
+        )}
+        <input type="file" ref={inputReff} onChange={handleImageChange} style={{display: "none"}}/>
+        </div>
             </div>
           </div>  
         </div>
@@ -1022,7 +1082,7 @@ const handleLoginCancelClick1 = () =>{
             className={styles.inputGroup1}
             style={{ marginLeft: "200px", textWrap: "nowrap",marginTop:"5px" }}
           >
-            <label className="text-blue-800 font-semibold">login Method</label>
+            <label className="text-blue-800 font-semibold">Login Method</label>
             <button
         className={`border-b-2 w-[77.5px] text-[11px] pl-[10px] ml-[10px] focus:outline-none ${
           preferredLoginMethod === 'Email' ? 'border-blue-200' : 'border-transparent'

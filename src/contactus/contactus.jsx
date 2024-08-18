@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from "react";
-// import Swal from "sweetalert2";
 // import { useRouter } from "next/router";
 import "./contactus.css";
 import TextField from "@mui/material/TextField";
-import quizifailogo from "../assets/Images/images/home/Quizifai3.png";
 import Lady from "../assets/Images/images/contact/lady.png";
 import ContactMail from "../assets/Images/images/contact/ContactMail.png";
-import aiImage from "../../src/assets/Images/images/home/ai-img.png";
-import homeImage from "../../src/assets/Images/images/home/home-img.png";
-// import Head from "next/head";
-import FirstNameIcon from "../../src/assets/Images/images/contact/first.png";
 import LastNameIcon from "../../src/assets/Images/images/contact/last.png";
 import PhoneIcon from "../../src/assets/Images/images/contact/mobile.png";
 import EmailIcon from "../../src/assets/Images/images/contact/mailImg.png";
 import MessageIcon from "../../src/assets/Images/images/contact/msg.png";
-import signupIcon from "../../src/assets/Images/images/home/signup.png";
-import loginIcon from "../../src/assets/Images/images/home/login.png";
-import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Navigation from "../navbar/navbar.jsx";
+import Navigation from "../navbar/navbar.jsx"
 
 
 function contact() {
@@ -144,6 +135,12 @@ function contact() {
     // };
 
     try {
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found');
+        return;
+      }
       const response = await fetch(
         "https://quizifai.com:8010/contact_us_email",
         {
@@ -151,6 +148,7 @@ function contact() {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify(data),
         }
@@ -188,13 +186,13 @@ function contact() {
         />
       </Head> */}
       {/* <header className="header">
-        {/* <div className="logo">
+        <div className="logo">
           <Link to={"/"}>
             <img src={quizifailogo} alt="Logo" width={160} height={63} />
           </Link>
-        </div> */}
-        {/* <nav className="navigation">
-          {/* <ul>
+        </div>
+        <nav className="navigation">
+          <ul>
             <li onClick={handleClick1} className="navItem">
               Home
             </li>
@@ -202,8 +200,8 @@ function contact() {
               Pricing
             </li> */}
 
-         
-            {/* <li className="buttons">
+{/*          
+            <li className="buttons">
               <Link to={"/signup"}>
                 <button
                   className="signup"
@@ -223,8 +221,8 @@ function contact() {
                   {/* Sign Up
                 </button>
               </Link>
-            </li>  */}
-            {/* <li className="buttons">
+            </li>
+            <li className="buttons">
               <Link to="/login">
                 <button
                   className="login"
@@ -241,16 +239,16 @@ function contact() {
                     className="icon"
                     style={{ marginRight: "10px" }}
                   /> */}
-                  {/* Login
+                 {/* Login
                 </button>
               </Link>
-            </li>  */}
-            {/* <li onClick={handleClick} className="navItem">
+            </li>
+            <li onClick={handleClick} className="navItem">
               Contact Us
-            </li> */}
-          {/* </ul>  */}
-        {/* </nav>  */}
-      {/* </header>  */}
+            </li>  */}
+        {/*}  </ul>
+        </nav>
+      </header> */}
       <div className="content4">
           <div className="contactContent">
           <div className="contactContent1">

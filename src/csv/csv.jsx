@@ -554,10 +554,20 @@ export default function quiztype() {
     }, 1000);
 
     try {
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        setErrorMessage('No authentication token found. Please log in again.');
+        clearInterval(interval);
+        return;
+      }
       const response = await fetch(
         "https://quizifai.com:8010/qz_from_exl_csv/",
         {
           method: "POST",
+          headers: {
+            'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+          },
           body: formData,
           onUploadProgress: (progressEvent) => {
             const progress = Math.round(
@@ -654,10 +664,20 @@ export default function quiztype() {
     }, 1000);
 
     try {
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        setErrorMessage('No authentication token found. Please log in again.');
+        clearInterval(interval);
+        return;
+      }
       const response = await fetch(
         "https://quizifai.com:8010/crt_qz_from_exl_csv/",
         {
           method: "POST",
+          headers: {
+            'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+          },
           body: formData,
           onUploadProgress: (progressEvent) => {
             const progress = Math.round(

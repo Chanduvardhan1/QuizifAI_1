@@ -72,11 +72,17 @@ const Questions = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+        if (!authToken) {
+          throw new Error('No authentication token found');
+        }
         const response = await fetch('https://quizifai.com:8010/leaderboard_result', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             quiz_id: quizId
@@ -318,14 +324,14 @@ const topThree = leaderboardData.slice(0, 3);
         <img src={FirstRank} alt="First Rank" style={{width:"60px",height:"52px"}} />
         </div> */}
         <div className={styles.ranksiconsContainer}>
-          <img src={rank1Icon} alt="Icon 1" className={styles.rankicon1} />
+          <img src={rank1Icon} alt="Icon 1" className={styles.rankicon2} />
       
-          <img src={rank2Icon} alt="" className={styles.rankicon2} />
+          <img src={rank2Icon} alt="" className={styles.rankicon1} />
           <img src={rank3Icon} alt="Rank 3 Icon" className={styles.rankicon3} />
         </div>
         <div className={styles.ranksiconsContainer1}>
-     <p className={styles.second}>2<span  className={styles.st}>nd</span></p>
-        <p className={styles.fist}>1<span  className={styles.st}>st</span></p> 
+     <p className={styles.second}>1<span  className={styles.st}>st</span></p>
+        <p className={styles.fist}>2<span  className={styles.st}>nd</span></p> 
       
         <p className={styles.thired}>3<span  className={styles.st}>rd</span></p>
         </div>
@@ -389,8 +395,8 @@ const topThree = leaderboardData.slice(0, 3);
     <span className={styles.column}>Duration</span>
   </div>
         
-  {remaining.map((entry, index) => (
-         <div key={index} className={styles.values}>
+  {remaining.map((item, index) => (
+         <div key={entry.rank} className={styles.values}>
          <div className={`${styles.value} ${styles.rank}`}>{entry.rank}</div>
          <div className={`${styles.value} ${styles.userName}`}>{entry.user_name}</div>
          <div className={`${styles.value} ${styles.percentage}`}>{entry.attained_percentage}</div>

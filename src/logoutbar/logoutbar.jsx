@@ -1,9 +1,9 @@
 // LogoutBar.js
 
-import React from "react";
+import React , { useContext }from "react";
 //import Image from "next/image";
 import { useNavigate } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useState,useEffect,useRef } from "react";
 import styles from "./dashboard.module.css";
 import LogoutIcon from "../assets/Images/images/dashboard/logout.png";
 import user2Icon from "../assets/Images/images/dashboard/user2.png";
@@ -13,7 +13,9 @@ import ranks from "../assets/Images/images/dashboard/ranks.png";
 import infinity from "../assets/Images/images/dashboard/infinity.png"
 import questionmark from "../assets/Images/images/dashboard/questionmark.png";
 import profileimg from "../assets/Images/images/profile/profileImage.png";
+import Camera from "../assets/Images/images/profile/Camera.png";
 import rocket from "../assets/Images/images/dashboard/rocket.png";
+import { AuthContext } from "../Authcontext/AuthContext.jsx"
 
 
 const currentValue1 = 50; 
@@ -47,7 +49,6 @@ const LogoutBar = (data) => {
   navigate("/free-profile");
  } 
   
- 
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
   const [userName, setUserName] = useState('');
   // const [occupation, setOccupation] = useState(localStorage.getItem("occupation_name"));
@@ -67,18 +68,28 @@ const LogoutBar = (data) => {
   const [subscriptionEndDate, setSubscriptionEndDate] = useState('');
   const [remainingDays, setRemainingDays] = useState('');
   const [otherOccupation, setOtherOccupation] = useState("");
-  
+  const inputReff = useRef(null);
+  const [image, setImage] = useState("");
+  // const { user, logout } = useContext(AuthContext);
+  const { isAuthenticated, authToken, logout } = useContext(AuthContext);
+
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login'); // Redirect to login if not authenticated
+      return;
+    }
     const fetchQuizData = async () => {
       console.log("User ID:", userId);
 
       try {
+       
         const response = await fetch(
           `https://quizifai.com:8010/dashboard`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${authToken}`,
             },
             body: JSON.stringify({
                user_id: userId
@@ -138,35 +149,120 @@ const LogoutBar = (data) => {
     };
 
     fetchQuizData();
-  }, [userId]); 
+  }, [userId,isAuthenticated,authToken]); 
+  useEffect(() => {
+    const handleWindowClose = () => {
+      fetch("https://quizifai.com:8010/usr_logout/", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: localStorage.getItem("user_id") }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log("Logout successful:", data))
+        .catch((error) => console.error("Error:", error));
+    };
+
+    // Add the event listener
+    window.addEventListener("beforeunload", handleWindowClose);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("beforeunload", handleWindowClose);
+    };
+  }, []);
 
   const handleBackToLogin = () => {
+    // Retrieve the authentication token from AuthContext or localStorage
+    const authToken = localStorage.getItem('authToken') || null;
+  
     fetch('https://quizifai.com:8010/usr_logout/', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`, // Include the authentication token
       },
       body: JSON.stringify({
-        user_id: userId
+        user_id: userId, // Ensure user.userId is available
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Logout response:', data);
+        if (data.response === 'success') {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user_id');
+          localStorage.removeItem('user_role');
+          localStorage.removeItem('password');
+          logout(); // Clear the token from AuthContext
+          navigate("/login");// Redirect to login page
+        } else {
+          console.error('Logout failed:', data.response_message);
+          // Handle unsuccessful logout (optional)
+        }
       })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Logout response:', data);
-      if (data.response === 'success') {
-        
-        navigate("/login");
-      } else {
-        console.error('Logout failed:', data.response_message);
-        // Handle unsuccessful logout (optional)
-      }
-    })
       .catch(error => {
         console.error('Error logging out:', error);
         // Handle errors appropriately
       });
   };
+
+   useEffect(() =>{
+  const savedImage = localStorage.getItem('savedImage');
+  if(savedImage){
+    setImage(savedImage);
+  }
+},[]);
+
+function handleImageClick() {
+  if (inputReff.current && typeof inputReff.current.click === 'function') {
+    inputReff.current.click(); // Open file dialog
+  } else {
+    console.error('click method is not available on inputReff.current');
+  }
+}
+
+function handleImageChange(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const imageDataUrl = reader.result;
+      localStorage.setItem('savedImage', imageDataUrl);
+      setImage(imageDataUrl);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+  
+function handleReplaceImage(event) {
+  event.stopPropagation(); // Prevent the click from triggering the parent div's click event
+  handleImageClick(); // Open file dialog
+}
+
+function handleDeleteImage(event) {
+  event.stopPropagation(); // Prevent the click from triggering the parent div's click event
+  localStorage.removeItem('savedImage'); // Remove from local storage
+  setImage(""); // Reset to default image
+}
+
+function handleViewImage(event) {
+  event.stopPropagation(); // Prevent the click from triggering the parent div's click event
+  if (image) {
+    // Create a temporary link element
+    const link = document.createElement('a');
+    link.href = image;
+    link.target = '_blank'; // Open in a new tab
+    link.click(); // Simulate click to open the image
+  } else {
+    console.error('No image available to view');
+  }
+}
+
   return (
     <div className={styles.logout}>
      <div style={{ marginTop: "-20px", display: "flex", alignItems: "center" , marginLeft:"20px",position:"relative",top:"25px"}}> 
@@ -185,30 +281,27 @@ const LogoutBar = (data) => {
 </div>
 
   </div>
+        {/* profile image ------------------------ */}
+        <div className="rounded-full w-[100px] ml-[51px] h-[100px]" style={{ position: "relative" }}>
+      {image ? (
+        <img className="w-[100px] h-[100px] rounded-full border-2 border-white" src={image} alt="Uploaded" />
+      ) : (
+        <img className="w-[100px] h-[100px] rounded-full border-2 border-white" src={profileimg} alt="Default" />
+      )}
+      <input type="file" ref={inputReff} onChange={handleImageChange} style={{ display: "none" }} />
 
-       <div style={{ position: "relative"}}>
-          
-        <img
-          src={profileimg}
-          alt="Background Image"
-          style={{ display: "block", marginLeft: "45px", width: "113px",
-            height:"110px"}}
-        />
-
-{/* <img
-          src={profileimg}
-          alt="Foreground Image"
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            paddingRight:"9px",
-            width: "113px",
-    height:"110px"
-          }}
-        /> */}
+      <div className="bg-[#C3EAF3] rounded-full w-fit h-[24px] px-[2px] py-[1px] relative left-20 -top-7">
+        <div className="rounded-full w-fit h-[28px] px-[2px] py-[2px] flex items-center justify-center group">
+          <img className="h-4 w-4 relative -top-[3px] cursor-pointer" src={Camera} alt="Camera" />
+          <div className="absolute top-full text-[7px] left-0 right-[30px] mt-1 bg-white rounded-sm text-black w-fit h-[37px] cursor-pointer px-1 py-[2px] text-nowrap items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <p onClick={handleReplaceImage}>Replace Image</p><br/>
+            <p className="relative -top-[10px]" onClick={handleViewImage}>View Image</p><br/>
+            <p className="relative -top-[20px]" onClick={handleDeleteImage}>Delete Image</p>
+          </div>
         </div>
+      </div>
+    </div>
+
         <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: "15px", marginBottom: "5px", fontWeight: 600 ,color:"#002366"}}>
             {userName}
@@ -276,7 +369,7 @@ const LogoutBar = (data) => {
               <div className=" flex flex-col">
               <div className=" flex items-center gap-[5px]">
               <p className="text-[25px] text-[#5E81F4]  text-start mt-1 font-bold">{globalRank}</p>
-              <h1 className="relative font-Poppins text-[13px]">Global Rank</h1>
+              <h1 className="relative font-Poppins text-[13px]">Global rank</h1>
               </div>
               <div className="flex items-center gap-[5px]">
               <p className="text-[20px] text-[#5E81F4]  text-start  font-bold">{globalscore}</p>
@@ -298,16 +391,7 @@ const LogoutBar = (data) => {
             <span className="text-[25px] text-[#E97132] ml-[25px] mt-[10px] font-semibold">{averageScorePercentage}%</span>
             <h1 className="mt-[23px] ml-[5px] text-[12px] font-normal">Average</h1>
           </div>
-          <div className=" flex items-center justify-center z-50 ">
-              <img src={rocket} alt="" className=" w-[49px] h-[112px] z-50"/>
-            </div>
-          <div className=" flex flex-col justify-center items-center p-[10px] bg-white rounded-[25px] w-[90%] ml-[10px] pt-[80px] relative top-[-75px]">
-         
-            <div>
-              <p className=" text-[#9696BB] ">Upgrade to <span className=" text-black font-bold">Pro</span>  for more resources</p>
-            </div>
-            <button className=" bg-[#5E81F4] p-[5px] px-[20px] rounded-[10px] text-white">Upgrade</button>
-          </div>
+          
           {/* <div className="h-[5px] w-full bg-white mt-[10px]"></div>
 
           <div>
@@ -324,16 +408,16 @@ const LogoutBar = (data) => {
               <img className="h-[40px] w-[35px] ml-5 -mt-2" src={infinity} />           
             )} */}
             {/* <h1 className="mt-[2px] ml-[10px] text-[13px] font-normal">days remaining</h1> */}
-            {/* </div>
-          </div>
+           {/* </div>
+          </div> */}
+
           <div className="h-[5px] w-full bg-white mt-[10px]"></div>
         
-          <div className="mt-[15px] ml-2">
-            <h1 className="text-[13px] text-start">Registered On :<span className="text-[#5E81F4] pl-1">{registeredOn}</span></h1>
-            <h1 className="text-[13px] text-start">Last Login : <span className="text-[#5E81F4]">{lastLogin}</span></h1>
-            <h1 className="text-[13px] text-start">Password Changed : <span className="text-[#5E81F4]">{passwordChanged}</span></h1>
-          </div>
-                   */}
+          <div className="mt-44 ml-2">
+            <h1 className="text-[13px] text-start text-[#002366] font-semibold">Registered On :<span className="pl-1 font-normal text-[12px]">{registeredOn}</span></h1>
+            <h1 className="text-[13px] text-start text-[#002366] font-semibold">Last Login : <span className="font-normal text-[12px]">{lastLogin}</span></h1>
+            <h1 className="text-[13px] text-start text-[#002366] font-semibold">Password Changed : <span className="font-normal text-[12px]">{passwordChanged}</span></h1>
+          </div>               
             
           </div>
         </div>

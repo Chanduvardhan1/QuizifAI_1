@@ -124,8 +124,9 @@ const options6 = [
 
 const options7 = [
   { label: "Duration" },
-  // { label: 5 },
+  { label: 5 },
   { label: 10 },
+  { label: 15 },
   { label: 20 },
   { label: 30 },
   { label: 40 },
@@ -242,26 +243,65 @@ export default function editmanuly() {
 
 
 
+  // const fetchCategories = async () => {
+  //   try {
+  //     const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+  //     if (!authToken) {
+  //       console.error('No authentication token found. Please log in again.');
+  //       return;
+  //     }
+  //     const response = await fetch('https://quizifai.com:8010/categories&sub_categories/');
+  //     const data = await response.json();
+  //     if (data.response === 'success') {
+  //       setCategories(data.data);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching categories:', error);
+  //   }
+  // };
+
+  // Handle category selection
+  
   const fetchCategories = async () => {
     try {
-      const response = await fetch('https://quizifai.com:8010/categories&sub_categories/');
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+  
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
+  
+      const response = await fetch('https://quizifai.com:8010/categories&sub_categories/', {
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
       const data = await response.json();
+  
       if (data.response === 'success') {
         setCategories(data.data);
+      } else {
+        console.error('Failed to fetch categories:', data.message || 'Unknown error');
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
-
-  // Handle category selection
+  
+  
   const handleSelectCategory = (event) => {
     const selectedCategory = event.target.value;
     setSelectedCategory(selectedCategory);
-    // Filter subcategories based on the selected category
     const category = categories.find(cat => cat.category_name === selectedCategory);
     if (category) {
       setSubCategories(category.sub_categories.map(subCat => subCat.sub_category_name));
+      setSelectedSubCategory(''); // Reset subcategory when a new category is selected
     }
   };
 
@@ -270,14 +310,26 @@ export default function editmanuly() {
     const selectedSubCategory = event.target.value;
     setSelectedSubCategory(selectedSubCategory);
   };
-
   useEffect(() => {
     fetchCourses();
   }, []);
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch('https://quizifai.com:8010/courses-clsses/');
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
+      const response = await fetch('https://quizifai.com:8010/courses-clsses/',{
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       if (data.response === 'success') {
         setCourses(data.data);
@@ -319,7 +371,22 @@ export default function editmanuly() {
 
   const fetchComplexities = async () => {
     try {
-      const response = await fetch('https://quizifai.com:8010/complexities/');
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
+      const response = await fetch('https://quizifai.com:8010/complexities/',{
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
       const data = await response.json();
       if (data.response === 'success') {
         setComplexities(data.data.map(complexity => complexity.complexity_name));
@@ -610,13 +677,19 @@ export default function editmanuly() {
         setErrorMessage("User ID not found. Please log in again.");
         return;
       }
-      
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
       const questionDuration = calculateQuizDuration();
       
       const response = await fetch(`https://quizifai.com:8010/edit_quiz/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${authToken}`,
         },
         body: JSON.stringify({
           user_id: user_id,
@@ -779,11 +852,18 @@ export default function editmanuly() {
     const quiz_id = localStorage.getItem('quiz_id');
 
     try {
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
       const response = await fetch('https://quizifai.com:8010/access_quiz_for_master', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'accept': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
         },
         body: JSON.stringify({
           quiz_id: quiz_id,
@@ -901,7 +981,25 @@ export default function editmanuly() {
   function handleSelect1(event) {
     setNumber(event.target.value);
   }
-
+  const handleAvailableFromChange = (e) => {
+    setavailablefrom(e.target.value);
+    // Clear the disabledOn date if it's before the new availableFrom date
+    if (disabledon && e.target.value > disabledon) {
+      setdisabledon('');
+    }
+  };
+  
+  const handleDisabledOnChange = (e) => {
+    const newDisabledOn = e.target.value;
+    if (availablefrom && newDisabledOn < availablefrom) {
+      // Show an error message or clear the disabledOn field
+      setdisabledon('');
+      setErrorMessage("Disabled on date cannot be earlier than available from date.");
+    } else {
+      setdisabledon(newDisabledOn);
+      setErrorMessage('');
+    }
+  };
   // function handleSelect2(e) {
   //   const selectedCategory = e.target.value;
   //   setQuizCategory(selectedCategory);
@@ -1174,9 +1272,9 @@ const handleQuizTotalMarksChange = (e) => {
         <div className="absolute top-[30px] left-[1260px] cursor-pointer text-[#eeb600f0] " onClick={Back}><MdOutlineCancel /></div>
 
           <main className="w-max-auto">
-          <div className="w-[79%] p-[5px] absolute top-[30px] left-[200px] rounded-[10px] bg-[#fee2e2] z-0">
-              <h className="font-Poppins font-semibold text-[20px] leading-[37.5px] text-[#214082] flex justify-center items-center mt-1l">
-              Finalize the configuration and click 'Next' to proceed with adding your quiz questions.
+            <div className="w-[719px] h-[48px] absolute top-[30px] left-[200px] rounded-[10px] bg-[#E0FFE8] z-0">
+              <h className="font-Poppins text-[#214082]  font-semibold text-[25px] leading-[37.5px] flex justify-center items-center mt-1l">
+                Configure and click next to type in your Quiz
               </h>
             </div>
 
@@ -1619,7 +1717,7 @@ const handleQuizTotalMarksChange = (e) => {
               text-[#9696BB] leading-[22.5px] text-[15px] font-medium bg-[#F4F4F4] px-4"
                 placeholder="YYYY-MM-DD"
                 value={availablefrom}
-                onChange={(e) => setavailablefrom(e.target.value)}
+                onChange={handleAvailableFromChange}
               ></input>
             </div>
 
@@ -1637,7 +1735,7 @@ const handleQuizTotalMarksChange = (e) => {
               text-[#9696BB] leading-[22.5px] text-[15px] font-medium bg-[#F4F4F4] px-4"
                 placeholder="YYYY-MM-DD"
                 value={disabledon}
-                onChange={(e) => setdisabledon(e.target.value)}
+                onChange={handleDisabledOnChange}
               ></input>
             </div>
 

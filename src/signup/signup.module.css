@@ -1055,3 +1055,7 @@ font-size:18px;
  
  }
   } */
+  .inputField input {
+    -webkit-appearance: none; /* Hides default browser styling */
+    appearance: none;
+  }

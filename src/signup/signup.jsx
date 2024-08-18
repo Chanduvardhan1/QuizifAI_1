@@ -25,6 +25,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Link, NavLink } from "react-router-dom";
 import Navbarhome from "../navbarhome/navbarhome";
+import HeaderSection from "../HeaderSection/HeaderSection";
 // import { useHistory } from 'react-router-dom';
 
 const Signup = () => {
@@ -925,7 +926,7 @@ if (hasError) {
 
   return (
     <div>
-      <Navbarhome />
+      <HeaderSection/>
     <div className="container" style={{display:"flex"}}>
 
         <div className={styles.leftSection}>

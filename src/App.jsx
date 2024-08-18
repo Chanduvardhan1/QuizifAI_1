@@ -89,6 +89,13 @@ import Editmanuly from "./edit-manuly/editmanuly.jsx";
 import Quizresults1 from "./quizview_results/quiz_results.jsx";
 import Leaderboard from "./leaderboard/leaderboard.jsx";
 import PrivateRoute from './privateRoute/privateRoute.jsx';
+import Classes from './configure/classes.jsx';
+import Subjects from './configure/subjects.jsx';
+import Specialisations from './configure/specialisations.jsx';
+import Course from './configure/course.jsx';
+import Contactus from './ContactUs1/contactus.jsx';
+import HeaderSection from './HeaderSection/HeaderSection.jsx';
+
 // import Home from "./pages/Home.jsx";
 // import ContactUs from "./pages/ContactUs.jsx";
 // import NoPage from "./pages/NoPage.jsx";
@@ -290,6 +297,14 @@ import PrivateRoute from './privateRoute/privateRoute.jsx';
         <Route path="contact" element={<PrivateRoute><Contact /></PrivateRoute>} />
         <Route path="contact1" element={<PrivateRoute><Contact1 /></PrivateRoute>} />
         <Route path="termsandconditions" element={<Termsandconditions />} />
+        <Route path="contactus" element={<Contactus />} />
+
+    <Route path="history" element={<PrivateRoute> <History /></PrivateRoute>} />
+    <Route path="course" element={<PrivateRoute> <Course /></PrivateRoute>} />
+    <Route path="specialisations" element={<PrivateRoute> <Specialisations /></PrivateRoute>} />
+    <Route path="classes" element={<PrivateRoute> <Classes /></PrivateRoute>} />
+    <Route path="subjects" element={<PrivateRoute> <Subjects /></PrivateRoute>} />
+    <Route path='headersection' element={<HeaderSection/>}/>
 
         <Route path="leaderboard" element={<PrivateRoute><Leaderboard /></PrivateRoute>} />
         <Route path="dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />

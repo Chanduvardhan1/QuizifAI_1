@@ -188,7 +188,7 @@ padding-top: 10px;
 
 .verticalLine {
     width: 1px;
-    height: 375px;
+    height: 500px;
     margin-top: 160px;
     background-color: black; /* Adjust as needed */
     /* margin-right: 20px;  */
@@ -200,7 +200,7 @@ padding-top: 10px;
 }
 .sentence1{
     font-family: Poppins;
-    margin-top: 100px;
+    /* margin-top: 100px; */
 font-size: 14px;
 font-weight: 700;
 line-height: 30px;
@@ -328,6 +328,12 @@ margin-left: -130px;
     margin-bottom: 10px;
     gap: 5px;
   }
+  .Next{
+    color: orange;
+  }
+  .font{
+    font-size: 16px;
+  }
   .Questionslines{
     display:flex;
     /* gap:40px; */
@@ -356,14 +362,14 @@ margin-left: -130px;
     display: flex;
     flex-wrap: nowrap;
     margin-bottom: 20px;
-   
-    max-width: 600px;
+   flex-wrap: wrap;
+    /* max-width: 600px; */
   }
   
   .questionNumber {
     flex: 0 0 auto; /* Ensures that the flex items do not shrink or grow */
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -372,6 +378,7 @@ margin-left: -130px;
     border-radius: 5px;
     cursor: pointer;
     background-color: #f9f9f9;
+    font-size: 12px;
   }
   
   .questionNumber.selected {
@@ -386,7 +393,8 @@ margin-left: -130px;
   display: flex;
   flex-wrap: nowrap;
   margin-bottom: 20px;
-  max-width: 600px;
+  flex-wrap: wrap;
+  /* max-width: 600px; */
 }
 
 .questionNumber1 {
@@ -398,7 +406,7 @@ margin-left: -130px;
   justify-content: center;
   margin: 2px;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 5px;
   cursor: pointer;
   background-color: #f9f9f9;
 }
@@ -438,9 +446,22 @@ margin-left: -130px;
 }
 .innerbox{
   display: flex;
-    border: 1px solid;
+    /* border: 1px solid; */
     flex-wrap: wrap;
-    border-color: #214082;;
-    border-radius: 10px;
+    /* border-color: #214082;; */
+    /* border-radius: 10px; */
     padding: 5px;
+}
+.skipped1{
+  background-color: #F4774B;
+  font-weight: bold;
+
+  border-color: red;
+  color: #214082;
+}
+.button3
+{
+  display: flex;
+  justify-content: end;
+  margin-left: 100px;
 }

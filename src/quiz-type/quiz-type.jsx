@@ -34,7 +34,8 @@ import D from "../assets/Images/quiz-type/D.png";
 import Delete from "../assets/Images/quiz-type/Delete.png";
 import Refresh from "../assets/Images/quiz-type/Refresh.png";
 import RefreshOptions from "../assets/Images/quiz-type/Refresh-options.png";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // const options1 =[
 //   {label: "Numbers"},
 //   {label: "10-30"},
@@ -119,7 +120,9 @@ const options6 = [
 
 const options7 = [
   { label: "Duration" },
+  { label: 5 },
   { label: 10 },
+  { label: 15 },
   { label: 20 },
   { label: 30 },
   { label: 40 },
@@ -224,34 +227,49 @@ export default function quiztype() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('https://quizifai.com:8010/categories&sub_categories/');
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
+      const response = await fetch('https://quizifai.com:8010/categories&sub_categories/',{
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       if (data.response === 'success') {
         setCategories(data.data);
       }
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      toast.error('Error fetching categories:', error);
     }
   };
   useEffect(() => {
-    // Set default category to 'General'
-    const generalCategory = categories.find(category => category.category_name === 'General');
-    if (generalCategory) {
-      setSelectedCategory(generalCategory.category_name);
-      setSubCategories(generalCategory.sub_categories.map(sub => sub.sub_category_name));
+    if (categories.length > 0) {
+      const generalCategory = categories.find(category => category.category_name === 'General');
+      if (generalCategory) {
+        setSelectedCategory(generalCategory.category_name);
+        setSubCategories(generalCategory.sub_categories.map(sub => sub.sub_category_name));
+      }
     }
   }, [categories]);
   
   useEffect(() => {
-    // Set default sub-category to 'General' if available
     if (subCategories.length > 0) {
       const generalSubCategory = subCategories.find(subCategory => subCategory === 'General');
       if (generalSubCategory) {
         setSelectedSubCategory(generalSubCategory);
+      } else {
+        setSelectedSubCategory(subCategories[0]); // Default to the first subcategory if 'General' is not available
       }
     }
   }, [subCategories]);
-
 
   useEffect(() => {
     // Get the current date and format it as YYYY-MM-DD
@@ -262,10 +280,10 @@ export default function quiztype() {
   const handleSelectCategory = (event) => {
     const selectedCategory = event.target.value;
     setSelectedCategory(selectedCategory);
-    // Filter subcategories based on the selected category
     const category = categories.find(cat => cat.category_name === selectedCategory);
     if (category) {
       setSubCategories(category.sub_categories.map(subCat => subCat.sub_category_name));
+      setSelectedSubCategory(''); // Reset subcategory when a new category is selected
     }
   };
   const sortedCategories = [...categories].sort((a, b) =>
@@ -283,13 +301,28 @@ export default function quiztype() {
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch('https://quizifai.com:8010/courses-clsses/');
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
+      const response = await fetch('https://quizifai.com:8010/courses-clsses/',{
+
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       if (data.response === 'success') {
         setCourses(data.data);
       }
     } catch (error) {
-      console.error('Error fetching courses:', error);
+      toast.error('Error fetching courses:', error);
     }
   };
   useEffect(() => {
@@ -334,13 +367,27 @@ export default function quiztype() {
 
   const fetchComplexities = async () => {
     try {
-      const response = await fetch('https://quizifai.com:8010/complexities/');
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+  if (!authToken) {
+    console.error('No authentication token found');
+    return;
+  }
+      const response = await fetch('https://quizifai.com:8010/complexities/',{
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       if (data.response === 'success') {
         setComplexities(data.data.map(complexity => complexity.complexity_name));
       }
     } catch (error) {
-      console.error('Error fetching complexities:', error);
+      toast.error('Error fetching complexities:', error);
     }
   };
 
@@ -578,12 +625,18 @@ export default function quiztype() {
         setErrorMessage("User ID not found. Please log in again.");
         return;
       }
+      const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+      if (!authToken) {
+        throw new Error('No authentication token found');
+      }
       const questionDuration = calculateQuizDuration();
       
       const response = await fetch(`https://quizifai.com:8010/crt_quiz_mnlly`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${authToken}`,
         },
         body: JSON.stringify({
           quiz_title: title,
@@ -624,18 +677,51 @@ export default function quiztype() {
      
         navigate("/quizcreated", { state: { quizData: responseData } });
       } else {
-        if (responseData.detail && responseData.detail[0].type === "missing" && responseData.detail[0].loc[1] === "body" && responseData.detail[0].loc[2] === "num_questions") {
-          setErrorMessage("Please provide the number of questions for the quiz.");
+        if (responseData.detail) {
+          const errorDetails = responseData.detail;
+  
+          // Check for specific error types and locations
+          if (errorDetails.some(error => error.type === "missing" && error.loc[2] === "num_questions")) {
+            toast.error("Please provide the number of questions for the quiz.");
+          } else if (errorDetails.some(error => error.type === "missing" && error.loc.includes("correct_answer_flag"))) {
+            toast.error("Please provide the correct answer flag for all options.");
+          } else if (errorDetails.some(error => error.type === "float_parsing" && error.loc[1] === "pass_percentage")) {
+            toast.error("Pass percentage must be a valid number.");
+          } else {
+            toast.error("An error occurred while creating the quiz.");
+          }
+        } else if (responseData.response === "fail" && responseData.response_message.includes("Missing or empty question_text")) {
+          toast.error(responseData.response_message);
         } else {
-          setErrorMessage(responseData.detail);
+          toast.error(responseData.response_message);
+          toast.error("An error occurred while creating the quiz.");
         }
       }
+       
     } catch (error) {
       console.error("Type-Quiz failed:", error);
       setErrorMessage("An error occurred while choosing the type of the quiz");
     }
   };
-
+  const handleAvailableFromChange = (e) => {
+    setavailablefrom(e.target.value);
+    // Clear the disabledOn date if it's before the new availableFrom date
+    if (disabledon && e.target.value > disabledon) {
+      setdisabledon('');
+    }
+  };
+  
+  const handleDisabledOnChange = (e) => {
+    const newDisabledOn = e.target.value;
+    if (availablefrom && newDisabledOn < availablefrom) {
+      // Show an error message or clear the disabledOn field
+      setdisabledon('');
+      setErrorMessage("Disabled on date cannot be earlier than available from date.");
+    } else {
+      setdisabledon(newDisabledOn);
+      setErrorMessage('');
+    }
+  };
   const calculateWeightage = (numQuestions, quiztotalmarks) => {
     return numQuestions > 0 ? Math.ceil(quiztotalmarks / numQuestions) : 0;
   };
@@ -817,6 +903,7 @@ export default function quiztype() {
             </a>
           </div> */}
           <Navigation />
+          <ToastContainer/>
         </header>
         <div className="absolute top-[30px] left-[1260px] cursor-pointer text-[#eeb600f0] " onClick={Back}><MdOutlineCancel /></div>
         {!showRegistrationSuccess && (
@@ -1253,7 +1340,7 @@ export default function quiztype() {
               text-[#9696BB] leading-[22.5px] text-[15px] font-medium  px-4"
                 placeholder="YYYY-MM-DD"
                 value={availablefrom}
-                onChange={(e) => setavailablefrom(e.target.value)}
+                onChange={handleAvailableFromChange}
               ></input>
             </div>
 
@@ -1270,7 +1357,7 @@ export default function quiztype() {
               text-[#9696BB] leading-[22.5px] text-[15px] font-medium  px-4"
                 placeholder="YYYY-MM-DD"
                 value={disabledon}
-                onChange={(e) => setdisabledon(e.target.value)}
+                onChange={handleDisabledOnChange}
               ></input>
             </div>
 

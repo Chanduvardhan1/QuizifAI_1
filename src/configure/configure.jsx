@@ -23,20 +23,38 @@ const configure = () => {
   const handleBanckToDashbaord = () =>{
     navigate('/dashboard');
   }
+  const userRole = localStorage.getItem('user_role');
+  const allowedRoles = ['Quiz Master']; // Roles allowed to access the pages
 
-  const handleCategoriesClick = () => {
-    navigate('/category'); 
+  const handleRestrictedClick = (navigateTo) => {
+    if (allowedRoles.includes(userRole)) {
+      navigate(navigateTo);
+    } else {
+      alert('You do not have permission to access this page.');
+    }
   };
-
+  const handleCategoriesClick = () => handleRestrictedClick('/category');
+  const handleCoursesClick = () => handleRestrictedClick('/Course');
+  const handleSpecialisationsClick = () => handleRestrictedClick('/specialisations');
+  const handleClassesClick = () => handleRestrictedClick('/classes');
+  const handleSubjectsClick = () => handleRestrictedClick('/Subjects');
+  
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+  if (!authToken) {
+    console.error('No authentication token found');
+    return;
+  }
         const response = await fetch(
           `https://quizifai.com:8010/dashboard`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              'Authorization': `Bearer ${authToken}`,
             },
             body: JSON.stringify({
               user_id: userId,         
@@ -65,7 +83,7 @@ const configure = () => {
   }, [userId]);
 
   const items = [
-      { id: 1, title: 'Configuration', content: 'Categories, Courses' },
+      { id: 1, title: 'Configuration', content: 'Categories, Courses, Specialisations, Classes, Subjects' },
       { id: 2, title: 'Organization', content: 'Profile, Manage Subscription, Performance Metrics, Marketing and Sales, Financial Information, Mission and Vision, Goals and Objectives' },
       { id: 3, title: 'Notification', content: 'Contact Information, Date and Time, Main Content, Additional Information' },
       { id: 4, title: 'User & Roles', content: 'User Information, Roles and Permissions, Communication, Responsibilities and Expectations' },
@@ -165,7 +183,16 @@ const configure = () => {
                  <p
                  key={index} 
                  className={`mt-3 text-[10px] ml-[20px] font-semibold cursor-pointer ${item.title === 'Configuration' && 'text-[#3340AF]'} ${item.title === 'Configuration' ? 'hover:underline hover:underline-offset-2' : 'text-gray-500'}`} 
-                 onClick={contentItem === 'Categories' ? handleCategoriesClick : null}
+                 onClick={
+                  contentItem === 'Categories' ? handleCategoriesClick : 
+                  contentItem === 'Courses' ? handleCoursesClick : 
+                  
+                  contentItem === 'Specialisations' ? handleSpecialisationsClick :
+                  contentItem === 'Classes' ? handleClassesClick :
+                  contentItem === 'Subjects' ? handleSubjectsClick :
+
+                  null
+                }
              >
                  {highlightText(contentItem, searchQuery)}
              </p>

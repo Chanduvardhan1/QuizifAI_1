@@ -70,11 +70,18 @@ const quizresults = () => {
 
     const fetchQuizReport = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+        if (!authToken) {
+          console.error('No authentication token found');
+          return;
+        }
         const response = await fetch('https://quizifai.com:8010/quiz_report', {
           method: 'POST',
           headers: {
             'accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             quiz_id: quizId,
@@ -163,11 +170,18 @@ const quizresults = () => {
   useEffect(() => {
     const sendQuizResult = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+        if (!authToken) {
+          console.error('No authentication token found');
+          return;
+        }
         const response = await fetch('https://quizifai.com:8010/quiz_result', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             user_id: userId,
@@ -194,11 +208,18 @@ const quizresults = () => {
   useEffect(() => {
     const fetchLeaderboardData = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+        if (!authToken) {
+          console.error('No authentication token found');
+          return;
+        }
         const response = await fetch('https://quizifai.com:8010/leaderboard_result', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             quiz_id: quizId
@@ -591,13 +612,13 @@ if (!Array.isArray(leaderboardData)) {
         <img
     src={rank1Icon} 
     alt="Icon 1"
-    className={styles.rankicon1}
+    className={styles.rankicon2}
   />
          
          <img
     src={rank2Icon} 
     alt="" 
-    className={styles.rankicon2}
+    className={styles.rankicon1}
   />
            <img
     src={rank3Icon} 
@@ -606,8 +627,8 @@ if (!Array.isArray(leaderboardData)) {
   />
         </div>
         <div className={styles.ranksiconsContainer1}>
-     <p className={styles.second}>2<span  className={styles.st}>nd</span></p>
-        <p className={styles.fist}>1<span  className={styles.st}>st</span></p> 
+     <p className={styles.second}>1<span  className={styles.st}>st</span></p>
+        <p className={styles.fist}>2<span  className={styles.st}>nd</span></p> 
       
         <p className={styles.thired}>3<span  className={styles.st}>rd</span></p>
         </div>

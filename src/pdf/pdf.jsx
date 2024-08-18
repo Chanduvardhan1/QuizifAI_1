@@ -104,7 +104,9 @@ const options6 = [
 
 const options7 = [
   { label: "Duration" },
+  { label: 5 },
   { label: 10 },
+  { label: 15 },
   { label: 20 },
   { label: 30 },
   { label: 40 },
@@ -214,9 +216,23 @@ export default function quiztype() {
 
   const fetchCategories = async () => {
     try {
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
       const response = await fetch(
-        "https://quizifai.com:8010/categories&sub_categories/"
-      );
+        "https://quizifai.com:8010/categories&sub_categories/",
+      {
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       if (data.response === "success") {
         setCategories(data.data);
@@ -226,20 +242,22 @@ export default function quiztype() {
     }
   };
   useEffect(() => {
-    // Set default category to 'General'
-    const generalCategory = categories.find(category => category.category_name === 'General');
-    if (generalCategory) {
-      setSelectedCategory(generalCategory.category_name);
-      setSubCategories(generalCategory.sub_categories.map(sub => sub.sub_category_name));
+    if (categories.length > 0) {
+      const generalCategory = categories.find(category => category.category_name === 'General');
+      if (generalCategory) {
+        setSelectedCategory(generalCategory.category_name);
+        setSubCategories(generalCategory.sub_categories.map(sub => sub.sub_category_name));
+      }
     }
   }, [categories]);
   
   useEffect(() => {
-    // Set default sub-category to 'General' if available
     if (subCategories.length > 0) {
       const generalSubCategory = subCategories.find(subCategory => subCategory === 'General');
       if (generalSubCategory) {
         setSelectedSubCategory(generalSubCategory);
+      } else {
+        setSelectedSubCategory(subCategories[0]); // Default to the first subcategory if 'General' is not available
       }
     }
   }, [subCategories]);
@@ -247,14 +265,10 @@ export default function quiztype() {
   const handleSelectCategory = (event) => {
     const selectedCategory = event.target.value;
     setSelectedCategory(selectedCategory);
-    // Filter subcategories based on the selected category
-    const category = categories.find(
-      (cat) => cat.category_name === selectedCategory
-    );
+    const category = categories.find(cat => cat.category_name === selectedCategory);
     if (category) {
-      setSubCategories(
-        category.sub_categories.map((subCat) => subCat.sub_category_name)
-      );
+      setSubCategories(category.sub_categories.map(subCat => subCat.sub_category_name));
+      setSelectedSubCategory(''); // Reset subcategory when a new category is selected
     }
   };
   useEffect(() => {
@@ -274,7 +288,21 @@ export default function quiztype() {
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch("https://quizifai.com:8010/courses-clsses/");
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
+      const response = await fetch("https://quizifai.com:8010/courses-clsses/",{
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       
       if (data.response === "success") {
@@ -342,7 +370,21 @@ export default function quiztype() {
 
   const fetchComplexities = async () => {
     try {
-      const response = await fetch("https://quizifai.com:8010/complexities/");
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        console.error('No authentication token found. Please log in again.');
+        return;
+      }
+      const response = await fetch("https://quizifai.com:8010/complexities/",{
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       if (data.response === "success") {
         setComplexities(
@@ -358,7 +400,25 @@ export default function quiztype() {
   const handleSelectComplexity = (event) => {
     setSelectedComplexity(event.target.value);
   };
-
+  const handleAvailableFromChange = (e) => {
+    setavailablefrom(e.target.value);
+    // Clear the disabledOn date if it's before the new availableFrom date
+    if (disabledon && e.target.value > disabledon) {
+      setdisabledon('');
+    }
+  };
+  
+  const handleDisabledOnChange = (e) => {
+    const newDisabledOn = e.target.value;
+    if (availablefrom && newDisabledOn < availablefrom) {
+      // Show an error message or clear the disabledOn field
+      setdisabledon('');
+      setErrorMessage("Disabled on date cannot be earlier than available from date.");
+    } else {
+      setdisabledon(newDisabledOn);
+      setErrorMessage('');
+    }
+  };
   // useEffect(() => {
   //   fetchData();
   // }, []);
@@ -647,6 +707,13 @@ if (isAnyFieldEmpty) {
     alert("Please fill in all the required fields before proceeding.");
     return; // Prevent further execution
 }
+const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+if (!authToken) {
+  setErrorMessage('No authentication token found. Please log in again.');
+  clearInterval(interval);
+  return;
+}
     try {
       const formData = new FormData();
       formData.append("quiz_title", title);
@@ -670,6 +737,9 @@ if (isAnyFieldEmpty) {
    
       const options = {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
+        },
         body: formData,
       };
   
@@ -755,13 +825,20 @@ if (isAnyFieldEmpty) {
         setErrorMessage("User ID not found. Please log in again.");
         return;
       }
-  
+      const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        setErrorMessage('No authentication token found. Please log in again.');
+        clearInterval(interval);
+        return;
+      }
       const response = await fetch(
         `https://quizifai.com:8010/crt_qz_from_pdf`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             quiz_title: title,
@@ -1399,7 +1476,7 @@ if (isAnyFieldEmpty) {
               text-[#9696BB] leading-[22.5px] text-[15p] font-medium px-4"
                 placeholder="YYYY-MM-DD"
                 value={availablefrom}
-                onChange={(e) => setavailablefrom(e.target.value)}
+                onChange={handleAvailableFromChange}
               ></input>
             </div>
 
@@ -1416,7 +1493,7 @@ if (isAnyFieldEmpty) {
               text-[#9696BB] leading-[22.5px] text-[15p] font-medium px-4"
                 placeholder="YYYY-MM-DD"
                 value={disabledon}
-                onChange={(e) => setdisabledon(e.target.value)}
+                o onChange={handleDisabledOnChange}
               ></input>
             </div>
 

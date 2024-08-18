@@ -128,13 +128,20 @@ const quizAccess = () => {
   const [createdBy, setCreatedBy] = useState('');
   const [createdOn, setCreatedOn] = useState('');
   useEffect(() => {
+    const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+  if (!authToken) {
+    console.error('No authentication token found');
+    return;
+  }
     const userId = localStorage.getItem("user_id");
     const quizId = localStorage.getItem("quiz_id");
     fetch('https://quizifai.com:8010/access_quiz_for_master', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         quiz_id: quizId,

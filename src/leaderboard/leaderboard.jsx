@@ -72,11 +72,18 @@ const leaderboard = () => {
     // const {passPercentage} = location.state || {};
     const fetchQuizReport = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+        if (!authToken) {
+          console.error('No authentication token found. Please log in again.');
+          return;
+        }
         const response = await fetch('https://quizifai.com:8010/quiz_report', {
           method: 'POST',
           headers: {
             'accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             quiz_id: quizId,
@@ -106,11 +113,18 @@ const leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboardData = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+        if (!authToken) {
+          console.error('No authentication token found. Please log in again.');
+          return;
+        }
         const response = await fetch('https://quizifai.com:8010/leaderboard_result', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             quiz_id: quizId
@@ -171,11 +185,18 @@ const leaderboard = () => {
 
     const sendQuizResult = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+        if (!authToken) {
+          console.error('No authentication token found. Please log in again.');
+          return;
+        }
         const response = await fetch('https://quizifai.com:8010/quiz_result_view', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             user_id: userId,
@@ -204,11 +225,18 @@ const leaderboard = () => {
 
     const fetchLeaderboardData = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
+
+    if (!authToken) {
+      console.error('No authentication token found. Please log in again.');
+      return;
+    }
         const response = await fetch('https://quizifai.com:8010/leaderboard_result', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             quiz_id: quizId
@@ -447,7 +475,7 @@ if (!quizData1 || !quizData1.questions) {
     alt="Calendar Icon"
     className={styles.icon2}
   />
-          <span>{quizData.correct_answers} correct answer</span>
+          <span className={styles.correct_answers} >{quizData.correct_answers} correct answer</span>
         </div>
       <div className={styles.sentencesContainer}>
         <div className={styles.sentence}>
@@ -517,16 +545,17 @@ if (!quizData1 || !quizData1.questions) {
         </div> */}
         <div className={styles.ranksiconsContainer}>
         <img
-    src={rank1Icon} 
-    alt="Icon 1"
-    className={styles.rankicon1}
-  />
-         
-         <img
     src={rank2Icon} 
     alt="" 
+    className={styles.rankicon1}
+  />
+        <img
+    src={rank1Icon} 
+    alt="Icon 1"
     className={styles.rankicon2}
   />
+         
+      
            <img
     src={rank3Icon} 
     alt="Rank 3 Icon"
@@ -534,8 +563,8 @@ if (!quizData1 || !quizData1.questions) {
   />
         </div>
         <div className={styles.ranksiconsContainer1}>
-     <p className={styles.second}>2<span  className={styles.st}>nd</span></p>
-        <p className={styles.fist}>1<span  className={styles.st}>st</span></p> 
+        <p className={styles.second}>1<span  className={styles.st}>st</span></p> 
+     <p className={styles.fist}>2<span  className={styles.st}>nd</span></p>
       
         <p className={styles.thired}>3<span  className={styles.st}>rd</span></p>
         </div>

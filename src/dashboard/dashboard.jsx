@@ -1,5 +1,5 @@
 // Dashboard.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import styles from "./dashboard.module.css";
 import Navigation from "../navbar/navbar.jsx";
 import LogoutBar from "../logoutbar/logoutbar.jsx";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Plus from "../../src/assets/Images/dashboard/Plus.png";
 import Start_button from "../../public/images/dashboard/Start-button.png";
 import start from "../../src/assets/Images/dashboard/non-attempted-start.png";
+import PlayButton from "../../src/assets/Images/dashboard/playButton.png";
 import Share_button from "../../public/images/dashboard/Share-button.png";
 import leaderboard_button from "../../public/images/dashboard/leaderboard-button.png";
 import Edit_button from "../../src/assets/Images/dashboard/Edit-button.png";
@@ -23,6 +24,7 @@ import arrow from "../../src/assets/Images/dashboard/rightArrow.png";
 import "react-sweet-progress/lib/style.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from '../Authcontext/AuthContext'; // Adjust the import path if needed
 
 const Dashboard = () => {
   const getFormattedDate = () => {
@@ -53,9 +55,29 @@ const Dashboard = () => {
   const [retakeCount, setRetakeCount] = useState(0);
   const [retakeFlag, setRetakeFlag] = useState(0);
 
+
   const navigate = useNavigate();
+  const { isAuthenticated, authToken } = useContext(AuthContext);
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem('authToken');
+  //   console.log("Token from localStorage:", token); // Debugging line
+  //   if (token) {
+  //     setIsAuthenticated(true);
+  //   } else {
+  //     console.log("No token found, user is not authenticated."); // Debugging line
+  //   }
+  // }, []);
+  
 
+  useEffect(() => {
+    // Example: Checking authentication state on component mount
+    console.log('User is authenticated:', isAuthenticated);
+    // You might not need to directly use setIsAuthenticated here
+    // It's typically handled within the AuthContext
+  }, [isAuthenticated]);
+
+ 
   
   useEffect(() => {
     const handleWindowClose = () => {
@@ -81,12 +103,17 @@ const Dashboard = () => {
     };
   }, []);
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login'); // Redirect to login if not authenticated
+      return;
+    }
     const fetchQuizData = async () => {
       try {
         const response = await fetch(`https://quizifai.com:8010/dashboard`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
             user_id: userId,
@@ -115,7 +142,7 @@ const Dashboard = () => {
     };
 
     fetchQuizData();
-  }, [userId]);
+  }, [authToken, isAuthenticated, navigate, userId]);
 
   const handleStartQuiz = (quizId) => {
     // navigate(`/quizaccess/${quizId}`);
@@ -371,7 +398,7 @@ const Dashboard = () => {
             {result?.quiz_percentage}%
           </span>
         </div>
-        <hr className={styles.divider} />
+        {index < 3 && <hr className={styles.divider} />}
       </div>
     );
   });
@@ -551,14 +578,14 @@ const Dashboard = () => {
                         paddingTop: "20px",
                         marginTop: "10px",
                         marginRight: "10px",
-                        backgroundColor: "#fee2e2",
+                        backgroundColor: quizItem.attempts_count < quizItem.retake_flag ? "#fee2e2" : "#55505026",
                       }}
                     >
                       <span className="relative group">
-                        <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate -mt-[10px]">
+                        <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate -mt-[13px]">
                           {quizItem.quiz_name}
                         </span>
-                        <span className="text-nowrap cursor-pointer hidden group-hover:inline-block absolute left-2 top-4 w-auto z-30 bg-black text-white px-1 border border-black-300 rounded">
+                        <span className="text-nowrap cursor-pointer hidden group-hover:inline-block absolute left-2 top-[1px] w-auto z-30 bg-black text-white px-1 border border-black-300 rounded">
                           {quizItem.quiz_name}
                         </span>
                       </span>
@@ -570,7 +597,7 @@ const Dashboard = () => {
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
                             stroke="currentColor"
-                            class="w-4 h-4 rotate-90 -ml-[35px] relative -top-[7px] cursor-pointer rounded-lg hover:bg-slate-200"
+                            class="w-4 h-4 rotate-90 -ml-[35px] relative -top-[7px] left-2 cursor-pointer rounded-lg hover:bg-slate-200"
                             onClick={() => toggleNavbar(index)}
                           >
                             <path
@@ -682,9 +709,9 @@ const Dashboard = () => {
                         </div>
                       </div>
 
-                      <div className="flex mt-[9px] relative top-[15px]">
+                      <div className="flex mt-[9px] mb-4 relative top-[7px]">
                         <span className="relative group">
-                          <span className="text-[#002366] ml-[10px] mt-4 w-[50px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                          <span className="text-[#002366] ml-[10px] mt-4 w-[50px] cursor-pointer z-0 truncate text-[9px] font-semibold">
                             {quizItem.category}
                           </span>
                           <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-2 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
@@ -695,7 +722,7 @@ const Dashboard = () => {
                         <p className="px-[2px] font-normal">|</p>
 
                         <span class="relative group">
-                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-normal inline-block w-[80px] overflow-hidden whitespace-nowrap">
+                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {quizItem.sub_category}
                             </span>
                             <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
@@ -704,17 +731,20 @@ const Dashboard = () => {
                           </span>
 
                           <button
-                            className="cursor-pointer ml-auto relative -top-[10px] right-1"
+                            className="cursor-pointer ml-auto relative top-1 right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
                             onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
                           >
                             <img
-                              className="h-8 w-[34px]"
-                              src={start}
+                              className="h-[5.5px] w-[4.5px] relative top-[3.5px] left-[2px]"
+                              src={PlayButton}
                               alt="Start button"
                             />
+                            <h1  className="text-[#472E86] text-[6px] relative top-[2px] pl-[1px] font-bold">Retake</h1>
                           </button>
                       </div>
-
+                      <div className="h-1 -mt-[8px] pl-[10px] text-[7px] text-[#002366] font-semibold relative -top-[6px]">
+                            <h3>Quiz ID : {quizItem.quiz_id}</h3>
+                          </div>
                       {/* <div className="h-[1px] w-full bg-white"></div> */}
                       {/* <div className="h-[3px] w-full bg-white"></div> */}
                       <div className="relative group mt-1">
@@ -857,7 +887,7 @@ const Dashboard = () => {
                         backgroundColor: "#CBF2FB",
                       }}
                     >
-                      <span className="relative group -top-[12px]">
+                      <span className="relative group -top-[13px]">
                         <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate">
                           {quizItem.quiz_name}
                         </span>
@@ -874,7 +904,7 @@ const Dashboard = () => {
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
                             stroke="currentColor"
-                            class="w-4 h-4 -ml-[27px] relative -top-[20px] right-[7px] rotate-90 cursor-pointer rounded-lg hover:bg-slate-200"
+                            class="w-4 h-4 -ml-[27px] relative -top-[20px] -left-[2px] rotate-90 cursor-pointer rounded-lg hover:bg-slate-200"
                             onClick={() => toggleNavbar1(index)}
                           >
                             <path
@@ -973,9 +1003,9 @@ const Dashboard = () => {
                         </div>
                       </div>
 
-                      <div className="flex -mt-[13px] relative top-[23px]">
+                      <div className="flex -mt-[13px] relative top-[16px]">
                         <span className="relative group">
-                          <span className="text-[#002366] ml-[10px] w-[50px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                          <span className="text-[#002366] ml-[10px] w-[50px] cursor-pointer z-0 truncate text-[9px] font-semibold">
                             {quizItem.category}
                           </span>
                           <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-2 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
@@ -984,7 +1014,7 @@ const Dashboard = () => {
                         </span>
                         <p className="px-[2px] font-normal">|</p>
                         <span class="relative group">
-                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-normal inline-block w-[80px] overflow-hidden whitespace-nowrap">
+                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {quizItem.sub_category}
                             </span>
                             <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
@@ -993,7 +1023,7 @@ const Dashboard = () => {
                           </span>
 
                           <button
-                            className="cursor-pointer ml-auto relative -top-[10px] right-1"
+                            className="cursor-pointer ml-auto relative -top-[5px] right-1"
                             onClick={() =>
                               handleStartQuiz(quizItem.quiz_id)
                             }
@@ -1012,11 +1042,10 @@ const Dashboard = () => {
                             {quizItem.created_by}
                           </span>
                         </div>
-                        {/* <div>Created On</div> */}
                       </div>
-                      {/* <div style={{ backgroundColor: "#EFEFEF", padding: "2px 0" }}>
-              <div className="h-[10px] w-full bg-[#D9D9D9]"></div>
-            </div> */}
+                      <div className="h-1 -mt-[6px] pl-[10px] text-[7px] text-[#002366] font-semibold relative -top-[6px]">
+                            <h3>Quiz ID : {quizItem.quiz_id}</h3>
+                          </div>
 
                       <div className="relative group mt-1 ">
                         <span className="mt-[6px] text-wrap text-[8px] font-normal absolute ml-[10px] w-[140px] cursor-pointer z-0 truncate line-clamp-4">
@@ -1051,7 +1080,7 @@ const Dashboard = () => {
                                   height={10}
                                 />
                                 <p>{quizItem.quiz_attempts}</p>
-                                <span className="text-[8px] ml-1">
+                                <span className="text-[8px] -ml-[1px]">
                                   attempts
                                 </span>
                               </div>
@@ -1148,11 +1177,11 @@ const Dashboard = () => {
                         paddingTop: "20px",
                         marginTop: "10px",
                         marginRight: "10px",
-                        backgroundColor: "#fee2e2",
+                        backgroundColor: quizItem.attempts_count < quizItem.retake_flag ? "#fee2e2" : "#55505026",
                       }}
                     >
                       <span className="relative group">
-                        <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate -mt-[10px]">
+                        <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate -mt-[13px]">
                           {quizItem.quiz_name}
                         </span>
                         <span className="text-nowrap cursor-pointer hidden group-hover:inline-block absolute left-2 top-4 w-auto z-30 bg-black text-white px-1 border border-black-300 rounded">
@@ -1160,7 +1189,7 @@ const Dashboard = () => {
                         </span>
                       </span>
                       <div className={styles.iconContainer}>
-                        <div className="z-40 mb-[2px]  font-normal rounded -mt-[12px] relative -top-[5px] right-[2px]">
+                        <div className="z-40 mb-[2px]  font-normal rounded -mt-[12px] relative -top-[8px] right-[2px]">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -1282,9 +1311,9 @@ const Dashboard = () => {
                     onClick={() => handleStartQuiz(quizItem.quiz_id)}/> */}
                       </div>
 
-                      <div className="flex mt-[9px] relative top-[15px]">
+                      <div className="flex mt-[9px] mb-[18px] relative top-[6px]">
                         <span className="relative group">
-                          <span className="text-[#002366] ml-[10px] mt-4 w-[50px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                          <span className="text-[#002366] ml-[10px] mt-4 w-[50px] cursor-pointer z-0 truncate text-[9px] font-semibold">
                             {quizItem.category}
                           </span>
                           <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-2 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
@@ -1295,27 +1324,29 @@ const Dashboard = () => {
                         <p className="px-[2px] font-normal">|</p>
 
                         <span className="relative group">
-                            <span className="text-[#002366] w-[80px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                            <span className="text-[#002366] w-[80px] cursor-pointer z-0 truncate text-[9px] font-semibold">
                               {quizItem.sub_category}
                             </span>
-                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[10px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
+                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[13px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
                               {quizItem.sub_category}
                             </span>
                           </span>
 
                           <button
-                            className="cursor-pointer ml-auto relative -top-[10px] right-1"
+                            className="cursor-pointer ml-auto relative top-1 right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
                             onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
                           >
-                            
                             <img
-                              className="h-8 w-[34px]"
-                              src={start}
+                              className="h-[5.5px] w-[4.5px] relative top-[3.5px] left-[2px]"
+                              src={PlayButton}
                               alt="Start button"
                             />
+                            <h1  className="text-[#472E86] text-[6px] relative top-[2px] pl-[1px] font-bold">Retake</h1>
                           </button>
                       </div>
-
+                      <div className="h-1 -mt-[8px] pl-[10px] text-[7px] text-[#002366] font-semibold relative -top-[6px]">
+                            <h3>Quiz ID : {quizItem.quiz_id}</h3>
+                          </div>
                       {/* <div className="h-[1px] w-full bg-white"></div> */}
                       {/* <div className="h-[3px] w-full bg-white"></div> */}
                       <div className="relative group mt-1">
@@ -1457,7 +1488,7 @@ const Dashboard = () => {
                         backgroundColor: "#CBF2FB",
                       }}
                     >
-                      <span className="relative group">
+                      <span className="relative group -top-[1px]">
                         <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate">
                           {quizItem.quiz_name}
                         </span>
@@ -1581,9 +1612,9 @@ const Dashboard = () => {
                         </div>
                       </div>
 
-                      <div className="flex relative top-[21px]">
+                      <div className="flex relative top-[15px]">
                         <span className="relative group">
-                          <span className="text-[#002366] ml-[10px] w-[50px] cursor-pointer z-0 truncate text-[9px] font-normal">
+                          <span className="text-[#002366] ml-[10px] w-[50px] cursor-pointer z-0 truncate text-[9px] font-semibold">
                             {quizItem.category}
                           </span>
                           <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-2 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
@@ -1593,7 +1624,7 @@ const Dashboard = () => {
                         <p className="px-[2px] font-normal">|</p>
 
                         <span class="relative group">
-                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-normal inline-block w-[80px] overflow-hidden whitespace-nowrap">
+                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {quizItem.sub_category}
                             </span>
                             <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
@@ -1602,7 +1633,7 @@ const Dashboard = () => {
                           </span>
 
                           <button
-                            className="cursor-pointer ml-auto relative -top-[10px] right-1"
+                            className="cursor-pointer ml-auto relative -top-[5px] right-1"
                             onClick={() => handleStartQuiz(quizItem.quiz_id)}
                           >
                             <img
@@ -1619,11 +1650,10 @@ const Dashboard = () => {
                             {quizItem.created_by}
                           </span>
                         </div>
-                        {/* <div>Created On</div> */}
                       </div>
-                      {/* <div style={{ backgroundColor: "#EFEFEF", padding: "2px 0" }}>
-              <div className="h-[10px] w-full bg-[#D9D9D9]"></div>
-            </div> */}
+                      <div className="h-1 -mt-[6px] pl-[10px] text-[7px] text-[#002366] font-semibold relative -top-[6px]">
+                            <h3>Quiz ID : {quizItem.quiz_id}</h3>
+                          </div>
 
                       <div className="relative group mt-1 ">
                         <span className="mt-[6px] text-wrap text-[8px] font-normal absolute ml-[10px] w-[140px] cursor-pointer z-0 truncate line-clamp-4">
@@ -1658,7 +1688,7 @@ const Dashboard = () => {
                                   height={10}
                                 />
                                 <p>{quizItem.quiz_attempts}</p>
-                                <span className="text-[8px] ml-1">
+                                <span className="text-[8px] -ml-1">
                                   attempts
                                 </span>
                               </div>

@@ -1,15 +1,7 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState,useContext } from "react";
 import styles from "../signup/email.module.css";
 import quizifailogo from "../../src/assets/Images/images/home/home.jpg";
-import butterflyImg from "../assets/Images/images/butterfly1.png";
-import icon1 from "../assets/Images/images/mdi_gmail.png";
-import icon2 from "../assets/Images/images/clarity_mobile-line.png";
-import icon3 from "../assets/Images/images/logos_google-gmail.png";
-import img2 from "../assets/Images/images/img2.png";
-import logo2 from "../assets/Images/images/narmtech-logo.png";
 import closeIcon from "../assets/Images/images/gmail/closeIcon.png";
-import { FaSyncAlt } from "react-icons/fa";
-import { BsFillVolumeUpFill, BsFillVolumeMuteFill } from "react-icons/bs";
 import forgotPasswordIcon from "../assets/Images/images/back1.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import TextField from "@mui/material/TextField";
@@ -18,6 +10,7 @@ import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbarhome from "../navbarhome/navbarhome";
 import { AuthContext } from "../Authcontext/AuthContext.jsx"
+import HeaderSection from "../HeaderSection/HeaderSection.jsx";
 
 
 const LoginPage = () => {
@@ -39,13 +32,15 @@ const LoginPage = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [termsChecked, setTermsChecked] = useState(false);
-  // const router = useRouter();
   const [emailError, setEmailError] = useState(false);
   const [loginOption, setloginOption] = useState("");
   const [platform, setplatform] = useState("")
   const [Forgotmassage, setForgotmassage] = useState("")
   const [Forgotmobile, setForgotmobile] = useState("")
-  const { login } = useContext(AuthContext)
+  const { login } =  useContext(AuthContext);
+  const [username, setUsername] = useState('');
+  // const { handleLogin } = useAuth();
+
   const validateEmail = () => {
     return /\S+@\S+\.\S+/.test(email);
   };
@@ -105,114 +100,41 @@ const LoginPage = () => {
     setShowResendOTPForm(true);
   };
   const navigate = useNavigate();
-  // const handleLogin = async (loginOption, email, mobile, password) => {
-  //   // if (!termsChecked) {
-  //   //   setErrorMessage("Please agree to the terms and conditions");
-  //   //   return;
-  //   // }
-  //   try {
-  //     console.log("email - ", email);
-  //     const response = await fetch(`https://quizifai.com:8010/login`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         login_option: loginMethod,
-  //         email_or_mobile: loginMethod === "email" ? email : mobile,
-  //         password: password,
-  //       }),
-  //     });
-  //     const responseData = await response.json();
-  //     console.log("API Response:", responseData);
-  //     console.log(responseData);
 
-  //     console.log("User ID:", responseData[0].user_id[0]);
-  //     console.log("User Name:", responseData[0].user_name);
-     
-  //     // Store user_id and user_name in localStorage
-  //     localStorage.setItem('user_id', responseData[0].user_id[0]);
-  //     localStorage.setItem('user_name', responseData[0].user_name)
-    
+  const handleLogin1 = async (loginOption, email, mobile, password) => {
 
-  //     {
-  //       /*const userId = responseData[0].user_id[0]; 
-  //     console.log('User ID:', userId);
-      
-     
-  //     sessionStorage.setItem('userId', userId);*/
-  //     }
-
-  //     if (response.ok) {
-  //       if (
-  //         Array.isArray(responseData) &&
-  //         responseData[0] &&
-  //         responseData[0].response === "fail"
-  //       ) {
-  //         setErrorMessage(
-  //           responseData[0].message ||
-  //             "An unknown error occurred while logging in."
-  //         );
-  //         console.error(errorMessage);
-  //       } else if (
-  //         typeof responseData === "object" &&
-  //         responseData.response === "fail"
-  //       ) {
-  //         setErrorMessage(
-  //           responseData.data || "An unknown error occurred while logging in."
-  //         );
-  //         console.error(errorMessage);
-  //       }else if (
-     
-  //         responseData.response === "fail" && responseData.data ==="Mobile Number is incorrect or account doesn't exist pls sinup." ) {
-  //         setErrorMessage(
-  //           responseData.data || "Mobile Number is incorrect or account doesn't exist pleass signup."
-  //         );
-  //         console.error(errorMessage);
-  //       }  else if (responseData.response === "success") {
-  //         // const userId = responseData.data.user_id;
-  //         // sessionStorage.setItem('userId', userId);
-
-  //         // const userName = responseData.response.user_name.user_id;
-  //         // sessionStorage.setItem('userName', userName);
-  //         // // sessionStorage.setItem('userid', userId);
-  //         // navigate("/dashboard");
-          
-          
-  //       } else {
-  //         setErrorMessage("");
-  //         navigate("/dashboard");
-  //         console.log("Login successful!");
-  //       }
-  //     } else if (responseData.data === "Mobile Number is incorrect or account doesn't exist pls sinup.") {
-  //       setErrorMessage("Mobile Number is incorrect or account doesn't exist. Please sign up.");
-  //     } else {
-  //       setErrorMessage(
-  //         responseData.message || "An unknown error occurred while logging in."
-  //       );
-  //       console.error(errorMessage);
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //     setErrorMessage("An error occurred while logging in.");
-  //   }
-  // };
-  const handleLogin = async (loginOption, email, mobile, password) => {
     if (!password) {
       setErrorMessage("Please enter your password");
       return;
     }
     try {
-      // console.log("email - ", email);
-      // console.log("password before storing:", password);
-
       const platform = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
       ? "mobile" // If any of the identifiers are found, return 'Mobile'.
       : "Web";
+      const tokenResponse = await fetch('https://quizifai.com:8010/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          accept: 'application/json',
+        },
+        body: new URLSearchParams({
+          username:  loginOption === "email" ? email : mobile, // Use the fixed username
+          password: password, // Use the fixed password
+        }),
+      });
+  
+      if (!tokenResponse.ok) {
+        throw new Error('Failed to retrieve access token');
+      }
+  
+      const tokenData = await tokenResponse.json();
+      const accessToken = tokenData.access_token;
+  
       const response = await fetch(`https://quizifai.com:8010/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           login_option: loginOption,
@@ -229,7 +151,7 @@ const LoginPage = () => {
           const userId = responseData.data && responseData.data[0] && responseData.data[0].user_id;
         const userRole = responseData.data && responseData.data[0] && responseData.data[0].user_role;
         if (userId && userRole) {
-          login({ userId, userRole });
+          login(accessToken);
           localStorage.setItem('user_id', userId);
           localStorage.setItem('user_role', userRole);
           localStorage.setItem('password', password);
@@ -266,7 +188,7 @@ const LoginPage = () => {
           }else if (responseData.response_message === "Password is incorrect. Please try again.") {
             errorMessage = "Password is incorrect. Please try again.";
           }else if (responseData.response_message === "You've chosen mobile as your login method, so please log in using your mobile number.") {
-            errorMessage = "You've chosen mobile as your login method, so please log in using your mobile number.";
+            errorMessage = "You've chosen mobile as your login method, So, please login by using your mobile number.";
           }
 
           setErrorMessage(errorMessage);
@@ -280,8 +202,6 @@ const LoginPage = () => {
       setErrorMessage("An error occurred while logging in.");
     }
   };
-  
-  
   
   const validateEmail1 = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -321,14 +241,16 @@ const LoginPage = () => {
         const userId = data.data[0]?.user_id;
         if (data.response_message === "OTP Succuessfully Sent") {
           navigate("/resetpasswordmobile", { state: { userId,mobile } });
-        } else if (data.response_message === "OTP Sent Successfully,Please reset your password") {
+        } else if (data.response_message === "OTP Sent Successfully, Please reset your password") {
           navigate("/resetpassword", { state: { userId,email} });
         }
+      }else if (data.response === "fail" && data.response_message === "Email is incorrect or not registered.") {
+        setForgotmassage(data.response_message);
       } else {
         setForgotmassage(data.response_message);
-        setForgotmassage(data.output);
       }
     })
+    
     .catch((error) => {
       console.error("Error occurred:", error);
     });
@@ -339,16 +261,13 @@ const LoginPage = () => {
     const value = e.target.value.trim().toLowerCase();
     setEmail(value);
   };
-  // const handleMobileChange = (event) => {
-  //   setMobile(event.target.value);
-  // };
   const handleBackToDashboard = () => {
     navigate("/signup");
   };
   return (
     <div>
-        <Navbarhome/>
-      <div className="container" style={{display:"flex"}}>
+       <HeaderSection/>
+      <div className="flex font-Poppins" style={{display:"flex"}}>
         <div className={styles.leftSection}>
           <div className={styles.logo1}>
             <img src={quizifailogo} alt="Logo"  width={1000} height={1000}
@@ -361,59 +280,10 @@ const LoginPage = () => {
             <>
               <div className={styles.loginHeader}>
                 <h1 className={styles.loginTitle}>Login</h1>
-                {/* <p className={styles.loginDescription}>
-                  Login by using the method you registered
-                </p> */}
               </div>
               <div className={styles.totalBox1}>
               <div className={styles.formContainer1}>
-              {/* <div className={styles.toggleOptions}>
-                <label className={styles.toggleLabel}>
-                  <input
-                    type="radio"
-                    name="contactMethod"
-                    className={`${styles.toggleRadio} ${styles.greyScale}`}
-                    value="email"
-                    checked={loginMethod === "email"}
-                    onChange={() => handleLoginMethodChange("email")}
-                  />
-                  <div className={styles.icon1}>
-                    <img src={icon1} alt="Logo" width={24} height={24} />
-                  </div>
-                  Email
-                </label>
 
-                <label className={styles.toggleLabel}>
-                  <input
-                    type="radio"
-                    name="contactMethod"
-                    className={`${styles.toggleRadio} ${styles.greyScale}`}
-                    value="mobile"
-                    checked={loginMethod === "mobile"}
-                    onChange={() => handleLoginMethodChange("mobile")}
-                  />
-                  <div className={styles.icon2}>
-                    <img src={icon2} alt="Logo" width={30} height={30} />
-                  </div>
-                  Mobile
-                </label>
-
-                {/*<label className={styles.toggleLabel}>
-                  <input
-                    type="radio"
-                    name="contactMethod"
-                    className={`${styles.toggleRadio} ${styles.greyScale}`}
-                    value="gmail"
-                    checked={loginMethod === "gmail"}
-                    onChange={() => handleLoginMethodChange("gmail")}
-                  />
-                  <div className={styles.icon3}>
-                    <img src={icon3} alt="Logo" width={22} height={17} />
-                  </div>
-                  Gmail
-                </label>
-          */}
-              {/* </div>  */}
               <div className={styles.toggleOptions}>
                     <div
                       className={`${styles.toggleLabel} ${
@@ -518,7 +388,7 @@ const LoginPage = () => {
 
                               borderRadius: "10px",
                             },
-                            endAdornment: (
+                            endAdornment: showPassword !== undefined &&(
                               <div
                                 className={styles.passwordToggleIcon}
                                 onClick={togglePasswordVisibility}
@@ -542,98 +412,6 @@ const LoginPage = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/*<div
-                    className={styles.captcha}
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <div
-                      style={{
-                        width: "145px",
-                        height: "20px",
-                        borderRadius: "20px",
-                        border: "1px solid #223F80",
-                        padding: "10px",
-                        marginRight: "10px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-                        Captcha
-                      </span>
-                    </div>
-
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <div style={{ cursor: "pointer" }}>
-                        <FaSyncAlt size={12} />
-                      </div>
-
-                      <div style={{ cursor: "pointer" }}>
-                        {soundOn ? (
-                          <BsFillVolumeUpFill
-                            size={18}
-                            onClick={() => setSoundOn(!soundOn)}
-                          />
-                        ) : (
-                          <BsFillVolumeMuteFill
-                            size={20}
-                            onClick={() => setSoundOn(!soundOn)}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div
-                    className={styles.captchaText}
-                    style={{
-                      marginTop: "10px",
-                      display: "flex",
-                      alignItems: "center",
-                      marginRight: "30px",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      placeholder="Type the word above"
-                      style={{
-                        width: "240px",
-                        height: "25px",
-                        backgroundColor: "#F0EFFF",
-                        borderRadius: "5px",
-                        padding: "5px",
-                        fontFamily: "Poppins",
-                        textAlign: "left",
-                        border: "none",
-                      }}
-                    />
-
-                    <div
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        backgroundColor: "#223F80",
-                        marginLeft: "10px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <span
-                        style={{
-                          color: "white",
-                          fontSize: "18px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        ✓
-                      </span>{" "}
-                    </div>
-                      </div>*/}
                 </div>
               )}
 
@@ -820,57 +598,10 @@ const LoginPage = () => {
                 Don't have an account yet?{" "}
                 <span className={styles.diffColor}
                 onClick={handleBackToDashboard}>Sign up</span>{" "}
-              </p>
-              {/* <div className={styles.checkboxContainer}>
-              <input
-                  type="checkbox"
-                  id="termsCheckbox"
-                  className={styles.checkboxInput1}
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                  }}
-                  // checked={termsChecked}
-                  // onChange={() => setTermsChecked(!termsChecked)}
-                />
-            
-             
-                <span className={styles.termsText}>
-                  I agree with the terms and conditions
-                </span>
-              </div> */}
-          {/* <div className={styles.checkbox1}>
-                <input
-                  type="checkbox"
-                  id="termsCheckbox"
-                  className={styles.checkboxInput1}
-                  style={{
-                    width: "15px",
-                    height: "15px",
-                  }}
-                  checked={termsChecked}
-                  onChange={() => setTermsChecked(!termsChecked)}
-                />
-                <span className={styles.span}>
-                  {" "}
-                  I agree with the   <a className={styles.terms} href="/termsandconditions">
-                        terms and conditions
-                      </a>
-                </span>
-                {/* <p className={styles.span2} > and Please read over children police</p> */}
-             
-                {/* <label
-                  htmlFor="termsCheckbox"
-                  className={styles.checkboxLabel}
-                  style={{ marginRight: "80px", marginLeft: "20px"  }}
-                >
-                  I agree with the terms and conditions
-                </label> */}
-              {/* </div>  */}
-              
+              </p>             
               <button
                 onClick={() =>
-                  handleLogin(loginMethod, email, mobile, password)
+                  handleLogin1(loginMethod, email, mobile, password)
                 }
                 className={styles.loginButton}
               >
@@ -883,16 +614,7 @@ const LoginPage = () => {
                   <p className={styles.displayError}>{errorMessage}</p>
                 </>
               )}
-              </div>
-              {/* {loginMethod === "mobile" && (
-                <button
-                  onClick={handleResendOTP}
-                  className={styles.resendButton}
-                >
-                  Resend OTP
-                </button>
-              )} */}
-            
+              </div>           
             </>
           ) : (
             <>
@@ -1010,28 +732,6 @@ const LoginPage = () => {
                         />
                       </div>
                         )}
-                      {/* <div
-                        className={styles.checkboxContainer1}
-                        styles={{ marginTop: "150px" }}
-                      > */}
-{/*                     
-                          <input
-                            type="checkbox"
-                            id="termsCheckbox"
-                            className={styles.checkboxInput}
-                            checked={termsChecked}
-                            onChange={() => setTermsChecked(!termsChecked)}
-                          />
-                          <label
-                            htmlFor="termsCheckbox"
-                            className={styles.checkboxLabel}
-                          ></label>
-                       
-                        <span className={styles.termsText}>
-                          I agree with the terms and conditions
-                        </span> */}
-                      {/* </div> */}
-                  
                       <div className={styles.buttonContainer}>
                      
                         <button
@@ -1186,23 +886,7 @@ const LoginPage = () => {
                       className={styles.checkboxContainer1}
                       styles={{ marginTop: "150px" }}
                     >
-{/*                     
-                        <input
-                          type="checkbox"
-                          id="termsCheckbox"
-                          className={styles.checkboxInput}
-                          checked={termsChecked}
-                          onChange={() => setTermsChecked(!termsChecked)}
-                        />
-                        <label
-                          htmlFor="termsCheckbox"
-                          className={styles.checkboxLabel}
-                        ></label>
-                     
-                      <span className={styles.termsText}>
-                        I agree with the terms and conditions
-                      </span> */}
-                    </div>
+                  </div>
                     {errorMessage && (
               <>
                 {console.log("Error message:", errorMessage)}
