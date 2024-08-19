@@ -43,7 +43,7 @@ const classes = () => {
 
   const navigate = useNavigate();
   const handleBanckToDashbaord = () =>{
-    navigate('/dashboard');
+    navigate('/configure');
   }
 
   const handleAddClass = async () => {

@@ -40,7 +40,7 @@ const course = () => {
 
   const navigate = useNavigate();
   const handleBanckToDashbaord = () =>{
-    navigate('/dashboard');
+    navigate('/configure');
   }
   const addCourse = async () => {
   

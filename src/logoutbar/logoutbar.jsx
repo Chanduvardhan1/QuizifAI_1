@@ -369,7 +369,7 @@ function handleViewImage(event) {
               <div className=" flex flex-col">
               <div className=" flex items-center gap-[5px]">
               <p className="text-[25px] text-[#5E81F4]  text-start mt-1 font-bold">{globalRank}</p>
-              <h1 className="relative font-Poppins text-[13px]">Global rank</h1>
+              <h1 className="relative font-Poppins text-[13px]">Global Rank</h1>
               </div>
               <div className="flex items-center gap-[5px]">
               <p className="text-[20px] text-[#5E81F4]  text-start  font-bold">{globalscore}</p>

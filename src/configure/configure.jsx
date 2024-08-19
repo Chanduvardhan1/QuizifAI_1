@@ -21,7 +21,7 @@ const configure = () => {
 
   const navigate = useNavigate();
   const handleBanckToDashbaord = () =>{
-    navigate('/dashboard');
+    navigate('/configure');
   }
   const userRole = localStorage.getItem('user_role');
   const allowedRoles = ['Quiz Master']; // Roles allowed to access the pages
