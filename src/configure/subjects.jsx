@@ -46,7 +46,7 @@ const subjects = () => {
 
   const navigate = useNavigate();
   const handleBanckToDashbaord = () =>{
-    navigate('/dashboard');
+    navigate('/configure');
   }
 
   const handleAddSubject = async () => {

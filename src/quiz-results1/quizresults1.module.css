@@ -915,7 +915,7 @@ text-align: left;
   
   .textOverImage2 {
     /* margin-top: 150px; */
-    margin-left: 177px;
+    margin-left: 55px;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -935,7 +935,7 @@ text-align: left;
   }
   .textOverImage1 {
     margin-top: 10px;
-    margin-left: -70px;
+    margin-left: 55px;
     display: flex;
     flex-direction: column;
     text-align: center;

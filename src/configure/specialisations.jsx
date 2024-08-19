@@ -41,7 +41,7 @@ const specialisations = () => {
 
   const navigate = useNavigate();
   const handleBanckToDashbaord = () =>{
-    navigate('/dashboard');
+    navigate('/configure');
   }
 
   const handleSubmit1 = async () => {
