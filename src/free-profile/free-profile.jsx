@@ -599,20 +599,26 @@ const handleUpdatePassword = async (e) => {
     if (!authToken) {
       throw new Error('No authentication token found');
     }
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${authToken}`,
-    };
-    const response = await axios.post('https://quizifai.com:8010/update_password', {
-      user_id: userId, // Replace with your user ID
-      old_password: oldPassword,
-      new_password: newPassword,
-      confirm_password: confirmPassword,
-      headers,
-    });
+  
+    const response = await axios.post(
+      'https://quizifai.com:8010/update_password',
+      {
+        user_id: userId, // Replace with your user ID
+        old_password: oldPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${authToken}`, // Set Authorization header
+          'Content-Type': 'application/json',      // Set Content-Type header
+          'accept': 'application/json',            // Set accept header
+        },
+      }
+    );
 
     if (response.data.response === "success") {
-      toast.error(response.data.response_message);
+      toast.success(response.data.response_message);
       localStorage.setItem('password', newPassword); // Store the new password in localStorage
 
       setOldPassword(newPassword);
