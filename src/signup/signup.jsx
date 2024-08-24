@@ -251,7 +251,9 @@ if (hasError) {
           data.response_message === 'Please click here to complete your registration and activate your account.'
         ) {
           setResponseMessage1(data.response_message);
-          navigate("/register");
+          navigate("/register", {
+            state: { mobile, emailOrMobile },
+          });
         } 
         else if (
           data.response === 'fail' &&
