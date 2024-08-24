@@ -317,7 +317,7 @@ import HeaderSection from './HeaderSection/HeaderSection.jsx';
         <Route path="quizcreated2" element={<PrivateRoute><Quizcreated2 /></PrivateRoute>} />
         <Route path="/quizaccess" element={<PrivateRoute><QuizAccess /></PrivateRoute>} />
 
-        <Route path="register" element={<PrivateRoute><Register /></PrivateRoute>} />
+        <Route path="register" element={<Register />} />
         <Route path="navbar" element={<PrivateRoute><Navigation /></PrivateRoute>} />
         <Route path="logoutbar" element={<PrivateRoute><LogoutBar /> </PrivateRoute>}/>
 
