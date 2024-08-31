@@ -291,7 +291,6 @@ const subjects = () => {
   className="rounded-3xl text-center -mt-[10px] w-[150px] text-[#214082] placeholder:text-[#214082] outline-[#214082]"
   value={classId}
   onChange={handleCourseChange}
-
 >
   <option value="">Select a class</option>
   {courses.map((course) => (

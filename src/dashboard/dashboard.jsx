@@ -102,6 +102,7 @@ const Dashboard = () => {
       window.removeEventListener("beforeunload", handleWindowClose);
     };
   }, []);
+  
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login'); // Redirect to login if not authenticated
@@ -109,7 +110,7 @@ const Dashboard = () => {
     }
     const fetchQuizData = async () => {
       try {
-        const response = await fetch(`https://quizifai.com:8010/dashboard`, {
+        const response = await fetch('https://quizifai.com:8010/dashboard', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -429,7 +430,7 @@ const Dashboard = () => {
                 </a>
               </div>
             </div> */}
-               {userRole === "Quiz Master" && (
+         {userRole === "Quiz Master" && (
         <div className="w-[99px] h-[41px] absolute mr-[80px] mb-2 pb-2 -mt-[35px] rounded-[10px] bg-[#fee2e2]">
           <div className="flex">
             <img
@@ -561,7 +562,7 @@ const Dashboard = () => {
               .filter(quizItem => {
                 const quizCreateDate = new Date(quizItem.quiz_start_date);
                 const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
-                return quizItem.active_flag === true &&
+                return quizItem.active_flag === "true" &&
                        quizItem.latest_flag === "Y" &&
                        currentDate >= quizCreateDate &&
                        (quizEndDate === null || currentDate <= quizEndDate);
@@ -1158,7 +1159,7 @@ const Dashboard = () => {
                .filter(quizItem => {
                 const quizCreateDate = new Date(quizItem.quiz_start_date);
                 const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
-                return quizItem.active_flag === true &&
+                return quizItem.active_flag === "true" &&
                        quizItem.latest_flag === "Y" &&
                        currentDate >= quizCreateDate &&
                        (quizEndDate === null || currentDate <= quizEndDate);
