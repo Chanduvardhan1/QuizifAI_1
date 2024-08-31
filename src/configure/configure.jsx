@@ -21,7 +21,7 @@ const configure = () => {
 
   const navigate = useNavigate();
   const handleBanckToDashbaord = () =>{
-    navigate('/configure');
+    navigate('/dashboard');
   }
   const userRole = localStorage.getItem('user_role');
   const allowedRoles = ['Quiz Master']; // Roles allowed to access the pages
@@ -38,7 +38,10 @@ const configure = () => {
   const handleSpecialisationsClick = () => handleRestrictedClick('/specialisations');
   const handleClassesClick = () => handleRestrictedClick('/classes');
   const handleSubjectsClick = () => handleRestrictedClick('/Subjects');
-  
+  const handleUsergroupsClick = () => handleRestrictedClick('/userandgroups');
+  const handleQuizDownloadAndPrintClick = () => handleRestrictedClick('/print');
+  const handleExamClick = () => handleRestrictedClick('/papertemplates');
+
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
@@ -84,11 +87,12 @@ const configure = () => {
 
   const items = [
       { id: 1, title: 'Configuration', content: 'Categories, Courses, Specialisations, Classes, Subjects' },
-      { id: 2, title: 'Organization', content: 'Profile, Manage Subscription, Performance Metrics, Marketing and Sales, Financial Information, Mission and Vision, Goals and Objectives' },
-      { id: 3, title: 'Notification', content: 'Contact Information, Date and Time, Main Content, Additional Information' },
-      { id: 4, title: 'User & Roles', content: 'User Information, Roles and Permissions, Communication, Responsibilities and Expectations' },
-      { id: 5, title: 'Developer & Data', content: 'Developer Information, Data Information, Access and Permissions' },
-      { id: 6, title: 'Preferences', content: 'User Information, Preference Categories, Default Settings, Subscription Preferences' },
+      { id: 2, title: 'User & Roles', content: 'User Groups, User Information, Roles and Permissions, Communication, Responsibilities and Expectations' },
+      { id: 3, title: 'Organization', content: 'Profile, Manage Subscription, Performance Metrics, Marketing and Sales, Financial Information, Mission and Vision, Goals and Objectives' },
+      { id: 4, title: 'Notification', content: 'Contact Information, Date and Time, Main Content, Additional Information' },
+      { id: 5, title: 'Quizzes', content: 'Quiz sharing and access control, Exam, Quiz download and print'},
+      { id: 6, title: 'Developer & Data', content: 'Developer Information, Data Information, Access and Permissions' },
+      { id: 7, title: 'Preferences', content: 'User Information, Preference Categories, Default Settings, Subscription Preferences' },
   ];
   
   const filteredItems = items.filter(item => 
@@ -172,25 +176,33 @@ const configure = () => {
 
         <div className='flex flex-wrap gap-[20px] mt-[20px] ml-[15px] mr-[10px] justify-center'>
          {filteredItems.map(item => (
-        <div
-            key={item.id}
+        <div key={item.id}
             className='h-auto pb-[20px] w-[calc((100%-80px)/4)] bg-white rounded-md shadow-xl transition-transform duration-300 transform scale-95 hover:scale-100 flex-none'
         >
-            <h1 className='text-[12px] font-semibold text-[#EF5130] cursor-pointer text-center pt-2'>
+            <h1 className='text-[12px] font-semibold text-[#EF5130] text-center pt-2'>
                 {highlightText(item.title, searchQuery)}
             </h1>
             {item.content.split(', ').map((contentItem, index) => (
                  <p
                  key={index} 
-                 className={`mt-3 text-[10px] ml-[20px] font-semibold cursor-pointer ${item.title === 'Configuration' && 'text-[#3340AF]'} ${item.title === 'Configuration' ? 'hover:underline hover:underline-offset-2' : 'text-gray-500'}`} 
+                 className={`mt-3 text-[10px] ml-[20px] font-semibold ${
+                  contentItem === 'Quiz sharing and access control' && item.title === 'Quizzes' 
+                  ? 'text-gray-500' 
+                  : contentItem === 'User Groups' && item.title === 'User & Roles'
+                  ? 'text-[#3340AF] hover:underline hover:underline-offset-2 cursor-pointer'
+                  : ['Configuration', 'Quizzes'].includes(item.title) 
+                  ? 'text-[#3340AF] hover:underline hover:underline-offset-2 cursor-pointer' 
+                  : 'text-gray-500'
+              }`}                   
                  onClick={
                   contentItem === 'Categories' ? handleCategoriesClick : 
-                  contentItem === 'Courses' ? handleCoursesClick : 
-                  
+                  contentItem === 'Courses' ? handleCoursesClick :                 
                   contentItem === 'Specialisations' ? handleSpecialisationsClick :
                   contentItem === 'Classes' ? handleClassesClick :
                   contentItem === 'Subjects' ? handleSubjectsClick :
-
+                  contentItem === 'User Groups' ? handleUsergroupsClick :
+                  contentItem === 'Quiz download and print' ? handleQuizDownloadAndPrintClick :
+                  contentItem === 'Exam' ? handleExamClick :
                   null
                 }
              >

@@ -324,8 +324,8 @@ padding-top: 10px;
   display: flex;
   flex-direction: column;
   padding: 2px;
-  background-color: #e2e8f0;
-  clip-path: polygon(0% 0%, 80% 0, 81% 16%, 95% 26%, 81% 34%, 81% 100%, 0 100%);
+  background-color: #f0eee2;
+  clip-path: polygon(0% 0%, 80% 0, 81% 7%, 90% 15%, 80% 25%, 81% 100%, 0 100%);
 }
 .infoIcons1{
   border-radius: 5px;
@@ -412,6 +412,7 @@ margin-top: -60px;
   gap: 2px;
   /* align-items: center; */
   padding: 2px;
+  cursor: pointer;
 }
 .start:hover{
   background-color: #cccecf;
@@ -456,6 +457,7 @@ margin-top: -60px;
    transition-timing-function: linear; 
    display: flex;
    gap: 2px;
+   cursor: pointer;
    /* align-items: center; */
    padding: 2px;
  }
@@ -488,6 +490,7 @@ margin-top: -60px;
   transition-timing-function: linear;
   display: flex;
   gap: 2px;
+  cursor: pointer;
   /* align-items: center; */
   padding: 2px;
 }

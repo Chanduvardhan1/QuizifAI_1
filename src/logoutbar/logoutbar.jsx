@@ -44,6 +44,12 @@ const LogoutBar = (data) => {
   // const handleBackToLogin = () => {
   //   navigate("/login");
   // };
+ const navigateToMyHistory = () =>{
+  navigate("/myhistory")
+ }
+ const handleBackToglobalLeaderboard =() =>{
+  navigate("/globalleaderboard");
+ }
 
  const handleToProfile =() =>{
   navigate("/free-profile");
@@ -290,7 +296,7 @@ function handleViewImage(event) {
       )}
       <input type="file" ref={inputReff} onChange={handleImageChange} style={{ display: "none" }} />
 
-      <div className="bg-[#C3EAF3] rounded-full w-fit h-[24px] px-[2px] py-[1px] relative left-20 -top-7">
+      <div className="bg-[#C3EAF3] rounded-full w-fit h-[24px] px-[2px] py-[1px] relative left-[75px] -top-9">
         <div className="rounded-full w-fit h-[28px] px-[2px] py-[2px] flex items-center justify-center group">
           <img className="h-4 w-4 relative -top-[3px] cursor-pointer" src={Camera} alt="Camera" />
           <div className="absolute top-full text-[7px] left-0 right-[30px] mt-1 bg-white rounded-sm text-black w-fit h-[37px] cursor-pointer px-1 py-[2px] text-nowrap items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -369,27 +375,30 @@ function handleViewImage(event) {
               <div className=" flex flex-col">
               <div className=" flex items-center gap-[5px]">
               <p className="text-[25px] text-[#5E81F4]  text-start mt-1 font-bold">{globalRank}</p>
-              <h1 className="relative font-Poppins text-[13px]">Global Rank</h1>
+              <h1 className="relative font-Poppins text-[13px]">Global rank</h1>
               </div>
               <div className="flex items-center gap-[5px]">
               <p className="text-[20px] text-[#5E81F4]  text-start  font-bold">{globalscore}</p>
               <h1 className="relative font-Poppins text-[13px]">Global Score</h1>
+              </div>
+              <div className="text-xs text-[#002366] text-start -ml-12 mt-1">
+              <p onClick={handleBackToglobalLeaderboard}>Click <span className="text-[#E97132] underline underline-offset-1 cursor-pointer font-bold">here</span> to Global score leader board</p>
               </div>
               </div>
             </div>
             <div className="h-[5px] w-full bg-white mt-[10px]"></div>
 
           <div className="flex">
-            <span className="text-[25px] text-[#E97132] ml-[25px] mt-[5px] font-semibold">{totalQuizzes}</span>
-            <h1 className="text-[12px] mt-[20px] ml-[5px] font-medium">Quizzes</h1>
+            <span className="text-[20px] text-[#E97132] ml-[15px] mt-[5px] font-semibold">{totalQuizzes}</span>
+            <h1 className="text-[12px] mt-[13px] ml-[5px] font-medium cursor-pointer" onClick={navigateToMyHistory}>Quizzes</h1>
           </div>
           <div className="flex -mt-[15px]">
-            <span className="text-[25px] text-[#E97132] ml-[25px] mt-[10px] font-semibold">{totalMinutes}</span>
-            <h1 className="mt-[23px] ml-[5px] text-[12px] text-nowrap font-normal">Total Minutes</h1>
+            <span className="text-[20px] text-[#E97132] ml-[15px] mt-[10px] font-semibold text-nowrap">{totalMinutes}</span>
+            <h1 className="mt-[20px] ml-[5px] text-[12px] text-nowrap font-normal">Total Minutes</h1>
 
           </div><div className="flex -mt-[15px]">
-            <span className="text-[25px] text-[#E97132] ml-[25px] mt-[10px] font-semibold">{averageScorePercentage}%</span>
-            <h1 className="mt-[23px] ml-[5px] text-[12px] font-normal">Average</h1>
+            <span className="text-[20px] text-[#E97132] ml-[15px] mt-[10px] font-semibold">{averageScorePercentage}%</span>
+            <h1 className="mt-[20px] ml-[5px] text-[12px] font-normal">Average</h1>
           </div>
           
           {/* <div className="h-[5px] w-full bg-white mt-[10px]"></div>
@@ -413,7 +422,7 @@ function handleViewImage(event) {
 
           <div className="h-[5px] w-full bg-white mt-[10px]"></div>
         
-          <div className="mt-44 ml-2">
+          <div className="mt-[200px] ml-2">
             <h1 className="text-[13px] text-start text-[#002366] font-semibold">Registered On :<span className="pl-1 font-normal text-[12px]">{registeredOn}</span></h1>
             <h1 className="text-[13px] text-start text-[#002366] font-semibold">Last Login : <span className="font-normal text-[12px]">{lastLogin}</span></h1>
             <h1 className="text-[13px] text-start text-[#002366] font-semibold">Password Changed : <span className="font-normal text-[12px]">{passwordChanged}</span></h1>

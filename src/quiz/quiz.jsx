@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import Plus from "../../src/assets/Images/dashboard/Plus.png";
 import Start_button from "../../public/images/dashboard/Start-button.png";
 import start from "../../src/assets/Images/dashboard/non-attempted-start.png";
+import Delete from "../../src/assets/Images/dashboard/delete.png";
+import disable from "../../src/assets/Images/dashboard/disable.png";
 import PlayButton from "../../src/assets/Images/dashboard/playButton.png";
 import Share_button from "../../public/images/dashboard/Share-button.png";
 import leaderboard_button from "../../public/images/dashboard/leaderboard-button.png";
@@ -22,8 +24,10 @@ import Easy from "../../public/images/dashboard/Easy.png";
 import Clock from "../../public/images/dashboard/Clock.png";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthContext } from "../Authcontext/AuthContext.jsx"
+import { AuthContext } from "../Authcontext/AuthContext.jsx";
+import Modal from "react-modal";
 
+// Modal.setAppElement('App.jsx');
 const Quiz = () => {
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
   const [username, setUsername] = useState("");
@@ -69,10 +73,24 @@ const Quiz = () => {
   const [weeklyQuizCount, setWeeklyQuizCount] = useState(null);
   const [averageScorePercentage, setAverageScorePercentage] = useState(null);
   const { authToken } = useContext(AuthContext);
+  
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleDelete = () => {
+    setModalIsOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (isChecked) {
+      setModalIsOpen(false);
+      handleStartQuiz(quizItem.quiz_id); // Your delete logic
+    }
+  };
 
   const navigate = useNavigate();
   const userRole = localStorage.getItem('user_role');
-
+  
   const sortAlphabetically = (arr) => {
     return arr.sort((a, b) => {
       const valueA = a ? a.toLowerCase() : '';
@@ -80,7 +98,7 @@ const Quiz = () => {
       return valueA.localeCompare(valueB);
     });
   };
-
+  
   useEffect(() => {
     const fetchDropdownValues = async () => {
       try {
@@ -301,8 +319,7 @@ const createquiz=() =>{
     mincompletiontime,
     quizattempts,
     avgscore,
-    max_percentage,
-    quizcreatedate
+    max_percentage
   ) => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     navigate("/quiz-results1", {
@@ -319,8 +336,7 @@ const createquiz=() =>{
         mincompletiontime,
         quizattempts,
         avgscore,
-        max_percentage,
-        quizcreatedate
+        max_percentage
       },
     });
   };
@@ -400,6 +416,23 @@ const createquiz=() =>{
     setSearchQuery(e.target.value);
   };
 
+  // const highlightText = (text, query) => {
+  //   if (!query) return text;
+  //   const parts = text.split(new RegExp(`(${query})`, "gi"));
+  //   return parts.map((part, index) =>
+  //     part.toLowerCase() === query.toLowerCase() ? (
+  //       <span key={index} style={{ backgroundColor: "yellow" }}>
+  //         {part}
+  //       </span>
+  //     ) : (
+  //       part
+  //     )
+  //   );
+  // };
+
+
+  // Custom styles for react-select to match your existing dropdown design
+  
   const highlightText = (text, query) => {
     if (typeof text !== "string") {
       return text;
@@ -419,7 +452,8 @@ const createquiz=() =>{
       )
     );
   };
-  // Custom styles for react-select to match your existing dropdown design
+  
+  
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
@@ -486,15 +520,16 @@ const createquiz=() =>{
       display: "none",
     }),
   };
+ const buttonColor = '#fee2e2';
 
   return (
-    <div className={styles.container}>
+    <div className="flex font-Poppins">
       <Navigation />
       <ToastContainer />
       <div className={styles.mainContent}>
         <div className={styles.header}>
           {/* Header content */}
-          <p className="-mt-[5px]"><span className='text-[16px]'>Welcome</span>  {username}</p>
+          <p className="-mt-[5px]"><span className='text-[20px]'>Welcome</span>  {username}</p>
           <div className={styles.headerRight}>
           {userRole === "Quiz Master" && (
         <div className="w-[99px] h-[40px] absolute mr-[300px] mb-2 pb-2 -mt-[25px] rounded-[10px] bg-[#fee2e2]">
@@ -641,25 +676,24 @@ const createquiz=() =>{
                .filter(quizItem => {
                 const quizCreateDate = new Date(quizItem.quiz_start_date);
                 const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
-                return quizItem.active_flag === true &&
+                return quizItem.active_flag === "true" &&
                        currentDate >= quizCreateDate &&
                        (quizEndDate === null || currentDate <= quizEndDate);
-              })
+                })
                 .map((quizItem, index) => (
-                  <div key={index} className="">
+                  <div key={index}>
                     {quizItem.attempt_flag === "Y" ? (
                       <div
-                        key={index}
-                        className={styles.card}
-                        style={{
+                          key={index}
+                          className={styles.card}
+                          style={{
                           width: "245px",
                           paddingTop: "8px",
                           paddingTop: "20px",
                           marginTop: "20px",
                           marginRight: "10px",
                           backgroundColor: quizItem.attempts_count < quizItem.retake_flag ? "#fee2e2" : "#55505026",
-                        }}
-                      >
+                        }}>
                         <span className="relative group">
                           <span className="text-[10px] text-[#002366] absolute ml-[10px] w-[195px] cursor-pointer z-0 truncate -mt-[13px]">
                             {highlightText(quizItem.quiz_name, searchQuery)}
@@ -777,32 +811,27 @@ const createquiz=() =>{
 
                         <div className="flex mt-[9px] mb-[19px] relative top-[19px]">
                           <span className="relative group -top-[13px]">
-                            <span className="text-[#002366] ml-[10px] mt-4 w-[50px] cursor-pointer z-0 truncate text-[9px] font-semibold">
+                          <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] left-[10px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {highlightText(quizItem.category, searchQuery)}
                             </span>
-                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-2 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
-                              {highlightText(quizItem.category, searchQuery)}
+                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block top-[14px] left-[7px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
+                               {highlightText(quizItem.category, searchQuery)} 
                             </span>
                           </span>
 
-                          <p className="px-[2px] font-normal relative -top-[13px]">|</p>
+                          <p className="px-[4px] font-normal relative -top-[13px] pl-2">|</p>
 
                           <span className="relative group -top-[13px]">
                             <span className="text-[#002366] w-[100px] cursor-pointer z-0 truncate text-[9px] font-semibold">
-                              {highlightText(
-                                quizItem.sub_category,
-                                searchQuery
-                              )}
+                              {highlightText(quizItem.sub_category, searchQuery)}
                             </span>
                             <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
-                              {highlightText(
-                                quizItem.sub_category,
-                                searchQuery
-                              )}
+                              {highlightText(quizItem.sub_category, searchQuery)}
                             </span>
                           </span>
                           
-                          <button
+               {buttonColor === '#fee2e2' && (
+                            <button
                             className="cursor-pointer ml-auto relative -top-[5px] right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
                             onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
                           >
@@ -813,6 +842,7 @@ const createquiz=() =>{
                             />
                             <h1 className="text-[#472E86] text-[6px] relative top-[2px] pl-[1px] font-bold">Retake</h1>
                           </button>
+                           )} 
                         </div>
                            <div className="h-1 -mt-[8px] pl-[10px] text-[7px] font-normal text-[#002366] relative -top-[6px]">
                             <h3>Quiz ID : {highlightText(quizItem.quiz_id, searchQuery)}</h3>
@@ -1060,7 +1090,6 @@ const createquiz=() =>{
                                         quizItem.quiz_attempts,
                                         quizItem.avg_score,
                                         quizItem.max_percentage,
-                                        quizItem.quiz_create_date
                                         
                                       )
                                     }
@@ -1068,6 +1097,75 @@ const createquiz=() =>{
                                     Leaderboard
                                   </span>
                                 </div>
+
+                            {userRole === "Quiz Master" && (
+                            <div className={styles.start}>
+                            <img
+                              className={styles.startimage}
+                              src={Delete}
+                              alt="Play icon"
+                            />
+                            <span
+                              className={styles.starttext}
+                              onClick={handleDelete}
+                            >
+                              Delete
+                            </span>
+  <Modal
+  isOpen={modalIsOpen}
+  onRequestClose={() => setModalIsOpen(false)}
+  className="bg-white rounded-lg p-8 mx-auto mt-20 max-w-md"
+  overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+>
+  <h2 className="text-xl font-semibold mb-4">Are you sure you want to delete this card?</h2>
+  <div className="mb-4">
+    <input
+      type="checkbox"
+      id="confirmCheckbox"
+      className="mr-2"
+      checked={isChecked}
+      onChange={(e) => setIsChecked(e.target.checked)}
+    />
+    <label htmlFor="confirmCheckbox">I understand the consequences.</label>
+  </div>
+  <div className="flex justify-end space-x-4">
+    <button
+      className={`bg-red-500 text-white px-4 py-2 rounded ${!isChecked ? 'opacity-50 cursor-not-allowed' : ''}`}
+      onClick={confirmDelete}
+      disabled={!isChecked}
+    >
+      Delete
+    </button>
+    <button
+      className="bg-gray-300 text-black px-4 py-2 rounded"
+      onClick={() => setModalIsOpen(false)}
+    >
+      Cancel
+    </button>
+  </div>
+</Modal>
+</div>
+                            )}
+                                
+
+                                {userRole === "Quiz Master" && (
+                                  <div className={styles.start}>
+                                  <img
+                                    className={styles.startimage}
+                                    src={disable}
+                                    alt="Play icon"
+                                  />
+                                  <span
+                                    className={styles.starttext}
+                                    onClick={() =>
+                                      handleStartQuiz(quizItem.quiz_id)
+                                    }
+                                  >
+                                    Disable
+                                  </span>
+                                </div>
+                                )}
+                                
                                 {/* <div className={styles.share}>
                                   <img
                                     className={styles.shareimage}
@@ -1084,27 +1182,21 @@ const createquiz=() =>{
                         </div>
 
                         <div className="flex mt-[9px] relative top-[17px]">
-                          <span className="relative group">
-                            <span className="text-[#002366] ml-[10px] w-[30px] cursor-pointer z-0 truncate text-[9px] font-semibold">
+                          <span className="relative group left-[11px]">
+                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
                               {highlightText(quizItem.category, searchQuery)}
                             </span>
-                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-2 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
-                              {highlightText(quizItem.category, searchQuery)}
+                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block top-[14px] -left-[2px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
+                               {highlightText(quizItem.category, searchQuery)} 
                             </span>
                           </span>
-                          <p className="px-[2px] font-normal">|</p>
+                          <p className="px-[4px] font-normal pl-2">|</p>
                           <span class="relative group">
                             <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
-                              {highlightText(
-                                quizItem.sub_category,
-                                searchQuery
-                              )}
+                              {highlightText(quizItem.sub_category, searchQuery)}
                             </span>
                             <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
-                              {highlightText(
-                                quizItem.sub_category,
-                                searchQuery
-                              )}
+                            {highlightText(quizItem.sub_category, searchQuery)}
                             </span>
                           </span>
                           <button

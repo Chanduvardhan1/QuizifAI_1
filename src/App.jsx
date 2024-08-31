@@ -95,6 +95,15 @@ import Specialisations from './configure/specialisations.jsx';
 import Course from './configure/course.jsx';
 import Contactus from './ContactUs1/contactus.jsx';
 import HeaderSection from './HeaderSection/HeaderSection.jsx';
+import UserAndGroups from './configure/userand-groups.jsx';
+import PaperTemplates from './questionpapers/papertemplates.jsx';
+import Myhistory from './myhistory/myhistory.jsx';
+import Globalleaderboard from './logoutbar/globalleaderboard.jsx';
+
+import Pdf1 from "./pdf1/pdf1.jsx"
+import Pdf2 from "./pdf2/pdf2.jsx"
+import Pdf3 from "./pdf3/pdf3.jsx"
+import Print from "./print/print.jsx"
 
 // import Home from "./pages/Home.jsx";
 // import ContactUs from "./pages/ContactUs.jsx";
@@ -298,6 +307,7 @@ import HeaderSection from './HeaderSection/HeaderSection.jsx';
         <Route path="contact1" element={<PrivateRoute><Contact1 /></PrivateRoute>} />
         <Route path="termsandconditions" element={<Termsandconditions />} />
         <Route path="contactus" element={<Contactus />} />
+        <Route path="myhistory" element={<PrivateRoute>  <Myhistory /> </PrivateRoute>} />
 
     <Route path="history" element={<PrivateRoute> <History /></PrivateRoute>} />
     <Route path="course" element={<PrivateRoute> <Course /></PrivateRoute>} />
@@ -316,6 +326,7 @@ import HeaderSection from './HeaderSection/HeaderSection.jsx';
         <Route path="quizcreated1" element={<PrivateRoute><Quizcreated1 /></PrivateRoute>} />
         <Route path="quizcreated2" element={<PrivateRoute><Quizcreated2 /></PrivateRoute>} />
         <Route path="/quizaccess" element={<PrivateRoute><QuizAccess /></PrivateRoute>} />
+        <Route path="userandgroups" element={<PrivateRoute><UserAndGroups/></PrivateRoute>}/>
 
         <Route path="register" element={<Register />} />
         <Route path="navbar" element={<PrivateRoute><Navigation /></PrivateRoute>} />
@@ -333,10 +344,18 @@ import HeaderSection from './HeaderSection/HeaderSection.jsx';
         <Route path="quiz-results1" element={<PrivateRoute><Questions /></PrivateRoute>} />
         <Route path="/quizquestions/:quizId" element={<PrivateRoute><QuizQuestions /></PrivateRoute>} />
         <Route path="resendotp" element={<ResendOTP />} />
+        <Route path='papertemplates' element={<PrivateRoute><PaperTemplates/></PrivateRoute>}/>
 
         <Route path="resetpassword" element={<Resetpassword />} />
         <Route path="resetpasswordmobile" element={<Resetpasswordmobile />} />
         <Route path="editmanuly" element={<PrivateRoute><Editmanuly /></PrivateRoute>} />
+
+        <Route path="pdf1" element={<PrivateRoute><Pdf1 /></PrivateRoute>} />
+        <Route path="pdf2" element={<PrivateRoute><Pdf2 /></PrivateRoute>} />
+       <Route path="pdf3" element={<PrivateRoute><Pdf3 /></PrivateRoute>} />
+       <Route path="print" element={<PrivateRoute><Print /></PrivateRoute>} />
+       <Route path='globalleaderboard' element={<PrivateRoute><Globalleaderboard/></PrivateRoute>}/>
+
       </Route>
     </Routes>
     {/* <VerificationHandler /> */}

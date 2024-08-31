@@ -9,6 +9,7 @@ import Settings from "../assets/Images/images/dashboard/Settings1.png";
 import rocket from "../assets/Images/images/dashboard/rocket.png";
 import infinity from "../assets/Images/images/dashboard/infinity.png";
 import mail from "../assets/Images/images/dashboard/mail.png";
+import history from "../assets/Images/images/dashboard/history.png";
 import { AuthContext } from "../Authcontext/AuthContext.jsx"
 
 
@@ -187,18 +188,18 @@ const Navigation = () => {
             className={`${styles.pageIcon} ${activePage === '/contact' ? styles.activeIcon : ''}`} />
           <span className={styles.pageLink}>Contact US</span>
         </NavLink>
-        {/* <NavLink
+        <NavLink
           to="/myhistory"
           className={`${styles.pageItem} ${activePage === '/myhistory' ? styles.bold : ''}`}
           onClick={() => handleNavigation('/myhistory')}
         >
          <img
-        src={mail}
+        src={history}
         alt="Settings Icon"
         className={`${styles.pageIcon} ${activePage === '/myhistory' ? styles.activeIcon : ''}`}
       />
-          <span className={styles.pageLink}>My history</span>
-        </NavLink> */}
+          <span className={styles.pageLink}>My History</span>
+        </NavLink>
         {/* <img className="h-[122px] w-[60px] ml-[35px] mt-[50px]" src={rocket} alt="rocket"/> */}
       </div>
       </div>
