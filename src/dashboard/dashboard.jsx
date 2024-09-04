@@ -562,7 +562,7 @@ const Dashboard = () => {
               .filter(quizItem => {
                 const quizCreateDate = new Date(quizItem.quiz_start_date);
                 const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
-                return quizItem.active_flag === "true" &&
+                return quizItem.active_flag.toLowerCase() === "true" &&
                        quizItem.latest_flag === "Y" &&
                        currentDate >= quizCreateDate &&
                        (quizEndDate === null || currentDate <= quizEndDate);
