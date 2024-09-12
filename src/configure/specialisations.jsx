@@ -229,7 +229,7 @@ const specialisations = () => {
             onChange={(e) => setSpecializationName(e.target.value)}
             className=' w-[120px] rounded-3xl text-center -mt-[10px]  py-[14px] text-[#214082] placeholder:text-[#214082] outline-[#214082]'
           />
-           <input
+        <input
         type='text'
         placeholder='Specialization Short Name'
         value={specializationShortName}

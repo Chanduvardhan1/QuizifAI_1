@@ -256,7 +256,6 @@ border: 1;
     margin-right: 20px;
     font-family: Poppins;
     font-size: 15px;
-
     line-height: 23px;
     letter-spacing: 0em;
     text-align: left;
@@ -265,7 +264,6 @@ border: 1;
   .sentence5 {
     display: flex;
     align-items: center;
-
     font-family: Poppins;
 font-size: 15px;
 font-weight: 600;

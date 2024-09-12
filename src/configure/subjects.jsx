@@ -275,7 +275,7 @@ const subjects = () => {
       value={selectedSpecialization}
       onChange={handleSpecializationChange}
     >
-      <option value="">Select a specialization</option>
+      <option value="" disabled selected hidden>Select a specialization</option>
       {courses.map(course => 
         course.specializations.map(specialization => (
           <option key={specialization.specialization_id} value={specialization.specialization_id}>

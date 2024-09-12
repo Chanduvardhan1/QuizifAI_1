@@ -1,30 +1,32 @@
 // Dashboard.js
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./dashboard.module.css";
 import Navigation from "../navbar/navbar.jsx";
 import LogoutBar from "../logoutbar/logoutbar.jsx";
 import { Line } from "rc-progress";
 import { useNavigate } from "react-router-dom";
-
+import Delete from "../../src/assets/Images/dashboard/delete.png";
+import disable from "../../src/assets/Images/dashboard/disable.png";
 import Plus from "../../src/assets/Images/dashboard/Plus.png";
-import Start_button from "../../public/images/dashboard/Start-button.png";
+import Start_button from "/images/dashboard/Start-button.png";
 import start from "../../src/assets/Images/dashboard/non-attempted-start.png";
 import PlayButton from "../../src/assets/Images/dashboard/playButton.png";
-import Share_button from "../../public/images/dashboard/Share-button.png";
-import leaderboard_button from "../../public/images/dashboard/leaderboard-button.png";
+import Share_button from "/images/dashboard/Share-button.png";
+import leaderboard_button from "/images/dashboard/leaderboard-button.png";
 import Edit_button from "../../src/assets/Images/dashboard/Edit-button.png";
 import download from "../../src/assets/Images/dashboard/download.png";
 import high_score from "../../src/assets/Images/dashboard/high-score.png";
 import eye from "../../src/assets/Images/dashboard/eye.png";
-import Attempt1 from "../../public/images/dashboard/Attempt1.png";
-import NoOfQuestion from "../../public/images/dashboard/NoOfQuestion.png";
-import Easy from "../../public/images/dashboard/Easy.png";
-import Clock from "../../public/images/dashboard/Clock.png";
+import Attempt1 from "/images/dashboard/Attempt1.png";
+import NoOfQuestion from "/images/dashboard/NoOfQuestion.png";
+import Easy from "/images/dashboard/Easy.png";
+import Clock from "/images/dashboard/Clock.png";
 import arrow from "../../src/assets/Images/dashboard/rightArrow.png";
 import "react-sweet-progress/lib/style.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthContext } from '../Authcontext/AuthContext'; // Adjust the import path if needed
+import { AuthContext } from "../Authcontext/AuthContext"; // Adjust the import path if needed
+import Modal from "react-modal";
 
 const Dashboard = () => {
   const getFormattedDate = () => {
@@ -55,10 +57,114 @@ const Dashboard = () => {
   const [retakeCount, setRetakeCount] = useState(0);
   const [retakeFlag, setRetakeFlag] = useState(0);
 
-
   const navigate = useNavigate();
   const { isAuthenticated, authToken } = useContext(AuthContext);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [isDeleteConfirmed, setIsDeleteConfirmed] = useState(false);
 
+  const [quizId, setQuizId] = useState(0); // Ensure quizId is properly initialized
+  const [userid, setUserid] = useState(null);
+  const [modalIsOpen1, setModalIsOpen1] = useState(false);
+  const [isChecked1, setIsChecked1] = useState(false);
+  const [isDisableConfirmed, setIsDisableConfirmed] = useState(false);
+
+  const handleDisableClick = (quiz_id) => {
+    setQuizId(quiz_id);
+    setModalIsOpen1(true);
+  };
+  const handleDisableQuiz = async () => {
+    try {
+      const authToken = localStorage.getItem("authToken"); // Get the auth token from localStorage
+
+      if (!authToken) {
+        throw new Error("No authentication token found");
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      const body = JSON.stringify({
+        user_id: userId,
+        quiz_id: quiz_id,
+      });
+
+      const response = await fetch(
+        "https://quizifai.com:8010/disable_quiz/",
+        {
+          method: "POST",
+          headers,
+          body,
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Disable response:", result);
+        setModalIsOpen1(false);
+      } else {
+        console.error("Failed to disable quiz");
+      }
+    } catch (error) {
+      console.error("Error during disable operation:", error);
+    }
+  };
+  useEffect(() => {
+    if (isDisableConfirmed) {
+      handleDisableQuiz();
+    }
+  }, [isDisableConfirmed]);
+
+  const handleDeleteClick = (quiz_id) =>{
+    setQuizId(quiz_id);
+    setModalIsOpen(true);
+  }
+  const handleDeleteQuiz = async () => {
+    console.log("Deleting quiz with userId:", userId, "and quizId:", quizId);
+    try {
+      const authToken = localStorage.getItem("authToken"); // Get the auth token from localStorage
+
+      if (!authToken) {
+        throw new Error("No authentication token found");
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      const body = JSON.stringify({
+        user_id: userid,
+        quiz_id: quizId,
+      });
+
+      const response = await fetch(
+        "https://quizifai.com:8010/delete_quiz/",
+        {
+          method: "POST",
+          headers,
+          body,
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Delete response:", result);
+        setModalIsOpen(false);
+      } else {
+        console.error("Failed to delete quiz");
+      }
+    } catch (error) {
+      console.error("Error during delete operation:", error);
+    }
+  };
+  useEffect(() => {
+    if (isDeleteConfirmed) {
+      handleDeleteQuiz();
+    }
+  }, [isDeleteConfirmed]);
   // useEffect(() => {
   //   const token = localStorage.getItem('authToken');
   //   console.log("Token from localStorage:", token); // Debugging line
@@ -68,17 +174,14 @@ const Dashboard = () => {
   //     console.log("No token found, user is not authenticated."); // Debugging line
   //   }
   // }, []);
-  
 
   useEffect(() => {
     // Example: Checking authentication state on component mount
-    console.log('User is authenticated:', isAuthenticated);
+    console.log("User is authenticated:", isAuthenticated);
     // You might not need to directly use setIsAuthenticated here
     // It's typically handled within the AuthContext
   }, [isAuthenticated]);
 
- 
-  
   useEffect(() => {
     const handleWindowClose = () => {
       fetch("https://quizifai.com:8010/usr_logout/", {
@@ -102,24 +205,27 @@ const Dashboard = () => {
       window.removeEventListener("beforeunload", handleWindowClose);
     };
   }, []);
-  
+
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login'); // Redirect to login if not authenticated
+      navigate("/login"); // Redirect to login if not authenticated
       return;
     }
     const fetchQuizData = async () => {
       try {
-        const response = await fetch('https://quizifai.com:8010/dashboard', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${authToken}`,
-          },
-          body: JSON.stringify({
-            user_id: userId,
-          }),
-        });
+        const response = await fetch(
+          "https://quizifai.com:8010/dashboard",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+              user_id: userId,
+            }),
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch quiz data");
         }
@@ -152,11 +258,13 @@ const Dashboard = () => {
   };
   const handleStartQuiz1 = (quizId, attemptsCount, retakeFlag) => {
     if (attemptsCount >= retakeFlag) {
-      toast.error('You have reached the maximum number of retake attempts for this quiz.');
+      toast.error(
+        "You have reached the maximum number of retake attempts for this quiz."
+      );
     } else {
       localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
       navigate(`/quizaccess`);
-      setMessage(''); // Clear any previous messages
+      setMessage(""); // Clear any previous messages
     }
   };
   // const leaderboard = (quizId) => {
@@ -194,7 +302,8 @@ const Dashboard = () => {
         mincompletiontime,
         quizattempts,
         avgscore,
-        max_percentage,quizcreatedate
+        max_percentage,
+        quizcreatedate,
       },
     });
   };
@@ -203,12 +312,18 @@ const Dashboard = () => {
   //   localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
   //   navigate('/leaderboard', { state: { quizId, quizTotalMarks, passPercentage } });
   // };
-  const leaderboard1 = (quizId, attemptId, complexity,quizduration,passpercentage) => {
+  const leaderboard1 = (
+    quizId,
+    attemptId,
+    complexity,
+    quizduration,
+    passpercentage
+  ) => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     // localStorage.setItem("quiz_level_attempt_id", attemptId);
     // localStorage.setItem("complexity", complexity); // Store attempt_id in local storage
     // localStorage.setItem("quiz_duration", quizduration);
-    navigate(`/leaderboard`,{
+    navigate(`/leaderboard`, {
       state: {
         quizId,
         attemptId,
@@ -228,7 +343,6 @@ const Dashboard = () => {
     });
   };
 
- 
   const Edit = (quizId) => {
     // navigate(`/quizaccess/${quizId}`);
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
@@ -240,7 +354,6 @@ const Dashboard = () => {
     navigate(`/quizview_results`);
   };
   const createQuiz = () => {
-
     navigate(`/create-quiz`);
   };
 
@@ -269,40 +382,42 @@ const Dashboard = () => {
     });
   };
 
-  const [cardStatus, setCardStatus] = useState(
-    Array(allquizzes.length).fill(false)
-  );
-  const toggleNavbar1 = (index) => {
-    setCardStatus((prevState) => {
-      const updatedStates = [...prevState];
-      updatedStates[index] = !updatedStates[index];
-      return updatedStates;
-    });
-  };
+  // const [cardStatus, setCardStatus] = useState(
+  //   Array(allquizzes.length).fill(false)
+  // );
+  // const toggleNavbar1 = (index) => {
+  //   setCardStatus((prevState) => {
+  //     const updatedStates = [...prevState];
+  //     updatedStates[index] = !updatedStates[index];
+  //     return updatedStates;
+  //   });
+  // };
   // toggle for popular quiz cards
-  const [cardStats, setCardStats] = useState(
-    Array(allquizzes.length).fill(false)
-  );
-  const toggleNavbar3 = (index) => {
-    setCardStats((prevState) => {
-      const updatedStates = [...prevState];
-      updatedStates[index] = !updatedStates[index];
-      return updatedStates;
-    });
-  };
+  // const [cardStats, setCardStats] = useState(
+  //   Array(allquizzes.length).fill(false)
+  // );
+  // const toggleNavbar3 = (index) => {
+  //   setCardStats((prevState) => {
+  //     const updatedStates = [...prevState];
+  //     updatedStates[index] = !updatedStates[index];
+  //     return updatedStates;
+  //   });
+  // };
 
-  const [cardStatuss, setCardStatuss] = useState(
-    Array(allquizzes.length).fill(false)
-  );
-  const toggleNavbar4 = (index) => {
-    setCardStatuss((prevState) => {
-      const updatedStates = [...prevState];
-      updatedStates[index] = !updatedStates[index];
-      return updatedStates;
-    });
-  };
+  // const [cardStatuss, setCardStatuss] = useState(
+  //   Array(allquizzes.length).fill(false)
+  // );
+  // const toggleNavbar4 = (index) => {
+  //   setCardStatuss((prevState) => {
+  //     const updatedStates = [...prevState];
+  //     updatedStates[index] = !updatedStates[index];
+  //     return updatedStates;
+  //   });
+  // };
   const handleDelete = (index) => {
-    setAllquizzes(prevAllquizzes => prevAllquizzes.filter((_, i) => i !== index));
+    setAllquizzes((prevAllquizzes) =>
+      prevAllquizzes.filter((_, i) => i !== index)
+    );
   };
 
   const handleBackToQuizzes = () => {
@@ -346,15 +461,14 @@ const Dashboard = () => {
   }
   const currentDate = new Date();
 
-  const userRole = localStorage.getItem('user_role');
+  const userRole = localStorage.getItem("user_role");
 
   const results = (latestResult || []).map((result, index) => {
+    console.log(' {result?.attempt_date}', result?.attempt_date);
+
     const percentColor = getColorPercentage(result?.quiz_percentage);
     const handleQuizClick = () => {
-      leaderboard1(
-        result?.quiz_id,
-        result?.quiz_level_attempt_id
-      );
+      leaderboard1(result?.quiz_id, result?.quiz_level_attempt_id);
     };
     return (
       <div key={index}>
@@ -365,8 +479,10 @@ const Dashboard = () => {
           >
             {result?.attempt_date}
             <span className="relative group">
-              <span className="absolute ml-[10px] w-[100px] cursor-pointer z-0 truncate"
-              onClick={handleQuizClick}>
+              <span
+                className="absolute ml-[10px] w-[100px] cursor-pointer z-0 truncate"
+                onClick={handleQuizClick}
+              >
                 {result?.quiz_name}
               </span>
               <span className="cursor-pointer hidden group-hover:inline-block absolute left-0 top-5 w-auto z-30 bg-black text-white px-1 border border-black-300 rounded">
@@ -411,7 +527,10 @@ const Dashboard = () => {
       <div className={styles.mainContent}>
         <div className={styles.header}>
           {/* Header content */}
-          <p><span className={styles.Welcome}>Welcome</span>  {username}</p>
+          <p>
+            <span className={styles.Welcome}>Welcome</span>{" "}
+            {username.charAt(0).toUpperCase() + username.slice(1)}
+          </p>
 
           <div className={styles.headerRight}>
             {/* <div>{getFormattedDate()}</div> */}
@@ -430,24 +549,23 @@ const Dashboard = () => {
                 </a>
               </div>
             </div> */}
-         {userRole === "Quiz Master" && (
-        <div className="w-[99px] h-[41px] absolute mr-[80px] mb-2 pb-2 -mt-[35px] rounded-[10px] bg-[#fee2e2]">
-          <div className="flex">
-            <img
-              className="w-[25px] h-[25px] ml-2 mt-2"
-              src={Plus}
-              alt="Plus Icon"
-            />
-            <a
-            
-              onClick={createQuiz}
-              className="hover:underline underline-offset-2 cursor-pointer font-Poppins font-medium text-[12px] leading-[18px] text-[#214082] ml-2 mt-3"
-            >
-              Quiz
-            </a>
-          </div>
-        </div>
-      )}
+            {userRole === "Quiz Master" && (
+              <div className="w-[99px] h-[41px] absolute mr-[80px] mb-2 pb-2 -mt-[35px] rounded-[10px] bg-[#fee2e2]">
+                <div className="flex">
+                  <img
+                    className="w-[25px] h-[25px] ml-2 mt-2"
+                    src={Plus}
+                    alt="Plus Icon"
+                  />
+                  <a
+                    onClick={createQuiz}
+                    className="hover:underline underline-offset-2 cursor-pointer font-Poppins font-medium text-[12px] leading-[18px] text-[#214082] ml-2 mt-3"
+                  >
+                    Quiz
+                  </a>
+                </div>
+              </div>
+            )}
             {/* <div className={styles.searchIconContainer}>
               <img
                 src={searchIcon}
@@ -458,7 +576,11 @@ const Dashboard = () => {
           </div>
         </div>
         <div className={styles.completionInfo}>
-        You have successfully completed {weeklyQuizCount} Quizzes this week, achieving an average score of {averageScorePercentage}%.
+          <p>
+            {weeklyQuizCount > 0 && averageScorePercentage > 0
+              ? `You have successfully completed ${weeklyQuizCount} Quizzes this week, achieving an average score of ${averageScorePercentage}%`
+              : "You have not attended any quizzes yet, Please attempt the quizzes below."}
+          </p>{" "}
         </div>
         <div className="flex mx-auto">
           <div className={styles.resultWrapper}>
@@ -493,6 +615,7 @@ const Dashboard = () => {
                   timeData.map((item, index) => {
                     // Create a new Date object from item.cal_date
                     const date = new Date(item.cal_date);
+                    console.log('date',date);
                     // Get the month abbreviation
                     const monthAbbreviation = date.toLocaleString("default", {
                       month: "short",
@@ -540,7 +663,7 @@ const Dashboard = () => {
             style={{ marginBottom: "20px" }}
           >
             <p className="text-[#002366] text-[15px] font-medium leading-6 ml-[10px]">
-              Latest Quizzes
+              Latest Quizzes 
             </p>
             <span className="flex">
               <span
@@ -559,13 +682,17 @@ const Dashboard = () => {
 
           <div className="flex flex-wrap mx-auto ml-[15px] -mt-[20px]">
             {allquizzes
-              .filter(quizItem => {
+              .filter((quizItem) => {
                 const quizCreateDate = new Date(quizItem.quiz_start_date);
-                const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
-                return quizItem.active_flag.toLowerCase() === "true" &&
-                       quizItem.latest_flag === "Y" &&
-                       currentDate >= quizCreateDate &&
-                       (quizEndDate === null || currentDate <= quizEndDate);
+                const quizEndDate = quizItem.quiz_end_date
+                  ? new Date(quizItem.quiz_end_date)
+                  : null;
+                return (
+                  quizItem.active_flag === "True" &&
+                  quizItem.latest_flag === "Y" &&
+                  currentDate >= quizCreateDate &&
+                  (quizEndDate === null || currentDate <= quizEndDate)
+                );
               })
               .slice(0, 3)
               .map((quizItem, index) => (
@@ -579,7 +706,10 @@ const Dashboard = () => {
                         paddingTop: "20px",
                         marginTop: "10px",
                         marginRight: "10px",
-                        backgroundColor: quizItem.attempts_count < quizItem.retake_flag ? "#fee2e2" : "#55505026",
+                        backgroundColor:
+                          quizItem.attempts_count < quizItem.retake_flag
+                            ? "#fee2e2"
+                            : "#55505026",
                       }}
                     >
                       <span className="relative group">
@@ -596,93 +726,156 @@ const Dashboard = () => {
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            stroke-width="1.5"
+                            strokeWidth="1.5"
                             stroke="currentColor"
-                            class="w-4 h-4 rotate-90 -ml-[35px] relative -top-[7px] left-2 cursor-pointer rounded-lg hover:bg-slate-200"
+                            className="w-4 h-4 rotate-90 -ml-[35px] relative -top-[7px] left-2 cursor-pointer rounded-lg hover:bg-slate-200"
                             onClick={() => toggleNavbar(index)}
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
                             />
                             {cardStates[index] ? "Close Navbar" : "Open Navbar"}
                           </svg>
                           {cardStates[index] && (
-                            <div className={styles.infoIcons1} style={{ marginLeft:"-122px", marginTop: "-28px"}}>
+                            <div
+                              className={styles.infoIcons1}
+                              style={{
+                                marginLeft: "-122px",
+                                marginTop: "-28px",
+                              }}
+                            >
                               <div className={styles.start}>
-                              <img
-                                className=""
-                                src={eye}
-                                alt="Play icon"
-                              />
-                              <span
-                                className="text-[8px]   cursor-pointer hover:text-black"
-                                onClick={() =>
-                                  quizresults(
-                                    quizItem.quiz_id,
-                                    quizItem.quiz_level_attempt_id
-                                  )
-                                }
-                              >
-                                View
-                              </span>
-                              </div>
-                              {quizItem.attempts_count < quizItem.retake_flag && (
-
-                              <div className={styles.retake}>
-                              <img
-                                className=" h-[10px] w-[10px] "
-                                src={Share_button}
-                                alt="download icon"
-                              />
-                              <span
-                                className="text-[8px] - cursor-pointer hover:text-black"
-                                onClick={() =>
-                                  handleStartQuiz(quizItem.quiz_id)
-                                }
-                              >
-                                Retake
-                              </span>
-                              </div>
-                              )}
-                                {userRole === "Quiz Master" && (
-                              <div className={styles.edit}>
-                                <img
-                                  className={styles.editimage}
-                                  src={Edit_button}
-                                  alt="Edit icon"
-                                />
+                                <img className="" src={eye} alt="Play icon" />
                                 <span
-                                  className={styles.edittext}
-                                  onClick={() => Edit(quizItem.quiz_id)}
+                                  className="text-[8px]   cursor-pointer hover:text-black"
+                                  onClick={() =>
+                                    quizresults(
+                                      quizItem.quiz_id,
+                                      quizItem.quiz_level_attempt_id
+                                    )
+                                  }
                                 >
-                                  Edit
+                                  View
                                 </span>
                               </div>
+                              {quizItem.attempts_count <
+                                quizItem.retake_flag && (
+                                <div className={styles.retake}>
+                                  <img
+                                    className=" h-[10px] w-[10px] "
+                                    src={Share_button}
+                                    alt="download icon"
+                                  />
+                                  <span
+                                    className="text-[8px] - cursor-pointer hover:text-black"
+                                    onClick={() =>
+                                      handleStartQuiz(quizItem.quiz_id)
+                                    }
+                                  >
+                                    Retake
+                                  </span>
+                                </div>
+                              )}
+                              {userRole === "Quiz Master" && (
+                                <div className={styles.edit}>
+                                  <img
+                                    className={styles.editimage}
+                                    src={Edit_button}
+                                    alt="Edit icon"
+                                  />
+                                  <span
+                                    className={styles.edittext}
+                                    onClick={() => Edit(quizItem.quiz_id)}
+                                  >
+                                    Edit 
+                                  </span>
+                                </div>
                               )}
                               <div className={styles.leaderboard}>
-                              <img
-                                className={styles.leaderboardimage}
-                                style={{ marginTop: "1px" }}
-                                src={leaderboard_button}
-                                alt="Play icon"
-                              />
-                              <span
-                                className={styles.leaderboardtext}
-                                onClick={() =>
-                                  leaderboard1(
-                                    quizItem.quiz_id,
-                                    quizItem.quiz_level_attempt_id,
-                                    quizItem.complexity,
-                                    quizItem.quiz_duration,
-                                    quizItem.pass_percentage,
-                                  )
-                                }
-                              >
-                                Leaderboard
-                              </span>
+                                <img
+                                  className={styles.leaderboardimage}
+                                  style={{ marginTop: "1px" }}
+                                  src={leaderboard_button}
+                                  alt="Play icon"
+                                />
+                                <span
+                                  className={styles.leaderboardtext}
+                                  onClick={() =>
+                                    leaderboard1(
+                                      quizItem.quiz_id,
+                                      quizItem.quiz_level_attempt_id,
+                                      quizItem.complexity,
+                                      quizItem.quiz_duration,
+                                      quizItem.pass_percentage
+                                    )
+                                  }
+                                >
+                                  Leaderboard
+                                </span>
                               </div>
+                              {userRole === "Quiz Master" && (
+                                <div className={styles.start}>
+                                  <img
+                                    className={styles.startimage}
+                                    src={disable}
+                                    alt="Disable icon"
+                                  />
+                                  <span
+                                    className={styles.starttext}
+                                    onClick={() => handleDisableClick(quizItem.quiz_id)}
+                                  >
+                                    Disable 
+                                  </span>
+                                  <Modal
+                                    isOpen={modalIsOpen1}
+                                    onRequestClose={() =>
+                                      setModalIsOpen1(false)
+                                    }
+                                    className="bg-white rounded-lg p-8 mx-auto mt-10 max-w-md border-red-400 border-[1px]"
+                                    overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+                                  >
+                                    <h2 className="text-xl font-semibold mb-4">
+                                      Are you sure you want to disable this
+                                      card? 
+                                    </h2>
+                                    <div className="mb-4">
+                                      <input
+                                        type="checkbox"
+                                        id="confirmCheckbox"
+                                        className="mr-2"
+                                        checked={isChecked1}
+                                        onChange={(e) =>
+                                          setIsChecked1(e.target.checked)
+                                        }
+                                      />
+                                      <label htmlFor="confirmCheckbox">
+                                        I understand the consequences.
+                                      </label>
+                                    </div>
+                                    <div className="flex justify-end space-x-4">
+                                      <button
+                                        className={`bg-red-500 text-white px-4 py-2 rounded ${
+                                          !isChecked1
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
+                                        }`}
+                                        onClick={setIsDisableConfirmed}
+                                        disabled={!isChecked1}
+                                      >
+                                        Disable 
+                                      </button>
+                                      <button
+                                        className="bg-gray-300 text-black px-4 py-2 rounded"
+                                        onClick={() => setModalIsOpen1(false)}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  </Modal>
+                                </div>
+                              )}
                               {/* {userRole === "Quiz Master" && (
                               <div className={styles.edit}>
                                 <img
@@ -722,30 +915,40 @@ const Dashboard = () => {
 
                         <p className="px-[2px] font-normal">|</p>
 
-                        <span class="relative group">
-                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
-                              {quizItem.sub_category}
-                            </span>
-                            <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
-                              {quizItem.sub_category}
-                            </span>
+                        <span className="relative group">
+                          <span className="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
+                            {quizItem.sub_category}
                           </span>
+                          <span className="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
+                            {quizItem.sub_category}
+                          </span>
+                        </span>
 
+                        {quizItem.attempts_count < quizItem.retake_flag && (
                           <button
-                            className="cursor-pointer ml-auto relative top-1 right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
-                            onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
+                            className="cursor-pointer ml-auto relative -top-[5px] right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
+                            onClick={() =>
+                              handleStartQuiz1(
+                                quizItem.quiz_id,
+                                quizItem.attempts_count,
+                                quizItem.retake_flag
+                              )
+                            }
                           >
                             <img
                               className="h-[5.5px] w-[4.5px] relative top-[3.5px] left-[2px]"
                               src={PlayButton}
                               alt="Start button"
                             />
-                            <h1  className="text-[#472E86] text-[6px] relative top-[2px] pl-[1px] font-bold">Retake</h1>
+                            <h1 className="text-[#472E86] text-[6px] relative top-[2px] pl-[1px] font-bold">
+                              Retake
+                            </h1>
                           </button>
+                        )}
                       </div>
                       <div className="h-1 -mt-[8px] pl-[10px] text-[7px] text-[#002366] font-semibold relative -top-[6px]">
-                            <h3>Quiz ID : {quizItem.quiz_id}</h3>
-                          </div>
+                        <h3>Quiz ID : {quizItem.quiz_id}</h3>
+                      </div>
                       {/* <div className="h-[1px] w-full bg-white"></div> */}
                       {/* <div className="h-[3px] w-full bg-white"></div> */}
                       <div className="relative group mt-1">
@@ -810,7 +1013,7 @@ const Dashboard = () => {
                                   title="number of times quiz attempted"
                                   className="text-[8px] -ml-[1px] cursor-pointer"
                                 >
-                                  quiz attempts
+                                  Quiz attempts
                                 </span>
                               </div>
                             </div>
@@ -830,7 +1033,7 @@ const Dashboard = () => {
                                 className="cursor-pointer text-[6px]"
                               >
                                 <span className="text-[8px] -ml-[1px]">
-                                  score
+                                  Score
                                 </span>
                               </div>
                             </span>
@@ -849,7 +1052,7 @@ const Dashboard = () => {
                                 className="cursor-pointer text-[6px]"
                               >
                                 <span className="text-[8px] -ml-[1px]">
-                                  attemped
+                                  Attemped
                                 </span>
                               </div>
                             </span>
@@ -868,7 +1071,7 @@ const Dashboard = () => {
                                 className="cursor-pointer text-[6px]"
                               >
                                 <span className="text-[8px] -ml-[1px]">
-                                  duration
+                                  Duration
                                 </span>
                               </div>
                             </span>
@@ -903,21 +1106,27 @@ const Dashboard = () => {
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            stroke-width="1.5"
+                            strokeWidth="1.5"
                             stroke="currentColor"
-                            class="w-4 h-4 -ml-[27px] relative -top-[20px] -left-[2px] rotate-90 cursor-pointer rounded-lg hover:bg-slate-200"
-                            onClick={() => toggleNavbar1(index)}
+                            className="w-4 h-4 -ml-[27px] relative -top-[20px] -left-[5px] rotate-90 cursor-pointer rounded-lg hover:bg-slate-200"
+                            onClick={() => toggleNavbar(index)}
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
                             />
-                            {cardStatus[index] ? "Close Navbar" : "Open Navbar"}
+                            {cardStates[index] ? "Close Navbar" : "Open Navbar"}
                           </svg>
 
-                          {cardStatus[index] && (
-                            <div className={styles.infoIcons} style={{marginTop: "-40px", marginLeft: "-124px"}}>
+                          {cardStates[index] && (
+                            <div
+                              className={styles.infoIcons}
+                              style={{
+                                marginTop: "-41px",
+                                marginLeft: "-124px",
+                              }}
+                            >
                               <div className={styles.start}>
                                 <img
                                   className={styles.startimage}
@@ -934,20 +1143,20 @@ const Dashboard = () => {
                                 </span>
                               </div>
                               {userRole === "Quiz Master" && (
-                              <div className={styles.edit}>
-                                <img
-                                  className={styles.editimage}
-                                  src={Edit_button}
-                                  alt="Edit icon"
-                                />
-                                <span
-                                  className={styles.edittext}
-                                  onClick={() => Edit(quizItem.quiz_id)}
-                                >
-                                  Edit
-                                </span>
-                              </div>
-                               )}
+                                <div className={styles.edit}>
+                                  <img
+                                    className={styles.editimage}
+                                    src={Edit_button}
+                                    alt="Edit icon"
+                                  />
+                                  <span
+                                    className={styles.edittext}
+                                    onClick={() => Edit(quizItem.quiz_id)}
+                                  >
+                                    Edit 
+                                  </span>
+                                </div>
+                              )}
                               <div className={styles.leaderboard}>
                                 <img
                                   className={styles.leaderboardimage}
@@ -973,13 +1182,128 @@ const Dashboard = () => {
                                       quizItem.avg_score,
                                       quizItem.max_percentage,
                                       quizItem.quiz_create_date
-                                      
                                     )
                                   }
                                 >
                                   Leaderboard
                                 </span>
                               </div>
+                              {userRole === "Quiz Master" && (
+                                <div className={styles.start}>
+                                  <img
+                                    className={styles.startimage}
+                                    src={Delete}
+                                    alt="Delete icon"
+                                  />
+                                  <span
+                                    className={styles.starttext}
+                                    onClick={() => handleDeleteClick(quizItem.quiz_id)}>
+                                    Delete
+                                  </span>
+                                  <Modal
+                                    isOpen={modalIsOpen}
+                                    onRequestClose={() => setModalIsOpen(false)}
+                                    className="bg-white rounded-lg p-8 mx-auto max-w-md border-red-400 border-[1px]"
+                                    overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+                                  >
+                                    <h2 className="text-xl font-semibold mb-4">
+                                      Are you sure you want to delete this card?
+                                    </h2>
+                                    <div className="mb-4">
+                                      <input
+                                        type="checkbox"
+                                        id="confirmCheckbox"
+                                        className="mr-2"
+                                        checked={isChecked}
+                                        onChange={(e) =>
+                                          setIsChecked(e.target.checked)
+                                        }
+                                      />
+                                      <label htmlFor="confirmCheckbox">
+                                        I understand the consequences.
+                                      </label>
+                                    </div>
+                                    <div className="flex justify-end space-x-4">
+                                      <button
+                                        className={`bg-red-500 text-white px-4 py-2 rounded ${
+                                          !isChecked
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
+                                        }`}
+                                        onClick={() =>setIsDeleteConfirmed(true)}
+                                        disabled={!isChecked}
+                                      >
+                                        Delete
+                                      </button>
+                                      <button
+                                        className="bg-gray-300 text-black px-4 py-2 rounded"
+                                        onClick={() => setModalIsOpen(false)}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  </Modal>
+                                </div>
+                              )}
+
+                              {userRole === "Quiz Master" && (
+                                <div className={styles.start}>
+                                  <img
+                                    className={styles.startimage}
+                                    src={disable}
+                                    alt="Disable icon"
+                                  />
+                                  <span
+                                    className={styles.starttext}
+                                    onClick={() => handleDisableClick(quizItem.quiz_id)}>
+                                    Disable
+                                  </span>
+                                  <Modal
+                                    isOpen={modalIsOpen1}
+                                    onRequestClose={() => setModalIsOpen1(false)}
+                                    className="bg-white rounded-lg p-8 mx-auto mt-10 max-w-md border-red-400 border-[1px]"
+                                    overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+                                  >
+                                    <h2 className="text-xl font-semibold mb-4">
+                                      Are you sure you want to disable this
+                                      card?
+                                    </h2>
+                                    <div className="mb-4">
+                                      <input
+                                        type="checkbox"
+                                        id="confirmCheckbox"
+                                        className="mr-2"
+                                        checked={isChecked1}
+                                        onChange={(e) =>
+                                          setIsChecked1(e.target.checked)
+                                        }
+                                      />
+                                      <label htmlFor="confirmCheckbox">
+                                        I understand the consequences.
+                                      </label>
+                                    </div>
+                                    <div className="flex justify-end space-x-4">
+                                      <button
+                                        className={`bg-red-500 text-white px-4 py-2 rounded ${
+                                          !isChecked1
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
+                                        }`}
+                                        onClick={() => setIsDisableConfirmed}
+                                        disabled={!isChecked1}
+                                      >
+                                        Disable
+                                      </button>
+                                      <button
+                                        className="bg-gray-300 text-black px-4 py-2 rounded"
+                                        onClick={() => setModalIsOpen1(false)}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  </Modal>
+                                </div>
+                              )}
                               {/* {userRole === "Quiz Master" && (
                               <div className={styles.edit}>
                                 <img
@@ -1014,27 +1338,25 @@ const Dashboard = () => {
                           </span>
                         </span>
                         <p className="px-[2px] font-normal">|</p>
-                        <span class="relative group">
-                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
-                              {quizItem.sub_category}
-                            </span>
-                            <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
-                              {quizItem.sub_category}
-                            </span>
+                        <span className="relative group">
+                          <span className="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
+                            {quizItem.sub_category}
                           </span>
+                          <span className="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
+                            {quizItem.sub_category}
+                          </span>
+                        </span>
 
-                          <button
-                            className="cursor-pointer ml-auto relative -top-[5px] right-1"
-                            onClick={() =>
-                              handleStartQuiz(quizItem.quiz_id)
-                            }
-                          >
-                            <img
-                              className="h-8 w-[34px]"
-                              src={start}
-                              alt="Start button"
-                            />
-                          </button>
+                        <button
+                          className="cursor-pointer ml-auto relative -top-[5px] right-1"
+                          onClick={() => handleStartQuiz(quizItem.quiz_id)}
+                        >
+                          <img
+                            className="h-8 w-[34px]"
+                            src={start}
+                            alt="Start button"
+                          />
+                        </button>
                       </div>
                       <div className="text-[#002366] flex font-semibold text-[6px] gap-[60px] relative top-[75px] left-[12px]">
                         <div>
@@ -1045,8 +1367,8 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="h-1 -mt-[6px] pl-[10px] text-[7px] text-[#002366] font-semibold relative -top-[6px]">
-                            <h3>Quiz ID : {quizItem.quiz_id}</h3>
-                          </div>
+                        <h3>Quiz ID : {quizItem.quiz_id}</h3>
+                      </div>
 
                       <div className="relative group mt-1 ">
                         <span className="mt-[6px] text-wrap text-[8px] font-normal absolute ml-[10px] w-[140px] cursor-pointer z-0 truncate line-clamp-4">
@@ -1082,7 +1404,7 @@ const Dashboard = () => {
                                 />
                                 <p>{quizItem.quiz_attempts}</p>
                                 <span className="text-[8px] -ml-[1px]">
-                                  attempts
+                                  Attempts
                                 </span>
                               </div>
                             </div>
@@ -1097,7 +1419,7 @@ const Dashboard = () => {
                               />
                               {quizItem.number_of_questions}
                               <span className="text-[8px] ml-[1px]">
-                                questions
+                                Questions
                               </span>
                             </span>
                             <span className="flex pl-[2px] pt-[2px] pb-[2px] -mt-[0.5px] gap-[5px] text-[#002366] h-[18px] w-[106px] rounded relative -left-[14px] hover:text-black">
@@ -1110,7 +1432,7 @@ const Dashboard = () => {
                               />
                               {quizItem.quiz_duration}
                               <span className="text-[8px] -ml-[0.5px]">
-                                minutes
+                                Minutes
                               </span>
                             </span>
                             <span className="flex text-[9px] pt-1 -mt-[4px] gap-[3px] h-[18px] text-[#002366] w-[106px] rounded relative -left-[10px] hover:text-black">
@@ -1156,15 +1478,19 @@ const Dashboard = () => {
 
           <div className="flex flex-wrap mx-auto ml-[15px] -mt-[20px]">
             {allquizzes
-               .filter(quizItem => {
+              .filter((quizItem) => {
                 const quizCreateDate = new Date(quizItem.quiz_start_date);
-                const quizEndDate = quizItem.quiz_end_date ? new Date(quizItem.quiz_end_date) : null;
-                return quizItem.active_flag.toLowerCase() === "true" &&
-                       quizItem.latest_flag === "Y" &&
-                       currentDate >= quizCreateDate &&
-                       (quizEndDate === null || currentDate <= quizEndDate);
+                const quizEndDate = quizItem.quiz_end_date
+                  ? new Date(quizItem.quiz_end_date)
+                  : null;
+                return (
+                  quizItem.active_flag === "true" &&
+                  quizItem.popularity_flag === "Y" &&
+                  currentDate >= quizCreateDate &&
+                  (quizEndDate === null || currentDate <= quizEndDate)
+                );
               })
-              .sort((a,b) =>b.quiz_attempts - a.quiz_attempts)
+              .sort((a, b) => b.quiz_attempts - a.quiz_attempts)
               .slice(0, 3)
               .map((quizItem, index) => (
                 <div key={index} className="">
@@ -1174,11 +1500,14 @@ const Dashboard = () => {
                       className={styles.card}
                       style={{
                         width: "245px",
-                        paddingTop: "8px",
+                        // paddingTop: "8px",
                         paddingTop: "20px",
                         marginTop: "10px",
                         marginRight: "10px",
-                        backgroundColor: quizItem.attempts_count < quizItem.retake_flag ? "#fee2e2" : "#55505026",
+                        backgroundColor:
+                          quizItem.attempts_count < quizItem.retake_flag
+                            ? "#fee2e2"
+                            : "#55505026",
                       }}
                     >
                       <span className="relative group">
@@ -1195,121 +1524,157 @@ const Dashboard = () => {
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            stroke-width="1.5"
+                            strokeWidth="1.5"
                             stroke="currentColor"
-                            class="w-4 h-4 -ml-[27px] rotate-90 cursor-pointer rounded-lg hover:bg-slate-200"
-                            onClick={() => toggleNavbar3(index)}
+                            className="w-4 h-4 -ml-[27px] rotate-90 cursor-pointer rounded-lg hover:bg-slate-200"
+                            onClick={() => toggleNavbar(index)}
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
                             />
-                            {cardStats[index] ? "Close Navbar" : "Open Navbar"}
+                            {cardStates[index] ? "Close Navbar" : "Open Navbar"}
                           </svg>
 
-                          {cardStats[index] && (
-                            <div className={styles.infoIcons} style={{marginTop: "-23px", marginLeft: "-118px"}}>
+                          {cardStates[index] && (
+                            <div
+                              className={styles.infoIcons}
+                              style={{
+                                marginTop: "-23px",
+                                marginLeft: "-118px",
+                              }}
+                            >
                               <div className={styles.start}>
-                              <img
-                                className=""
-                                src={eye}
-                                alt="Play icon"
-                              />
-                              <span
-                                className="text-[8px]  cursor-pointer hover:text-black"
-                                onClick={() =>
-                                  quizresults(
-                                    quizItem.quiz_id,
-                                    quizItem.quiz_level_attempt_id
-                                  )
-                                }
-                              >
-                                View
-                              </span>
-                              </div>
-                              {quizItem.attempts_count < quizItem.retake_flag && (
-
-                              <div className={styles.retake}>
-                              <img
-                                className=" h-[10px] w-[10px] "
-                                src={Share_button}
-                                alt="download icon"
-                              />
-                              <span
-                                className="text-[8px]  cursor-pointer hover:text-black"
-                                onClick={() =>
-                                  handleStartQuiz(quizItem.quiz_id)
-                                }
-                              >
-                                Retake
-                              </span>
-                              </div>
-                              )}
-                                {userRole === "Quiz Master" && (
-                              <div className={styles.edit}>
-                                <img
-                                  className={styles.editimage}
-                                  src={Edit_button}
-                                  alt="Edit icon"
-                                />
+                                <img className="" src={eye} alt="Play icon" />
                                 <span
-                                  className={styles.edittext}
-                                  onClick={() => Edit(quizItem.quiz_id)}
+                                  className="text-[8px]  cursor-pointer hover:text-black"
+                                  onClick={() =>
+                                    quizresults(
+                                      quizItem.quiz_id,
+                                      quizItem.quiz_level_attempt_id
+                                    )
+                                  }
                                 >
-                                  Edit
+                                  View
                                 </span>
                               </div>
+                              {quizItem.attempts_count <
+                                quizItem.retake_flag && (
+                                <div className={styles.retake}>
+                                  <img
+                                    className=" h-[10px] w-[10px] "
+                                    src={Share_button}
+                                    alt="download icon"
+                                  />
+                                  <span
+                                    className="text-[8px]  cursor-pointer hover:text-black"
+                                    onClick={() =>
+                                      handleStartQuiz(quizItem.quiz_id)
+                                    }
+                                  >
+                                    Retake
+                                  </span>
+                                </div>
+                              )}
+                              {userRole === "Quiz Master" && (
+                                <div className={styles.edit}>
+                                  <img
+                                    className={styles.editimage}
+                                    src={Edit_button}
+                                    alt="Edit icon"
+                                  />
+                                  <span
+                                    className={styles.edittext}
+                                    onClick={() => Edit(quizItem.quiz_id)}
+                                  >
+                                    Edit
+                                  </span>
+                                </div>
                               )}
                               <div className={styles.leaderboard}>
-                              <img
-                                className={styles.leaderboardimage}
-                                style={{ marginTop: "1px" }}
-                                src={leaderboard_button}
-                                alt="Play icon"
-                              />
-                              <span
-                                className={styles.leaderboardtext}
-                                onClick={() =>
-                                  leaderboard1(
-                                    quizItem.quiz_id,
-                                    quizItem.quiz_level_attempt_id,
-                                    quizItem.complexity,
-                                    quizItem.quiz_duration,
-                                    quizItem.pass_percentage,
-                                  )
-                                }
-                              >
-                                Leaderboard
-                              </span>
+                                <img
+                                  className={styles.leaderboardimage}
+                                  style={{ marginTop: "1px" }}
+                                  src={leaderboard_button}
+                                  alt="Play icon"
+                                />
+                                <span
+                                  className={styles.leaderboardtext}
+                                  onClick={() =>
+                                    leaderboard1(
+                                      quizItem.quiz_id,
+                                      quizItem.quiz_level_attempt_id,
+                                      quizItem.complexity,
+                                      quizItem.quiz_duration,
+                                      quizItem.pass_percentage
+                                    )
+                                  }
+                                >
+                                  Leaderboard
+                                </span>
                               </div>
-                              {/* {userRole === "Quiz Master" && (
+
+                              {userRole === "Quiz Master" && (
                               <div className={styles.edit}>
                                 <img
                                   className={styles.editimage}
-                                  src={Edit_button}
-                                  alt="Edit icon"
+                                  src={disable}
+                                  alt="Disable icon"
                                 />
                                 <span
-                                  className={styles.edittext}
-                                  onClick={() => handleDelete(index)}
-                                >
-                                  Delete
-                                </span>
+                                    className={styles.starttext}
+                                    onClick={() => handleDisableClick(quizItem.quiz_id)}>
+                                    Disable
+                                  </span>
+                                    <Modal
+                                      isOpen={modalIsOpen1}
+                                      onRequestClose={() =>
+                                        setModalIsOpen1(false)
+                                      }
+                                      className="bg-white rounded-lg p-8 mx-auto max-w-md border-red-400 border-[1px]"
+                                      overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+                                    >
+                                      <h2 className="text-xl font-semibold mb-4">
+                                        Are you sure you want to disable this
+                                        card?
+                                      </h2>
+                                      <div className="mb-4">
+                                        <input
+                                          type="checkbox"
+                                          id="confirmCheckbox"
+                                          className="mr-2"
+                                          checked={isChecked1}
+                                          onChange={(e) => setIsChecked1(e.target.checked)}/>
+                                        <label htmlFor="confirmCheckbox">
+                                          I understand the consequences.
+                                        </label>
+                                      </div>
+                                      <div className="flex justify-end space-x-4">
+                                        <button
+                                          className={`bg-red-500 text-white px-4 py-2 rounded ${
+                                            !isChecked
+                                              ? "opacity-50 cursor-not-allowed"
+                                              : ""
+                                          }`}
+                                          onClick={() => setIsDisableConfirmed}
+                                          disabled={!isChecked1}
+                                        >
+                                          Delete
+                                        </button>
+                                        <button
+                                          className="bg-gray-300 text-black px-4 py-2 rounded"
+                                          onClick={() => setModalIsOpen1(false)}
+                                        >
+                                          Cancel
+                                        </button>
+                                      </div>
+                                    </Modal>
                               </div>
-                              )} */}
-                              {/* <img
-                            className={styles.shareimage} style={{marginTop:"2px"}}
-                            
-                            src={download}
-                            alt="Play icon"
-                          />
-                          <span className={styles.sharetext} >Download</span> */}
+                              )} 
                             </div>
                           )}
                         </div>
-                        {/* <img style={{ height: '30px', width: '30px' }} className="relative top-[2px] right-10 -mt-[10px] cursor-pointer" src={start} 
-                    onClick={() => handleStartQuiz(quizItem.quiz_id)}/> */}
                       </div>
 
                       <div className="flex mt-[9px] mb-[18px] relative top-[6px]">
@@ -1325,29 +1690,39 @@ const Dashboard = () => {
                         <p className="px-[2px] font-normal">|</p>
 
                         <span className="relative group">
-                            <span className="text-[#002366] w-[80px] cursor-pointer z-0 truncate text-[9px] font-semibold">
-                              {quizItem.sub_category}
-                            </span>
-                            <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[13px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
-                              {quizItem.sub_category}
-                            </span>
+                          <span className="text-[#002366] w-[80px] cursor-pointer z-0 truncate text-[9px] font-semibold">
+                            {quizItem.sub_category}
                           </span>
+                          <span className="text-nowrap cursor-pointer absolute hidden group-hover:inline-block left-0 top-[13px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded">
+                            {quizItem.sub_category}
+                          </span>
+                        </span>
 
+                        {quizItem.attempts_count < quizItem.retake_flag && (
                           <button
-                            className="cursor-pointer ml-auto relative top-1 right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
-                            onClick={() => handleStartQuiz1(quizItem.quiz_id, quizItem.attempts_count, quizItem.retake_flag)}
+                            className="cursor-pointer ml-auto relative -top-[5px] right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
+                            onClick={() =>
+                              handleStartQuiz1(
+                                quizItem.quiz_id,
+                                quizItem.attempts_count,
+                                quizItem.retake_flag
+                              )
+                            }
                           >
                             <img
                               className="h-[5.5px] w-[4.5px] relative top-[3.5px] left-[2px]"
                               src={PlayButton}
                               alt="Start button"
                             />
-                            <h1  className="text-[#472E86] text-[6px] relative top-[2px] pl-[1px] font-bold">Retake</h1>
+                            <h1 className="text-[#472E86] text-[6px] relative top-[2px] pl-[1px] font-bold">
+                              Retake
+                            </h1>
                           </button>
+                        )}
                       </div>
                       <div className="h-1 -mt-[8px] pl-[10px] text-[7px] text-[#002366] font-semibold relative -top-[6px]">
-                            <h3>Quiz ID : {quizItem.quiz_id}</h3>
-                          </div>
+                        <h3>Quiz ID : {quizItem.quiz_id}</h3>
+                      </div>
                       {/* <div className="h-[1px] w-full bg-white"></div> */}
                       {/* <div className="h-[3px] w-full bg-white"></div> */}
                       <div className="relative group mt-1">
@@ -1412,7 +1787,7 @@ const Dashboard = () => {
                                   title="number of times quiz attempted"
                                   className="text-[8px] -ml-[1px] cursor-pointer"
                                 >
-                                  quiz attempts
+                                  Quiz attempts
                                 </span>
                               </div>
                             </div>
@@ -1432,7 +1807,7 @@ const Dashboard = () => {
                                 className="cursor-pointer text-[6px]"
                               >
                                 <span className="text-[8px] -ml-[1px]">
-                                  score
+                                  Score
                                 </span>
                               </div>
                             </span>
@@ -1451,7 +1826,7 @@ const Dashboard = () => {
                                 className="cursor-pointer text-[6px]"
                               >
                                 <span className="text-[8px] -ml-[1px]">
-                                  attemped
+                                  Attemped
                                 </span>
                               </div>
                             </span>
@@ -1470,7 +1845,7 @@ const Dashboard = () => {
                                 className="cursor-pointer text-[6px]"
                               >
                                 <span className="text-[8px] -ml-[1px]">
-                                  duration
+                                  Duration
                                 </span>
                               </div>
                             </span>
@@ -1504,25 +1879,28 @@ const Dashboard = () => {
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            stroke-width="1.5"
+                            strokeWidth="1.5"
                             stroke="currentColor"
-                            class="w-4 h-4 -ml-[27px] relative -top-[9px] right-[1px] rotate-90 cursor-pointer rounded-lg hover:bg-slate-200"
-                            onClick={() => toggleNavbar4(index)}
+                            className="w-4 h-4 -ml-[27px] relative -top-[9px] right-[1px] rotate-90 cursor-pointer rounded-lg hover:bg-slate-200"
+                            onClick={() => toggleNavbar(index)}
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
                             />
-                            {cardStatuss[index]
+                            {cardStates[index]
                               ? "Close Navbar"
                               : "Open Navbar"}
                           </svg>
 
-                          {cardStatuss[index] && (
+                          {cardStates[index] && (
                             <div
                               className={styles.infoIcons}
-                              style={{ marginTop: "-29px",marginLeft:"-115px" }}
+                              style={{
+                                marginTop: "-29px",
+                                marginLeft: "-120px",
+                              }}
                             >
                               <div className={styles.start}>
                                 <img
@@ -1540,20 +1918,19 @@ const Dashboard = () => {
                                 </span>
                               </div>
                               {userRole === "Quiz Master" && (
-
-                              <div className={styles.edit}>
-                                <img
-                                  className={styles.editimage}
-                                  src={Edit_button}
-                                  alt="Edit icon"
-                                />
-                                <span
-                                  className={styles.edittext}
-                                  onClick={() => Edit(quizItem.quiz_id)}
-                                >
-                                  Edit
-                                </span>
-                              </div>
+                                <div className={styles.edit}>
+                                  <img
+                                    className={styles.editimage}
+                                    src={Edit_button}
+                                    alt="Edit icon"
+                                  />
+                                  <span
+                                    className={styles.edittext}
+                                    onClick={() => Edit(quizItem.quiz_id)}
+                                  >
+                                    Edit
+                                  </span>
+                                </div>
                               )}
                               <div className={styles.leaderboard}>
                                 <img
@@ -1585,6 +1962,122 @@ const Dashboard = () => {
                                   Leaderboard
                                 </span>
                               </div>
+                              {userRole === "Quiz Master" && (
+                                <div className={styles.start}>
+                                  <img
+                                    className={styles.startimage}
+                                    src={Delete}
+                                    alt="Delete icon"
+                                  />
+                                  <span
+                                    className={styles.starttext}
+                                    onClick={() => handleDeleteClick(quizItem.quiz_id)}>
+                                    Delete
+                                  </span>
+                                  <Modal
+                                    isOpen={modalIsOpen}
+                                    onRequestClose={() => setModalIsOpen(false)}
+                                    className="bg-white rounded-lg p-8 mx-auto max-w-md border-red-400 border-[1px]"
+                                    overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+                                  >
+                                    <h2 className="text-xl font-semibold mb-4">
+                                      Are you sure you want to delete this card?
+                                    </h2>
+                                    <div className="mb-4">
+                                      <input
+                                        type="checkbox"
+                                        id="confirmCheckbox"
+                                        className="mr-2"
+                                        checked={isChecked}
+                                        onChange={(e) =>
+                                          setIsChecked(e.target.checked)
+                                        }
+                                      />
+                                      <label htmlFor="confirmCheckbox">
+                                        I understand the consequences.
+                                      </label>
+                                    </div>
+                                    <div className="flex justify-end space-x-4">
+                                      <button
+                                        className={`bg-red-500 text-white px-4 py-2 rounded ${
+                                          !isChecked
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
+                                        }`}
+                                        onClick={() =>setIsDeleteConfirmed(true)}
+                                        disabled={!isChecked}
+                                      >
+                                        Delete
+                                      </button>
+                                      <button
+                                        className="bg-gray-300 text-black px-4 py-2 rounded"
+                                        onClick={() => setModalIsOpen(false)}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  </Modal>
+                                </div>
+                              )}
+
+                              {userRole === "Quiz Master" && (
+                                <div className={styles.start}>
+                                  <img
+                                    className={styles.startimage}
+                                    src={disable}
+                                    alt="Disable icon"
+                                  />
+                                  <span
+                                    className={styles.starttext}
+                                    onClick={() => handleDisableClick(quizItem.quiz_id)}>
+                                    Disable
+                                  </span>
+                                  <Modal
+                                    isOpen={modalIsOpen1}
+                                    onRequestClose={() => setModalIsOpen1(false)}
+                                    className="bg-white rounded-lg p-8 mx-auto mt-10 max-w-md border-red-400 border-[1px]"
+                                    overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+                                  >
+                                    <h2 className="text-xl font-semibold mb-4">
+                                      Are you sure you want to disable this
+                                      card?
+                                    </h2>
+                                    <div className="mb-4">
+                                      <input
+                                        type="checkbox"
+                                        id="confirmCheckbox"
+                                        className="mr-2"
+                                        checked={isChecked1}
+                                        onChange={(e) =>
+                                          setIsChecked1(e.target.checked)
+                                        }
+                                      />
+                                      <label htmlFor="confirmCheckbox">
+                                        I understand the consequences.
+                                      </label>
+                                    </div>
+                                    <div className="flex justify-end space-x-4">
+                                      <button
+                                        className={`bg-red-500 text-white px-4 py-2 rounded ${
+                                          !isChecked1
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
+                                        }`}
+                                        onClick={() => setIsDisableConfirmed}
+                                        disabled={!isChecked1}
+                                      >
+                                        Disable
+                                      </button>
+                                      <button
+                                        className="bg-gray-300 text-black px-4 py-2 rounded"
+                                        onClick={() => setModalIsOpen1(false)}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  </Modal>
+                                </div>
+                              )}
                               {/* {userRole === "Quiz Master" && (
                               <div className={styles.edit}>
                                 <img
@@ -1624,25 +2117,25 @@ const Dashboard = () => {
                         </span>
                         <p className="px-[2px] font-normal">|</p>
 
-                        <span class="relative group">
-                            <span class="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
-                              {quizItem.sub_category}
-                            </span>
-                            <span class="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
-                              {quizItem.sub_category}
-                            </span>
+                        <span className="relative group">
+                          <span className="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[80px] overflow-hidden whitespace-nowrap">
+                            {quizItem.sub_category}
                           </span>
+                          <span className="absolute hidden group-hover:inline-block left-0 top-[14px] w-auto z-30 bg-black text-white px-1 py-0.5 border border-black-300 rounded text-nowrap">
+                            {quizItem.sub_category}
+                          </span>
+                        </span>
 
-                          <button
-                            className="cursor-pointer ml-auto relative -top-[5px] right-1"
-                            onClick={() => handleStartQuiz(quizItem.quiz_id)}
-                          >
-                            <img
-                              className="h-8 w-[34px]"
-                              src={start}
-                              alt="Start button"
-                            />
-                          </button>
+                        <button
+                          className="cursor-pointer ml-auto relative -top-[5px] right-1"
+                          onClick={() => handleStartQuiz(quizItem.quiz_id)}
+                        >
+                          <img
+                            className="h-8 w-[34px]"
+                            src={start}
+                            alt="Start button"
+                          />
+                        </button>
                       </div>
                       <div className="text-[#002366] flex font-semibold text-[6px] gap-[60px] relative top-[75px] left-[12px]">
                         <div>
@@ -1653,8 +2146,8 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="h-1 -mt-[6px] pl-[10px] text-[7px] text-[#002366] font-semibold relative -top-[6px]">
-                            <h3>Quiz ID : {quizItem.quiz_id}</h3>
-                          </div>
+                        <h3>Quiz ID : {quizItem.quiz_id}</h3>
+                      </div>
 
                       <div className="relative group mt-1 ">
                         <span className="mt-[6px] text-wrap text-[8px] font-normal absolute ml-[10px] w-[140px] cursor-pointer z-0 truncate line-clamp-4">
@@ -1690,7 +2183,7 @@ const Dashboard = () => {
                                 />
                                 <p>{quizItem.quiz_attempts}</p>
                                 <span className="text-[8px] -ml-1">
-                                  attempts
+                                  Attempts
                                 </span>
                               </div>
                             </div>
@@ -1705,7 +2198,7 @@ const Dashboard = () => {
                               />
                               {quizItem.number_of_questions}
                               <span className="text-[8px] ml-[1px]">
-                                questions
+                                Questions
                               </span>
                             </span>
                             <span className="flex pl-[2px] pt-[2px] pb-[2px] -mt-[0.5px] gap-[5px] text-[#002366] h-[18px] w-[106px] rounded relative -left-[14px] hover:text-black">
@@ -1718,7 +2211,7 @@ const Dashboard = () => {
                               />
                               {quizItem.quiz_duration}
                               <span className="text-[8px] -ml-[0.5px]">
-                                minutes
+                                Minutes
                               </span>
                             </span>
                             <span className="flex text-[9px] pt-1 -mt-[4px] gap-[3px] h-[18px] text-[#002366] w-[106px] rounded relative -left-[10px] hover:text-black">
