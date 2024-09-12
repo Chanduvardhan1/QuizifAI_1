@@ -426,10 +426,12 @@ if (hasError) {
           // });
         } else if (
           data.response === "fail" &&
-          data.response_message === "Please click here to complete your registration and activate your account."
+          data.response_message === "Kindly verify the OTP you received before completing your registration."
         ) {
+          
           setResponseMessage(data.response_message);
-          navigate("/Register");
+          setShowOtpField1(true);
+          setShowVerifyButton1(true); 
         }
         else if (
           data.response === "fail" &&
@@ -565,7 +567,7 @@ if (hasError) {
       }
       const data = await response.json();
 
-      if (data.response === "success"  && data.response_message ==="Email is Verified, you can proceed with registration.") {
+      if (data.response === "success"  && data.response_message ==="Email is Verified you can proceed with registration.") {
      
         setShowRegistrationSuccess(true);
       }  else if (
