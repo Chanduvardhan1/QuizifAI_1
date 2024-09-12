@@ -248,10 +248,11 @@ if (hasError) {
           setTerms(data.response_message);
         }  else if (
           data.response === 'fail' &&
-          data.response_message ==='Please click here to complete your registration and activate your account.'
+          data.response_message ==='Please verify otp to complete your registration and activate your account.'
         ) {
-          setResponseMessage1(data.response_message);
-          navigate("/register");
+          setResponseMessage(data.response_message);
+          setShowOtpField(true);
+          setShowVerifyButton(true);
         } 
         else if (
           data.response === 'fail' &&
@@ -564,7 +565,7 @@ if (hasError) {
       }
       const data = await response.json();
 
-      if (data.response === "success"  && data.response_message ==="Email is Verified you can proceed with registration.") {
+      if (data.response === "success"  && data.response_message ==="Email is Verified, you can proceed with registration.") {
      
         setShowRegistrationSuccess(true);
       }  else if (
