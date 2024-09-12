@@ -23,6 +23,7 @@ const Globalleaderboard = () => {
   const { isAuthenticated, authToken } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [allUsersData, setAllUsersData] = useState([]);
+  const [isExpanded, setIsExpanded] = useState(false);
   const rowsPerPage = 25;
   const [sortOption, setSortOption] = useState("latest");
   const [searchTerm, setSearchTerm] = useState("");
@@ -189,13 +190,17 @@ useEffect(() => {
     );
     setCrop(crop);
    }
+    
+    const handleToggle = () => {
+      setIsExpanded(!isExpanded);
+    };
 
   return (
     <div className='flex h-screen font-Poppins'>
         <Navigation/>
         <div className='full mt-6'>
         <h1 className='text-center text-lg text-[#E97132] font-bold text-[35px]'>Global Score Leader Board</h1>
-        <h1 className='text-[20px] text-[#002366] font-medium ml-5 mt-10'>Welcome {userName || ""}</h1>
+        <h1 className='text-[20px] text-[#002366] font-medium ml-5 mt-10'>Welcome {userName.charAt(0).toUpperCase() + userName.slice(1)}</h1>
         <div className='flex justify-between mt-2  bg-green-100 border-2 mx-5'>
         <div className="flex ml-5 mt-5 relative top-5">
         <div className="rounded-full w-[100px] ml-[5px] h-[100px] -mt-[38px]" style={{ position: "relative" }}>
@@ -205,22 +210,11 @@ useEffect(() => {
         <img className="w-[80px] h-[80px] rounded-full border-2 border-white" src={profileimg} alt="Default" />
       )}
       <input type="file" ref={inputReff} onChange={handleImageChange} style={{ display: "none" }} />
-
-      {/* <div className="bg-[#C3EAF3] rounded-full w-fit h-[24px] px-[2px] py-[1px] relative left-14 -top-9">
-        <div className="rounded-full w-fit h-[28px] px-[2px] py-[2px] flex items-center justify-center group">
-          <img className="h-4 w-4 relative -top-[3px] cursor-pointer" src={Camera} alt="Camera" />
-          <div className="absolute top-full text-[7px] left-0 right-[30px] mt-1 bg-white rounded-sm text-black w-fit h-[37px] cursor-pointer px-1 py-[2px] text-nowrap items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <p onClick={handleReplaceImage}>Replace Image</p><br/>
-            <p className="relative -top-[10px]" onClick={handleViewImage}>View Image</p><br/>
-            <p className="relative -top-[20px]" onClick={handleDeleteImage}>Delete Image</p>
-          </div>
-        </div>
-      </div> */}
     </div>
 
   <div className="-mt-4 -ml-3 text-[13px] text-[#002366] font-semibold">
 <span >Name : </span>
-<span>{userName || ""}</span><br/>
+<span>{userName.charAt(0).toUpperCase() + userName.slice(1)}</span><br/>
 <span className=" text-[#002366]">User id : </span>
 <span className=" font-normal">{userId}</span>
 </div>
@@ -244,9 +238,24 @@ useEffect(() => {
         </div>
         
 
-         <p className='text-[#002366] mx-5 text-[13px] mt-7'>
-         The Global Score Leaderboard is designed to showcase your quiz achievements and compare them with users worldwide. It provides an up-to-date ranking, reflecting your cumulative scores from various quizzes. This feature not only highlights your strengths but also helps you identify areas for improvement. By seeing your position on the leaderboard, you can set personal goals and stay motivated to climb higher. Competing with others adds an exciting element to your learning experience, encouraging continuous growth. The leaderboard is regularly refreshed, ensuring that your hard work is always visible. Engage with this dynamic tool to challenge yourself, track your progress, and strive for excellence in every quiz you take.
-         </p>
+        <div className="text-[#002366] mx-5 text-[13px] mt-7">
+      <p>
+        The Global Score Leaderboard is designed to showcase your quiz achievements and compare them with users worldwide.
+        It provides an up-to-date ranking, reflecting your cumulative scores from various quizzes. 
+        {isExpanded && (
+          <>
+            This feature not only highlights your strengths but also helps you identify areas for improvement.
+            By seeing your position on the leaderboard, you can set personal goals and stay motivated to climb higher.
+            Competing with others adds an exciting element to your learning experience, encouraging continuous growth.
+            The leaderboard is regularly refreshed, ensuring that your hard work is always visible.
+            Engage with this dynamic tool to challenge yourself, track your progress, and strive for excellence in every quiz you take.
+          </>
+        )}
+      </p>
+      <button onClick={handleToggle} className="text-blue-500 text-[12px] underline underline-offset-1 hover:no-underline">
+        {isExpanded ? 'Show Less' : 'Show More'}
+      </button>
+    </div>
 
          <div className='flex justify-between'>
             <h1 className='text-[#E97132] ml-5 mt-4 pt-4 font-semibold'>Global Scores:</h1>
@@ -267,12 +276,12 @@ useEffect(() => {
         <thead className='bg-[#CBF2FB]'>
         <tr className='text-[12px] text-[#002366]'>
         <th className='py-2 px-2 border-b'>Seq</th>
-         <th className='py-2 px-2 border-b'>User Name</th>
+         <th className='py-2 px-2 border-b text-start'>User Name</th>
          <th className='py-2 px-2 border-b'>Rank</th>
          <th className='py-2 px-2 border-b'>Global Score</th>
          <th className='py-2 px-2 border-b'>Attempted</th>
-         <th className='py-2 px-2 border-b'>QuizifAi Time</th>
-         <th className='py-2 px-2 border-b'>City</th>
+         <th className='py-2 px-2 border-b text-start'>QuizifAi Time</th>
+         <th className='py-2 px-2 border-b text-start'>City</th>
         </tr>
         </thead>
 
@@ -280,11 +289,13 @@ useEffect(() => {
             {currentRows.map((user, index) =>(
               <tr key={user.user_id} className="bg-white hover:bg-gray-100 active:bg-green-200 text-[12px] text-[#002366] font-medium border-black">
               <th className='py-2 px-2 border-b'>{indexOfFirstRow + index + 1}</th>
-              <th className='py-2 px-2 border-b text-start'>{user.full_name}</th>
+              <th className='py-2 px-2 border-b text-start'>
+              {user.full_name.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}
+              </th>
               <th className='py-2 px-2 border-b'>{user.global_score_rank}</th>
               <th className='py-2 px-2 border-b'>{user.global_score !== null ? user.global_score : '-'}</th>
               <th className='py-2 px-2 border-b'>{user.total_quizzes_attempted}</th>
-              <th className='py-2 px-2 border-b'>{user.total_duration}</th>
+              <th className='py-2 px-2 border-b text-start'>{user.total_duration}</th>
               <th className='py-2 px-2 border-b text-start'>{user.city || '-'}</th>
              </tr>
             ))}

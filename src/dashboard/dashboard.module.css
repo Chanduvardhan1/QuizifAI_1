@@ -524,7 +524,7 @@ padding-top: 10px;
     flex-direction: column;
     padding: 2px;
   background-color: #e2e8f0;
-  clip-path: polygon(0% 0%, 80% 0, 81% 16%, 95% 26%, 81% 34%, 81% 100%, 0 100%);
+  clip-path: polygon(0% 0%, 80% 0, 80% 8%, 95% 15%, 81% 23%, 80% 100%, 0 100%);
 }
 .infoIcons1{
   border-radius: 5px;

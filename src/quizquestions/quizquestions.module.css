@@ -165,11 +165,6 @@ padding-top: 10px;
     color: #ABABAB;
     margin-left: 10px;
 }
-
-
-.button {
-    width: 110px;
-}
 .button1{
 
 }
@@ -181,6 +176,7 @@ padding-top: 10px;
 }
 .buttonsContainer {
     display: flex;
+   justify-content: space-between;
     /* justify-content: space-between; */
     margin-top: 50px;
     margin-bottom: 10px; /* Adjust as needed */
@@ -318,9 +314,10 @@ margin-left: -130px;
   }
   
   .button {
-    padding: 10px 20px;
+    font-size: 13px;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: 500;
   }
   .optionItem {
     display: flex;
