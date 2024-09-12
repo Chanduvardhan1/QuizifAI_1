@@ -222,14 +222,16 @@ const quizresults = () => {
             'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
-            quiz_id: quizId
+            quiz_id: quizId,
+            user_id:userId,
           })
         });
 
         const result = await response.json();
 
         if (result.response === 'success') {
-          setLeaderboardData(result.data);
+          setLeaderboardData(result.data.all_results);
+
        
         } else {
           console.error('Failed to fetch leaderboard data:', result.message);

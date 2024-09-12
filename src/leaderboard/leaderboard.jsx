@@ -246,7 +246,8 @@ const leaderboard = () => {
         const result = await response.json();
 
         if (result.response === 'success') {
-          setLeaderboardData(result.data);
+          setLeaderboardData(result.data.all_results);
+
         } else {
           console.error('Failed to fetch leaderboard data:', result.message);
         }

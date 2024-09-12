@@ -69,6 +69,8 @@ const Questions = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [quizData, setQuizData] = useState({});
   const [quizMetrics, setQuizMetrics] = useState({})
+  const userId = localStorage.getItem("user_id");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,14 +87,16 @@ const Questions = () => {
             'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
-            quiz_id: quizId
+            quiz_id: quizId,
+            user_id:userId,
           })
         });
 
         const result = await response.json();
 
         if (result.response === 'success') {
-          setLeaderboardData(result.data);
+          setLeaderboardData(result.data.all_results);
+
           // Assuming you have quiz data in result, otherwise update this part
           setQuizData({
             quiz_name: result.data[0].quiz_name,

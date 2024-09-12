@@ -211,6 +211,7 @@ const quiz_results = () => {
 
   useEffect(() => {
     const quizId = localStorage.getItem("quiz_id");
+    const userId = localStorage.getItem("user_id");
 
     const fetchLeaderboardData = async () => {
       try {
@@ -228,14 +229,16 @@ const quiz_results = () => {
             'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
-            quiz_id: quizId
+            quiz_id: quizId,
+            user_id:userId,
           })
         });
 
         const result = await response.json();
 
         if (result.response === 'success') {
-          setLeaderboardData(result.data);
+          setLeaderboardData(result.data.all_results);
+
         } else {
           console.error('Failed to fetch leaderboard data:', result.message);
         }
