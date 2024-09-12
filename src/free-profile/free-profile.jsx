@@ -1,6 +1,6 @@
 // profile.js
 
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 //import { useRouter } from 'next/router';
 import Navigation from "../navbar/navbar.jsx";
 import axios from "axios";
@@ -44,11 +44,11 @@ const FreeProfile = () => {
   const [gender, setGender] = useState("");
   const [dob, setDob] = useState("");
   const [postalCode, setPostalCode] = useState("");
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [city, setCity] = useState("");
   const [locations, setLocations] = useState([]);
   const [state, setState] = useState("");
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState("");
   const [country, setCountry] = useState("");
   const [district, setDistrict] = useState("");
   const [email, setEmail] = useState("");
@@ -56,19 +56,19 @@ const FreeProfile = () => {
   const [occupation, setOccupation] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingLogin, setIsEditingLogin] = useState(false);
-  const [initialFormData, setInitialFormData] = useState({}); 
+  const [initialFormData, setInitialFormData] = useState({});
   const [initialLoginData, setInitialLoginData] = useState({});
-  const [oldPassword, setOldPassword] = useState('********');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState("********");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [oldPasswordVisible, setOldPasswordVisible] = useState(false);
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [showNewPasswords, setShowNewPasswords] = useState(false);
-  const [buttonText, setButtonText] = useState('Update Password');
-  const [oldPasswordError, setOldPasswordError] = useState('');
-  const [newPasswordError, setNewPasswordError] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [buttonText, setButtonText] = useState("Update Password");
+  const [oldPasswordError, setOldPasswordError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [locationId, setLocationId] = useState("");
 
   const [weeklyQuizCount, setWeeklyQuizCount] = useState(0);
@@ -78,24 +78,24 @@ const FreeProfile = () => {
   const [userName, setUserName] = useState("");
   const [profileData, setProfileData] = useState(null);
   const [profession, setProfession] = useState("");
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [userrole, setuserrole] = useState("quiz user");
   const [usertype, setusertype] = useState("public");
   const [displayname, setdisplayname] = useState(null);
   const [professions, setProfessions] = useState("student");
-  const [emailOtp, setEmailOtp] = useState('');
+  const [emailOtp, setEmailOtp] = useState("");
 
   const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
 
   const [otheroccupation, setOtherccupation] = useState("");
-  const [address1, setAddress1] = useState('');
+  const [address1, setAddress1] = useState("");
 
   const [occupations, setOccupations] = useState([]);
 
-  const [isSendOtpSent,setIsSendOtpSent] = useState(false)
+  const [isSendOtpSent, setIsSendOtpSent] = useState(false);
 
   const [showOtherInput, setShowOtherInput] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
@@ -122,68 +122,71 @@ const FreeProfile = () => {
     // Allow only digits and limit to 6 characters
     if (/^\d{0,6}$/.test(value)) {
       setPostalCode(value);
-      setError('');
+      setError("");
     }
   };
 
-  
-    const fetchDetailsByPincode = async (pincode) => {
-      try {
-        const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+  const fetchDetailsByPincode = async (pincode) => {
+    try {
+      const authToken = localStorage.getItem("authToken"); // Get the auth token from localStorage
 
-        if (!authToken) {
-          throw new Error('No authentication token found');
+      if (!authToken) {
+        throw new Error("No authentication token found");
+      }
+      const response = await axios.post(
+        "https://quizifai.com:8010/location_details/",
+        {
+          pincode: pincode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Include the auth token in the Authorization header
+          },
         }
-        const response = await axios.post('https://quizifai.com:8010/location_details/', {
-          pincode: pincode },
-          {
-            headers: {
-              'Authorization': `Bearer ${authToken}`, // Include the auth token in the Authorization header
-            },
-          }
-        );
-        const data = response.data.data[0];
-        setCountry(data.country);
-        setState(data.state);
-        setDistrict(data.district);
-        setLocationId(data.location_id);
-  
-        const locationData = response.data.data;
-        setLocations(locationData);
-        if(locationData.length > 0){
-          setCity(locationData[0].location);
-        }
+      );
+      const data = response.data.data[0];
+      setCountry(data.country);
+      setState(data.state);
+      setDistrict(data.district);
+      setLocationId(data.location_id);
 
-      } catch (error) {
-        console.error("Error fetching details by pincode", error);
+      const locationData = response.data.data;
+      setLocations(locationData);
+      if (locationData.length > 0) {
+        setCity(locationData[0].location);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching details by pincode", error);
+    }
+  };
 
-    const handleSearchClick = () => {
-      if (postalCode.length < 6) {
-        setError('* Pincode must be 6 digits.');
-        return;
-      }
-      fetchDetailsByPincode(postalCode);
-    };
-    const handleCityChange = (event) => {
-      const selectedCity = event.target.value;
-      setCity(selectedCity);
-    
-      const selectedLocation = locations.find(location => location.location === selectedCity);
-      if (selectedLocation) {
-        setLocationId(selectedLocation.location_id);
-      }
-    };
+  const handleSearchClick = () => {
+    if (postalCode.length < 6) {
+      setError("* Pincode must be 6 digits.");
+      return;
+    }
+    fetchDetailsByPincode(postalCode);
+  };
+  const handleCityChange = (event) => {
+    const selectedCity = event.target.value;
+    setCity(selectedCity);
+
+    const selectedLocation = locations.find(
+      (location) => location.location === selectedCity
+    );
+    if (selectedLocation) {
+      setLocationId(selectedLocation.location_id);
+    }
+  };
   // Get profile details integration part******************
   useEffect(() => {
     const fetchQuizData = async () => {
-      console.log("User ID:", userId);     
+      console.log("User ID:", userId);
       try {
-        const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+        const authToken = localStorage.getItem("authToken"); // Get the auth token from localStorage
 
         if (!authToken) {
-          throw new Error('No authentication token found');
+          throw new Error("No authentication token found");
         }
         const response = await fetch(
           `https://quizifai.com:8010/dashboard`,
@@ -191,7 +194,7 @@ const FreeProfile = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              'Authorization': `Bearer ${authToken}`,
+              Authorization: `Bearer ${authToken}`,
             },
             body: JSON.stringify({
               user_id: userId,
@@ -206,36 +209,36 @@ const FreeProfile = () => {
         console.log("Data:", data);
 
         const dashboardData = data.data[0];
-            if (dashboardData) {
-                setWeeklyQuizCount(dashboardData.weekly_quiz_count);
-                setAverageScorePercentage(dashboardData.average_score_percentage);
-            } else {
-                console.error("Dashboard data not found");
-            }
-      
+        if (dashboardData) {
+          setWeeklyQuizCount(dashboardData.weekly_quiz_count);
+          setAverageScorePercentage(dashboardData.average_score_percentage);
+        } else {
+          console.error("Dashboard data not found");
+        }
+
         const userProfileDetails = data.data[0].user_profile_details;
-        if(!userProfileDetails){
+        if (!userProfileDetails) {
           throw new Error("User profile details not found");
         }
-        
+
         const initialData = {
           firstName: userProfileDetails.first_name,
           middleName: userProfileDetails.middle_name,
           lastName: userProfileDetails.last_name,
           gender: userProfileDetails.gender,
           dob: userProfileDetails.date_of_birth,
-          district : userProfileDetails.district_name,
+          district: userProfileDetails.district_name,
           email: userProfileDetails.user_email,
           mobileNumber: userProfileDetails.user_phone_number,
           country: userProfileDetails.country_name,
           state: userProfileDetails.state_name,
-          city: userProfileDetails.location_name ,
+          city: userProfileDetails.location_name,
           postalCode: userProfileDetails.pin_code,
           occupation: userProfileDetails.occupation_name,
           preferredLoginMethod: userProfileDetails.preferred_login_method,
           address: userProfileDetails.user_address_line_1,
           otheroccupation: userProfileDetails.other_occupation_name,
-          rolename:userProfileDetails.role_name
+          rolename: userProfileDetails.role_name,
         };
         setFirstName(userProfileDetails.first_name);
         setMiddleName(userProfileDetails.middle_name);
@@ -254,12 +257,12 @@ const FreeProfile = () => {
         setInitialLoginData(initialData);
         setPreferredLoginMethod(userProfileDetails.preferred_login_method);
         setOtherccupation(userProfileDetails.other_occupation_name);
-        setShowOtherInput(userProfileDetails.occupation_name === 'Other');
-        setrolename(userProfileDetails.role_name)
+        setShowOtherInput(userProfileDetails.occupation_name === "Other");
+        setrolename(userProfileDetails.role_name);
         const userDetails = data.data[0].audit_details;
         setUserName(userDetails.full_name);
 
-        console.log("Gender:", userProfileDetails.gender); 
+        console.log("Gender:", userProfileDetails.gender);
         // const userDetails = data.user_details;
         // setUserName(userDetails.full_name);
       } catch (error) {
@@ -270,28 +273,31 @@ const FreeProfile = () => {
     fetchQuizData();
   }, [userId]);
   // console.log("Stored password:", storedPassword);
-  
+
   // Edit profile details **********************
   const handleEditClick = () => {
-    setInitialFormData({firstName,middleName,lastName,
-          gender,
-          dob,
-          district,
-          email,
-          mobileNumber,
-          address,
-          country,
-          state,
-          city,
-          postalCode,
-          occupation,
-          preferredLoginMethod,
+    setInitialFormData({
+      firstName,
+      middleName,
+      lastName,
+      gender,
+      dob,
+      district,
+      email,
+      mobileNumber,
+      address,
+      country,
+      state,
+      city,
+      postalCode,
+      occupation,
+      preferredLoginMethod,
     }); // Save the current form data as the initial state
     setIsEditing(true);
     fetchDetailsByPincode(postalCode); // Call fetchDetailsByPincode here
     handlePostalCodeChange(postalCode);
   };
-   // save after edit 
+  // save after edit
   const handleSaveClick = async () => {
     const payload = {
       user_id: userId,
@@ -300,10 +306,10 @@ const FreeProfile = () => {
       last_name: lastName,
       user_email: email,
       email_otp: emailOtp,
-      user_phone_number: mobileNumber,
+      // user_phone_number: mobileNumber,
       otp: otp,
       user_role: rolename, // Example value, adjust as needed
-      user_type: "Public", 
+      user_type: "Public",
       user_org_id: null,
       gender: gender,
       display_name: " ",
@@ -316,16 +322,15 @@ const FreeProfile = () => {
       occupation: occupation,
       other_occupation: otheroccupation,
       user_phone_number: mobileNumber,
-
     };
 
     console.log("Updating profile with payload:", payload);
 
     try {
-      const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+      const authToken = localStorage.getItem("authToken"); // Get the auth token from localStorage
 
       if (!authToken) {
-        throw new Error('No authentication token found');
+        throw new Error("No authentication token found");
       }
       const response = await fetch(
         `https://quizifai.com:8010/edt_prfl_dtls`,
@@ -333,12 +338,11 @@ const FreeProfile = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            'Authorization': `Bearer ${authToken}`,
+            Authorization: `Bearer ${authToken}`,
           },
           body: JSON.stringify(payload),
         }
       );
-
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -347,13 +351,31 @@ const FreeProfile = () => {
 
       const data = await response.json();
       console.log("Updated Data:", data);
-      if (data.detail && data.detail.response === "fail" && data.detail.response_message === "Invalid or incorrect OTP.") {
+      if (
+        data.detail &&
+        data.detail.response === "fail" &&
+        data.detail.response_message === "Invalid or incorrect OTP."
+      ) {
         setResponseMessage("Invalid or incorrect OTP. Please try again.");
       } else {
         setResponseMessage("Profile Updated successfully...!");
         setIsEmailOtpSent(false);
         setIsMobileOtpSent(false);
         setIsEditing(false);
+        window.location.reload();
+        // const response = await fetch(
+        //   `https://quizifai.com:8010/dashboard`,
+        //   {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       "Authorization": `Bearer ${authToken}`,
+        //     },
+        //     body: JSON.stringify({
+        //        user_id: userId
+        //     }),
+        //   }
+        // );
       }
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -383,46 +405,44 @@ const FreeProfile = () => {
     setInitialFormData({
       email,
       mobileNumber,
-});
-setIsEditingLogin(true);
-setIsEmailOtpSent(false);
-setIsMobileOtpSent(false);
-setIsSendOtpSent(true)
-handleEditClick(); 
-
-
+    });
+    setIsEditingLogin(true);
+    setIsEmailOtpSent(false);
+    setIsMobileOtpSent(false);
+    setIsSendOtpSent(true);
+    handleEditClick();
   };
   useEffect(() => {
-    const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+    const authToken = localStorage.getItem("authToken"); // Get the auth token from localStorage
 
     if (!authToken) {
-      throw new Error('No authentication token found');
+      throw new Error("No authentication token found");
     }
     // Fetch the data from the API
-    fetch('https://quizifai.com:8010/occupations/', {
-      method: 'GET',
+    fetch("https://quizifai.com:8010/occupations/", {
+      method: "GET",
       headers: {
-        'accept': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
-      }
+        accept: "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
     })
-      .then(response => response.json())
-      .then(data => {
-        if (data.response === 'success') {
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.response === "success") {
           setOccupations(data.data);
         } else {
-          console.error('Failed to fetch occupations');
+          console.error("Failed to fetch occupations");
         }
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
   }, []);
 
   const handleOccupationChange = (e) => {
     const selectedOccupation = e.target.value;
     setOccupation(selectedOccupation);
-    setShowOtherInput(selectedOccupation === 'Other');
+    setShowOtherInput(selectedOccupation === "Other");
   };
   const handleLoginSaveClick = async () => {
     const payload = {
@@ -430,16 +450,16 @@ handleEditClick();
       email: email,
       mobile: mobileNumber,
     };
-  
+
     console.log("Sending OTP with payload:", payload);
-  
-    let alertMessage = ''; // Initialize alertMessage
-  
+
+    let alertMessage = ""; // Initialize alertMessage
+
     try {
-      const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
+      const authToken = localStorage.getItem("authToken"); // Get the auth token from localStorage
 
       if (!authToken) {
-        throw new Error('No authentication token found');
+        throw new Error("No authentication token found");
       }
       const response = await fetch(
         `https://quizifai.com:8010/chnge_email_mobile`,
@@ -447,58 +467,78 @@ handleEditClick();
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            'Authorization': `Bearer ${authToken}`,
+            Authorization: `Bearer ${authToken}`,
           },
           body: JSON.stringify(payload),
         }
       );
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`Failed to send OTP: ${errorText}`);
         throw new Error(`Failed to send OTP: ${errorText}`);
       }
-  
+
       const data = await response.json();
       console.log("OTP Sent Data:", data);
-  
+
       // Check for detailed response message
       if (data.detail && data.detail.response === "fail") {
-        if (data.detail.response_message.includes("Account already exists with the given email")) {
+        if (
+          data.detail.response_message.includes(
+            "Account already exists with the given email"
+          )
+        ) {
           console.error("Account already exists with the given email");
           alertMessage = data.detail.response_message; // Use the response message directly
-        } else if (data.detail.response_message.includes("Account already exists with the given mobile number")) {
+        } else if (
+          data.detail.response_message.includes(
+            "Account already exists with the given mobile number"
+          )
+        ) {
           console.error("Account already exists with the given mobile number");
           alertMessage = data.detail.response_message; // Use the response message directly
         }
       } else {
         setIsEditingLogin(false);
         setIsOtpSent(true);
-  
+
         // Check response message to determine which OTP input box to show
-        if (data.response_message === "Your email account is successfully created and verify your OTP on your email.") {
-          alertMessage = 'Your email account is successfully created and verify your OTP on your email.';
+        if (
+          data.response_message ===
+          "Your email account is successfully created and verify your OTP on your email."
+        ) {
+          alertMessage =
+            "Your email account is successfully created and verify your OTP on your email.";
           setIsEmailOtpSent(true);
-        } else if (data.response_message === "Given email is already registered.but not verified,Please verify your OTP") {
-          alertMessage = 'Given email is already registered but not verified. Please verify your OTP.';
+        } else if (
+          data.response_message ===
+          "Given email is already registered.but not verified,Please verify your OTP"
+        ) {
+          alertMessage =
+            "Given email is already registered but not verified. Please verify your OTP.";
           setIsEmailOtpSent(true);
-        } else if (data.response_message === "Given mobile is already registered.but not verified,Please verify your OTP") {
-          alertMessage = 'Given mobile is already registered but not verified. Please verify your OTP.';
+        } else if (
+          data.response_message ===
+          "Given mobile is already registered.but not verified,Please verify your OTP"
+        ) {
+          alertMessage =
+            "Given mobile is already registered but not verified. Please verify your OTP.";
           setIsMobileOtpSent(true);
         } else if (isEmailSelected) {
           setIsEmailOtpSent(true);
-          alertMessage = 'OTP sent successfully!';
+          alertMessage = "OTP sent successfully!";
         } else {
           setIsMobileOtpSent(true);
-          alertMessage = 'OTP sent successfully!';
+          alertMessage = "OTP sent successfully!";
         }
       }
-  
+
       if (alertMessage) {
         toast.error(alertMessage);
       }
-  
-      if (!alertMessage.includes('Error')) {
+
+      if (!alertMessage.includes("Error")) {
         handleEditClick();
         fetchDetailsByPincode(postalCode); // Call fetchDetailsByPincode here
         handlePostalCodeChange(postalCode);
@@ -511,32 +551,27 @@ handleEditClick();
       }
     }
   };
-  
-  
-  
-  
-  
-  const handleLoginCancelClick = () =>{
+
+  const handleLoginCancelClick = () => {
     setEmail(initialFormData.email);
     setMobileNumber(initialFormData.mobileNumber);
     setIsEmailOtpSent(false);
-setIsMobileOtpSent(false);
-setIsEditingLogin(false);
-setIsSendOtpSent(false)
-// handleEditClick(); 
-
-  }
+    setIsMobileOtpSent(false);
+    setIsEditingLogin(false);
+    setIsSendOtpSent(false);
+    // handleEditClick();
+  };
 
   const handleOtpVerifyClick = () => {
     const isOtpValid = verifyOtp(otp);
 
     if (isOtpValid) {
-      setMessage('OTP verified successfully!');
+      setMessage("OTP verified successfully!");
       setIsEditing(false);
       setIsEditingLogin(false);
       setIsOtpSent(false);
     } else {
-      setMessage('Invalid OTP. Please try again.');
+      setMessage("Invalid OTP. Please try again.");
     }
   };
   const verifyOtp = (enteredOtp) => {
@@ -545,139 +580,202 @@ setIsSendOtpSent(false)
     return enteredOtp === "123456";
   };
 
- 
-//update password****************************
+  //update password****************************
 
-useEffect(() => {
-  const oldPassword = localStorage.getItem('password');
-  if (oldPassword) {
-    setOldPassword(oldPassword);
-  }
-}, []);
-const togglePasswordVisibility = (type) => {
-  if (type === 'old') {
-    setOldPasswordVisible(!oldPasswordVisible);
-  } else if (type === 'new') {
-    setNewPasswordVisible(!newPasswordVisible);
-  } else if (type === 'confirm') {
-    setConfirmPasswordVisible(!confirmPasswordVisible);
-  }
-};
-
-const handleUpdatePassword = async (e) => {
-  e.preventDefault();
-
-  if (!showNewPasswords) {
-    setShowNewPasswords(true);
-    setButtonText('Save Password');
-    return;
-  }
-
-  let valid = true;
-
-  if (!validatePassword(newPassword)) {
-    setNewPasswordError('Password must be at least 8 characters long, contain 1 uppercase letter, 1 special character, and 1 digit.');
-    valid = false;
-  } else {
-    setNewPasswordError('');
-  }
-
-  if (newPassword !== confirmPassword) {
-    setConfirmPasswordError('New password and confirm password do not match.');
-    valid = false;
-  } else {
-    setConfirmPasswordError('');
-  }
-
-  if (!valid) {
-    return;
-  }
-
-  try {
-    const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
-
-    if (!authToken) {
-      throw new Error('No authentication token found');
+  useEffect(() => {
+    const oldPassword = localStorage.getItem("password");
+    if (oldPassword) {
+      setOldPassword(oldPassword);
     }
-  
-    const response = await axios.post(
-      'https://quizifai.com:8010/update_password',
-      {
-        user_id: userId, // Replace with your user ID
-        old_password: oldPassword,
-        new_password: newPassword,
-        confirm_password: confirmPassword,
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${authToken}`, // Set Authorization header
-          'Content-Type': 'application/json',      // Set Content-Type header
-          'accept': 'application/json',            // Set accept header
-        },
+  }, []);
+  const togglePasswordVisibility = (type) => {
+    if (type === "old") {
+      setOldPasswordVisible(!oldPasswordVisible);
+    } else if (type === "new") {
+      setNewPasswordVisible(!newPasswordVisible);
+    } else if (type === "confirm") {
+      setConfirmPasswordVisible(!confirmPasswordVisible);
+    }
+  };
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+
+    if (!showNewPasswords) {
+      setShowNewPasswords(true);
+      setButtonText("Save Password");
+      return;
+    }
+
+    let valid = true;
+
+    if (!validatePassword(newPassword)) {
+      setNewPasswordError(
+        "Password must be at least 8 characters long, contain 1 uppercase letter, 1 special character, and 1 digit."
+      );
+      valid = false;
+    } else {
+      setNewPasswordError("");
+    }
+
+    if (newPassword !== confirmPassword) {
+      setConfirmPasswordError(
+        "New password and confirm password do not match."
+      );
+      valid = false;
+    } else {
+      setConfirmPasswordError("");
+    }
+
+    if (!valid) {
+      return;
+    }
+
+    try {
+      const authToken = localStorage.getItem("authToken"); // Get the auth token from localStorage
+
+      if (!authToken) {
+        throw new Error("No authentication token found");
       }
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      };
+      const response = await axios.post(
+        "https://quizifai.com:8010/update_password",
+        {
+          user_id: userId, // Replace with your user ID
+          old_password: oldPassword,
+          new_password: newPassword,
+          confirm_password: confirmPassword,
+          headers,
+        }
+      );
+
+      if (response.data.response === "success") {
+        toast.error(response.data.response_message);
+        localStorage.setItem("password", newPassword); // Store the new password in localStorage
+
+        setOldPassword(newPassword);
+        setNewPassword("");
+        setConfirmPassword("");
+        setOldPasswordError("");
+        setNewPasswordError("");
+        setConfirmPasswordError("");
+        setShowNewPasswords(false);
+        setButtonText("Update Password");
+      } else if (response.data.error === "Incorrect old password") {
+        setOldPasswordError("Incorrect old password.");
+      } else {
+        toast.error("Failed to update password. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error updating password", error);
+      toast.error("An error occurred while updating the password");
+    }
+  };
+
+  const validatePassword = (password) => {
+    return (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /[0-9]/.test(password) &&
+      /[!@#$%^&*(),.?":{}|<>]/.test(password)
     );
-
-    if (response.data.response === "success") {
-      toast.success(response.data.response_message);
-      localStorage.setItem('password', newPassword); // Store the new password in localStorage
-
-      setOldPassword(newPassword);
-      setNewPassword('');
-      setConfirmPassword('');
-      setOldPasswordError('');
-      setNewPasswordError('');
-      setConfirmPasswordError('');
-      setShowNewPasswords(false);
-      setButtonText('Update Password');
-    } else if (response.data.error === 'Incorrect old password') {
-      setOldPasswordError('Incorrect old password.');
+  };
+  const handleLoginCancelClick1 = () => {
+    setShowNewPasswords(false);
+  };
+  // Image handling and crop logic
+  useEffect(() => {
+    const savedImage = localStorage.getItem("savedImage");
+    if (savedImage) {
+      setImage(savedImage);
     }
-     else {
-      toast.error("Failed to update password. Please try again.");
+  }, []);
+
+  function handleImageClick() {
+    if (inputReff.current && typeof inputReff.current.click === "function") {
+      inputReff.current.click(); // Open file dialog
+    } else {
+      console.error("click method is not available on inputReff.current");
     }
-  } catch (error) {
-    console.error("Error updating password", error);
-    toast.error("An error occurred while updating the password");
   }
-};
 
-const validatePassword = (password) => {
-  return password.length >= 8 &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password) &&
-    /[!@#$%^&*(),.?":{}|<>]/.test(password);
-};
-const handleLoginCancelClick1 = () =>{
- 
-  setShowNewPasswords(false);
-
-}
-function handleImageClick() {
-  if (inputReff.current && typeof inputReff.current.click === 'function') {
-      inputReff.current.click(); // Correct method name
-  } else {
-      console.error('click method is not available on inputReff.current');
+  function handleImageChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const imageDataUrl = reader.result;
+        // localStorage.setItem('savedImage', imageDataUrl);
+        setImage(imageDataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
   }
-}
-function handleImageChange(event) {
-const file = event.target.files[0];
-console.log(file);
-setImage(event.target.files[0]);
-};
+
+  const handleCropComplete = (crop) => {
+    setCompletedCrop(crop);
+  };
+  function handleReplaceImage(event) {
+    event.stopPropagation(); // Prevent the click from triggering the parent div's click event
+    handleImageClick(); // Open file dialog
+  }
+
+  function handleDeleteImage(event) {
+    event.stopPropagation(); // Prevent the click from triggering the parent div's click event
+    localStorage.removeItem("savedImage"); // Remove from local storage
+    setImage(""); // Reset to default image
+  }
+
+  function handleViewImage(event) {
+    event.stopPropagation(); // Prevent the click from triggering the parent div's click event
+    if (image) {
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = image;
+      link.target = "_blank"; // Open in a new tab
+      link.click(); // Simulate click to open the image
+    } else {
+      console.error("No image available to view");
+    }
+  }
+  const onImageLoad = (e) => {
+    const { width, height } = e.currentTarget;
+    const crop = makeAspectCrop(
+      {
+        unit: "%",
+        width: 25,
+      },
+      ASPECT_RATIO,
+      width,
+      height
+    );
+    setCrop(crop);
+  };
   return (
     <div className={styles.container}>
       <Navigation />
-      <ToastContainer/>
-      <div className={styles.mainContent} style={{backgroundColor:"#F5F5F5"}}>
+      <ToastContainer />
+      <div
+        className={styles.mainContent}
+        style={{ backgroundColor: "#F5F5F5" }}
+      >
         <div className={styles.header}>
           {/* Header content */}
           <div className="flex">
             <div className="absolute left-0 ml-[20px] w-full">
-              <p className="text-[#002366] ml-[16px]">Welcome {userName}</p>
+              <p className="text-[#002366] ml-[16px]">
+                Welcome {userName.charAt(0).toUpperCase() + userName.slice(1)}
+              </p>
               <div className="bg-[#30CDF040] mr-[40px] mt-[10px] pl-[20px] text-[15px] font-medium text-[#214082] leading-6 py-[10px] rounded-[10px]">
-                You've completed {weeklyQuizCount} Quizzes this week with an
-                average score of {averageScorePercentage}%
+                <p>
+                  {weeklyQuizCount > 0 && averageScorePercentage > 0
+                    ? `You have successfully completed ${weeklyQuizCount} Quizzes this week, achieving an average score of ${averageScorePercentage}%`
+                    : "You have not attended any quizzes yet, Please attempt the quizzes below."}
+                </p>
               </div>
             </div>
             <div className={styles.headerRight}>
@@ -686,36 +784,63 @@ setImage(event.target.files[0]);
           </div>
         </div>
 
-    {/* Main content  */}
+        {/* Main content  */}
         <div className="relative top-[70px] bg-white flex-col">
           <div className="flex">
-          <div className="relative left-[35px]">
-          <div className={styles.imgAndTextContainer}>
-            <div className={styles.profileimgContainer}>
-            <h1 className=" text-[13px] text-[#EF5130] font-semibold relative top-3 left-2 text-nowrap">
-                  Personal Information
-                </h1>
-              <div className="rounded-full w-[100px] ml-[25px] mt-8 h-[100px]" onClick={handleImageClick} style={{ position: "relative"}}>         
-        {image ? (
-        <img className="w-[100px]  h-[100px] rounded-full border-2 border-white" src={URL.createObjectURL(image)} alt="Background Image"/>
-        ): (
-          <img className="w-[100px]  h-[100px] rounded-full border-2 border-white" src={profileimg} alt="Background Image"/>
-        )}
-        <input type="file" ref={inputReff} onChange={handleImageChange} style={{display: "none"}}/>
-        </div>
-            </div>
-          </div>  
-        </div>
+            <div className="relative left-[35px]">
+              <div className={styles.imgAndTextContainer}>
+                <div className={styles.profileimgContainer}>
+                  <h1 className=" text-[13px] text-[#EF5130] font-semibold relative top-3 left-2 text-nowrap">
+                    Personal Information
+                  </h1>
+                  <div
+                    className="rounded-full w-[100px] ml-[5px] h-[100px] mt-10"
+                    style={{ position: "relative" }}
+                  >
+                    {image ? (
+                      <img
+                        className="w-[80px] h-[80px] rounded-full border-2 border-white"
+                        src={image}
+                        alt="Uploaded"
+                      />
+                    ) : (
+                      <img
+                        className="w-[80px] h-[80px] rounded-full border-2 border-white"
+                        src={profileimg}
+                        alt="Default"
+                      />
+                    )}
+                    <input
+                      type="file"
+                      ref={inputReff}
+                      onChange={handleImageChange}
+                      style={{ display: "none" }}
+                    />
 
-        <div className="-ml-[5px]">
-           {/* first name and occupation  */}
-        <div className="flex flex-nowrap mt-[55px] ml-[85px]">
-              <div className={styles.inputGroup1}>
-                <label className="text-blue-800 font-semibold">
-                  First Name
-                </label>
-                <input
-                  className="border-transparent 
+                    {/* <div className="bg-[#C3EAF3] rounded-full w-fit h-[24px] px-[2px] py-[1px] relative left-14 -top-9">
+        <div className="rounded-full w-fit h-[28px] px-[2px] py-[2px] flex items-center justify-center group">
+          <img className="h-4 w-4 relative -top-[3px] cursor-pointer" src={Camera} alt="Camera" />
+          <div className="absolute top-full text-[7px] left-0 right-[30px] mt-1 bg-white rounded-sm text-black w-fit h-[37px] cursor-pointer px-1 py-[2px] text-nowrap items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <p onClick={handleReplaceImage}>Replace Image</p><br/>
+            <p className="relative -top-[10px]" onClick={handleViewImage}>View Image</p><br/>
+            <p className="relative -top-[20px]" onClick={handleDeleteImage}>Delete Image</p>
+          </div>
+        </div>
+      </div> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="-ml-[55px]">
+              {/* first name and occupation  */}
+              <div className="flex flex-nowrap mt-[55px] ml-[85px]">
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">
+                    First Name
+                  </label>
+                  <input
+                    className="border-transparent 
                           border-b-2  
                         hover:border-blue-200 
                           ml-[25px] 
@@ -725,40 +850,54 @@ setImage(event.target.files[0]);
                           pl-[8px]
                           text-[11px] 
                           focus:outline-none ${isEditing ? 'input-highlight' : ''}`}"
-                          type="text"
-                          required
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                          disabled={!isEditing}
-                />
-                <hr className={`h-[1px] w-[250px] ${isEditing ? 'hr-highlight' : 'bg-whitet'}`}></hr>
+                    type="text"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <hr
+                    className={`h-[1px] w-[250px] ${
+                      isEditing ? "hr-highlight" : "bg-whitet"
+                    }`}
+                  ></hr>
+                </div>
+
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">
+                    Occupation
+                  </label>
+                  <select
+                    name="occupation"
+                    className="border-transparent border-b-2 hover:border-blue-200 ml-[25px] h-[30px] w-[165px] text-[11px] pl-[3px] focus:outline-none"
+                    value={occupation}
+                    onChange={handleOccupationChange}
+                    disabled={!isEditing}
+                  >
+                    {occupations.map((occ) => (
+                      <option
+                        key={occ.occupation_id}
+                        value={occ.occupation_name}
+                      >
+                        {occ.occupation_name}
+                      </option>
+                    ))}
+                  </select>
+                  <hr className="h-[0.5px] w-[270px] bg-gray-100"></hr>
+                </div>
               </div>
 
-              <div className={styles.inputGroup1}>
-      <label className="text-blue-800 font-semibold">Occupation</label>
-      <select
-        name="occupation"
-        className="border-transparent border-b-2 hover:border-blue-200 ml-[25px] h-[30px] w-[165px] text-[11px] pl-[3px] focus:outline-none"
-        value={occupation}
-        onChange={handleOccupationChange}
-        disabled={!isEditing}
-      >
-        {occupations.map((occ) => (
-          <option key={occ.occupation_id} value={occ.occupation_name}>
-            {occ.occupation_name}
-          </option>
-        ))}
-      </select>
-      <hr className="h-[0.5px] w-[270px] bg-gray-100"></hr>
-    </div>
-            </div>
-
-           {/* Middle name and pincode*/}  
-        <div className="flex ml-[85px] mt-[5px]">
-          <div className={styles.inputGroup1} style={{flexWrap: "nowrap"}}>
-            <label className="text-blue-800 font-semibold">Middle Name</label>
-            <input
-              className="border-transparent 
+              {/* Middle name and pincode*/}
+              <div className="flex ml-[85px] mt-[5px]">
+                <div
+                  className={styles.inputGroup1}
+                  style={{ flexWrap: "nowrap" }}
+                >
+                  <label className="text-blue-800 font-semibold">
+                    Middle Name
+                  </label>
+                  <input
+                    className="border-transparent 
                           border-b-2  
                         hover:border-blue-200 
                           ml-[10px] 
@@ -768,18 +907,18 @@ setImage(event.target.files[0]);
                           pl-[7px]
                           text-[11px] 
                           focus:outline-none ${isEditing ? 'input-highlight' : ''}`}"
-              type="text"
-              value={middleName}
-              onChange={(e) => setMiddleName(e.target.value)}
-              disabled={!isEditing}
-            />
-            <hr className="h-[0.5px] w-[250px] bg-gray-200"></hr>
-          </div>
+                    type="text"
+                    value={middleName}
+                    onChange={(e) => setMiddleName(e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <hr className="h-[0.5px] w-[250px] bg-gray-200"></hr>
+                </div>
 
-          <div className={styles.inputGroup1}>
-            <label className="text-blue-800 font-semibold">Pincode</label>
-            <input
-              className="border-transparent 
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">Pincode</label>
+                  <input
+                    className="border-transparent 
                           border-b-2  
                         hover:border-blue-200 
                           ml-[50px] 
@@ -788,27 +927,31 @@ setImage(event.target.files[0]);
                           pl-[7px]
                           text-[11px] 
                           focus:outline-none ${isEditing ? 'input-highlight' : ''}`}"
-              type="text"
-              value={postalCode}
-              onChange={handlePostalCodeChange}
-              disabled={!isEditing}
-            />
-          <img
-          className="h-[15px] w-[15px] -mt-[15px] ml-[93%] relative -top-[8px] cursor-pointer"
-          src={search}
-          onClick={handleSearchClick}
-        />     
-         {error && <div className="text-red-500 text-[10px] mt-1">{error}</div>}       
-            <hr className="h-[0.5px] w-[270px] bg-gray-200"></hr>
-          </div>
-        </div>
+                    type="text"
+                    value={postalCode}
+                    onChange={handlePostalCodeChange}
+                    disabled={!isEditing}
+                  />
+                  <img
+                    className="h-[15px] w-[15px] -mt-[15px] ml-[93%] relative -top-[8px] cursor-pointer"
+                    src={search}
+                    onClick={handleSearchClick}
+                  />
+                  {error && (
+                    <div className="text-red-500 text-[10px] mt-1">{error}</div>
+                  )}
+                  <hr className="h-[0.5px] w-[270px] bg-gray-200"></hr>
+                </div>
+              </div>
 
-           {/* Last name and district name */}
-        <div className="flex ml-[85px] mt-[5px]">
-          <div className={styles.inputGroup1}>
-            <label className="text-blue-800 font-semibold">Last Name</label>
-            <input
-              className="border-transparent 
+              {/* Last name and district name */}
+              <div className="flex ml-[85px] mt-[5px]">
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">
+                    Last Name
+                  </label>
+                  <input
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[28px] 
@@ -818,18 +961,20 @@ setImage(event.target.files[0]);
                           text-[11px]
                           pl-[7px] 
                           focus:outline-none"
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              disabled={!isEditing}
-            />
-            <hr className="h-[0.5px] w-[250px] bg-gray-200"></hr>
-          </div>
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <hr className="h-[0.5px] w-[250px] bg-gray-200"></hr>
+                </div>
 
-          <div className={styles.inputGroup1}>
-            <label className="text-blue-800 font-semibold">District Name</label>
-            <input
-              className="border-transparent 
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">
+                    District Name
+                  </label>
+                  <input
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[15px] 
@@ -838,25 +983,25 @@ setImage(event.target.files[0]);
                           text-[11px] 
                           pl-[7px]
                           focus:outline-none"
-              type="text"
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)}
-              disabled={!isEditing}
-            />
-            <hr
-              className={`h-[0.5px] w-[270px] bg-gray-200 ${
-                isFocused ? "bg-blue-500" : ""
-              }`}
-            />
-          </div>  
-        </div> 
+                    type="text"
+                    value={district}
+                    onChange={(e) => setDistrict(e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <hr
+                    className={`h-[0.5px] w-[270px] bg-gray-200 ${
+                      isFocused ? "bg-blue-500" : ""
+                    }`}
+                  />
+                </div>
+              </div>
 
-           {/* gender and city name*/}
-         <div className="flex ml-[85px] mt-[5px]">
-         <div className={styles.inputGroup1}>
-           <label className="text-blue-800 font-semibold">Gender</label>
-         <select
-              className="border-transparent 
+              {/* gender and city name*/}
+              <div className="flex ml-[85px] mt-[5px]">
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">Gender</label>
+                  <select
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[50px] 
@@ -866,21 +1011,23 @@ setImage(event.target.files[0]);
                           text-[11px]
                           pl-[3px] 
                           focus:outline-none"
-    value={gender}
-    onChange={(e) => setGender(e.target.value)}
-    disabled={!isEditing}
-  >
-    <option value="Male">Male</option>
-    <option value="Female">Female</option>
-    <option value="Other">Other</option>
-  </select>
-  <hr className="h-[0.5px] w-[250px] bg-gray-200"></hr>
-            </div>
-  
-          <div className={styles.inputGroup1}>
-            <label className="text-blue-800 font-semibold">City Name</label>
-            <select
-              className="border-transparent 
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    disabled={!isEditing}
+                  >
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <hr className="h-[0.5px] w-[250px] bg-gray-200"></hr>
+                </div>
+
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">
+                    City Name
+                  </label>
+                  <select
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[35px] 
@@ -889,28 +1036,33 @@ setImage(event.target.files[0]);
                           text-[11px] 
                           pl-[3px]
                           focus:outline-none"
-              type="text"
-              value={city}
-              onChange={handleCityChange}
-              disabled={!isEditing}
-            >
-              <option value={city}>{city}</option>
-             {locations.map((location) => (
-            <option key={location.location_id} value={location.location}>
-              {location.location}
-            </option>
-             ))} 
-            </select>
-            <hr className="h-[1px] w-[270px] bg-gray-200"></hr>
-          </div>  
-        </div> 
-         
-         {/* addrress and country  */}
-        <div className="flex ml-[85px] mt-[5px]">
-          <div className={styles.inputGroup1}>
-            <label className="text-blue-800 font-semibold">Date of birth</label>
-            <input
-              className="border-transparent 
+                    type="text"
+                    value={city}
+                    onChange={handleCityChange}
+                    disabled={!isEditing}
+                  >
+                    <option value={city}>{city}</option>
+                    {locations.map((location) => (
+                      <option
+                        key={location.location_id}
+                        value={location.location}
+                      >
+                        {location.location}
+                      </option>
+                    ))}
+                  </select>
+                  <hr className="h-[1px] w-[270px] bg-gray-200"></hr>
+                </div>
+              </div>
+
+              {/* addrress and country  */}
+              <div className="flex ml-[85px] mt-[5px]">
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">
+                    Date of birth
+                  </label>
+                  <input
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[20px] 
@@ -920,17 +1072,19 @@ setImage(event.target.files[0]);
                           text-[11px]
                           pl-[3px] 
                           focus:outline-none"
-              type="date"
-              value={dob}
-              onChange={handleDateChange}
-               disabled={!isEditing}
-            />
-            <hr className="h-[1px] w-[250px] bg-gray-200"></hr>
-          </div>
-          <div className={styles.inputGroup1}>
-            <label className="text-blue-800 font-semibold">State Name</label>
-            <input
-              className="border-transparent 
+                    type="date"
+                    value={dob}
+                    onChange={handleDateChange}
+                    disabled={!isEditing}
+                  />
+                  <hr className="h-[1px] w-[250px] bg-gray-200"></hr>
+                </div>
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">
+                    State Name
+                  </label>
+                  <input
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[28px] 
@@ -939,21 +1093,22 @@ setImage(event.target.files[0]);
                           text-[11px] 
                           pl-[7px]
                           focus:outline-none"
-              type="text"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              disabled={!isEditing}
-            />
-            <hr className="h-[1px] w-[270px] bg-gray-200"></hr>
-          </div>
-          
-        </div>
+                    type="text"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <hr className="h-[1px] w-[270px] bg-gray-200"></hr>
+                </div>
+              </div>
 
-        <div className="flex ml-[85px] mt-[5px]">
-          <div className={styles.inputGroup1}>
-            <label for="address" className="text-blue-800 font-semibold">User Address1</label>
-            <input
-              className="border-transparent 
+              <div className="flex ml-[85px] mt-[5px]">
+                <div className={styles.inputGroup1}>
+                  <label for="address" className="text-blue-800 font-semibold">
+                    User Address1
+                  </label>
+                  <input
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[20px] 
@@ -963,17 +1118,20 @@ setImage(event.target.files[0]);
                           text-[11px]
                           pl-[3px] 
                           focus:outline-none"
-              type="text" id="address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-               disabled={!isEditing}
-            />
-            <hr className="h-[1px] w-[250px] bg-gray-200"></hr>
-          </div>
-          <div className={styles.inputGroup1}>
-            <label className="text-blue-800 font-semibold">Country Name</label>
-            <input
-              className="border-transparent 
+                    type="text"
+                    id="address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <hr className="h-[1px] w-[250px] bg-gray-200"></hr>
+                </div>
+                <div className={styles.inputGroup1}>
+                  <label className="text-blue-800 font-semibold">
+                    Country Name
+                  </label>
+                  <input
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[10px] 
@@ -982,28 +1140,28 @@ setImage(event.target.files[0]);
                           text-[11px] 
                           pl-[7px]
                           focus:outline-none"
-              type="text"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              disabled={!isEditing}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
-            <hr
-              className={`h-[1px] w-[270px] bg-gray-200 ${
-                isFocused ? "bg-blue-500" : ""
-              }`}
-            />
-          </div>
-          
-          
-        </div>
+                    type="text"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    disabled={!isEditing}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                  />
+                  <hr
+                    className={`h-[1px] w-[270px] bg-gray-200 ${
+                      isFocused ? "bg-blue-500" : ""
+                    }`}
+                  />
+                </div>
+              </div>
 
-        <div className="flex ml-[85px] mt-[5px]">
-          <div className={styles.inputGroup1}>
-            <label for="address" className="text-blue-800 font-semibold">User Address2</label>
-            <input
-              className="border-transparent 
+              <div className="flex ml-[85px] mt-[5px]">
+                <div className={styles.inputGroup1}>
+                  <label for="address" className="text-blue-800 font-semibold">
+                    User Address2
+                  </label>
+                  <input
+                    className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[20px] 
@@ -1013,18 +1171,21 @@ setImage(event.target.files[0]);
                           text-[11px]
                           pl-[3px] 
                           focus:outline-none"
-              type="text" id="address"
-              value={address1}
-              onChange={(e) => setAddress1(e.target.value)}
-               disabled={!isEditing}
-            />
-            <hr className="h-[1px] w-[250px] bg-gray-200"></hr>
-          </div>
-          {showOtherInput && (
-          <div className={styles.inputGroup1}>
-            <label className="text-blue-800 font-semibold">Other Occupation</label>
-            <input
-              className="border-transparent 
+                    type="text"
+                    id="address"
+                    value={address1}
+                    onChange={(e) => setAddress1(e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <hr className="h-[1px] w-[250px] bg-gray-200"></hr>
+                </div>
+                {showOtherInput && (
+                  <div className={styles.inputGroup1}>
+                    <label className="text-blue-800 font-semibold">
+                      Other Occupation
+                    </label>
+                    <input
+                      className="border-transparent 
                            border-b-2   
                         hover:border-blue-200 
                           ml-[10px] 
@@ -1033,259 +1194,336 @@ setImage(event.target.files[0]);
                           text-[11px] 
                           pl-[7px]
                           focus:outline-none"
-              type="text"
-              value={otheroccupation}
-              disabled={!isEditing}
-              onChange={(e) => setOtherccupation(e.target.value)}
-
-            />
-            <hr
-              className={`h-[1px] w-[270px] bg-gray-200 ${
-                isFocused ? "bg-blue-500" : ""
-              }`}
-            />
+                      type="text"
+                      value={otheroccupation}
+                      disabled={!isEditing}
+                      onChange={(e) => setOtherccupation(e.target.value)}
+                    />
+                    <hr
+                      className={`h-[1px] w-[270px] bg-gray-200 ${
+                        isFocused ? "bg-blue-500" : ""
+                      }`}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
+          <div className="flex justify-start ml-[24%] mt-[20px] mb-[20px]">
+            {isEditing ? (
+              <>
+                <button
+                  className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] text-white"
+                  onClick={handleSaveClick}
+                >
+                  Save
+                </button>
+                <button
+                  className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[5%] text-white"
+                  onClick={handleCancelClick}
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <button
+                className="bg-[#3B61C8] hover:transform hover:scale-110 transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] text-white "
+                onClick={handleEditClick}
+              >
+                Edit
+              </button>
             )}
-          
+            {responseMessage && (
+              <p className=" text-green-500 flex ml-[85px] mt-[5px]">
+                {responseMessage}
+              </p>
+            )}
+          </div>
         </div>
-  
-  </div>
-  </div>
-  <div className="flex justify-start ml-[24%] mt-[20px] mb-[20px]">
-  {isEditing ? (
-    <>
-      <button
-        className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] text-white"
-        onClick={handleSaveClick}
-      >
-        Save
-      </button>
-      <button
-        className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[5%] text-white"
-        onClick={handleCancelClick}
-      >
-        Cancel
-      </button>
-    </>
-  ) : (
-    <button
-      className="bg-[#3B61C8] hover:transform hover:scale-110 transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] text-white"
-      onClick={handleEditClick}
-    >
-      Edit
-    </button>
-  )}
-  {responseMessage && (
-    <p className=" text-green-500 flex ml-[85px] mt-[5px]">{responseMessage}</p>
-  )}
-</div>
-  </div>
 
-{/* *************login details ******************************* */}
-  <div className="bg-white w-full mt-[8%]">
-    <h1 className="ml-[6%] mt-4 text-[13px] text-[#EF5130] font-semibold">Login User Details</h1>
-     <div
+        {/* *************login details ******************************* */}
+        <div className="bg-white w-full mt-[8%]">
+          <h1 className="ml-[6%] mt-4 text-[13px] text-[#EF5130] font-semibold">
+            Login User Details
+          </h1>
+          <div
             className={styles.inputGroup1}
-            style={{ marginLeft: "200px", textWrap: "nowrap",marginTop:"5px" }}
+            style={{
+              marginLeft: "168px",
+              textWrap: "nowrap",
+              marginTop: "5px",
+            }}
           >
             <label className="text-blue-800 font-semibold">Login Method</label>
             <button
-        className={`border-b-2 w-[77.5px] text-[11px] pl-[10px] ml-[10px] focus:outline-none ${
-          preferredLoginMethod === 'Email' ? 'border-blue-200' : 'border-transparent'
-        } ${!isEditingLogin && 'cursor-not-allowed'}`}
-        onClick={() => isEditingLogin && setPreferredLoginMethod('Email')}
-        disabled={!isEditingLogin}
-      >
-        Email
-      </button>
-      <button
-        className={`border-b-2 w-[77.5px] text-[11px] pl-[10px] focus:outline-none ${
-          preferredLoginMethod === 'Mobile' ? 'border-blue-200' : 'border-transparent'
-        } ${!isEditingLogin && 'cursor-not-allowed'}`}
-        onClick={() => isEditingLogin && setPreferredLoginMethod('Mobile')}
-        disabled={!isEditingLogin}
-      >
-        Mobile
-      </button>
+              className={`border-b-2 w-[77.5px] text-[11px] pl-[10px] ml-[10px] focus:outline-none ${
+                preferredLoginMethod === "Email"
+                  ? "border-blue-200"
+                  : "border-transparent"
+              } ${!isEditingLogin && "cursor-not-allowed"}`}
+              onClick={() => isEditingLogin && setPreferredLoginMethod("Email")}
+              disabled={!isEditingLogin}
+            >
+              Email
+            </button>
+            <button
+              className={`border-b-2 w-[77.5px] text-[11px] pl-[10px] focus:outline-none ${
+                preferredLoginMethod === "Mobile"
+                  ? "border-blue-200"
+                  : "border-transparent"
+              } ${!isEditingLogin && "cursor-not-allowed"}`}
+              onClick={() =>
+                isEditingLogin && setPreferredLoginMethod("Mobile")
+              }
+              disabled={!isEditingLogin}
+            >
+              Mobile
+            </button>
             <hr className="h-[1px] w-[90px] bg-gray-200"></hr>
           </div>
-    <div className="flex ml-[30%] mt-[20px]">
-    {preferredLoginMethod === 'Email' && (
-        <div className={styles.inputGroup1} style={{ marginLeft: "-60px" }}>
-          <label className="text-blue-800 font-semibold">Email</label>
-          <input
-            className={`border-transparent border-b-2 hover:border-blue-200 mr-[40px] ml-[10px] h-[30px] w-[200px] text-[11px] focus:outline-gray-300 ${isEditingLogin ? 'highlight' : ''}`}
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={!isEditingLogin}
-          />
-        </div>
-      )}
-       {preferredLoginMethod === 'Mobile' && (
-        <div className={styles.inputGroup1} style={{ marginLeft: "-60px" }}>
-          <label className="text-blue-800 font-semibold ">Mobile</label>
-          <input
-            className={`border-transparent border-b-2 hover:border-blue-200 ml-[10px] h-[30px] w-[213px] text-[11px] focus:outline-gray-300 ${isEditingLogin ? 'highlight' : ''}`}
-            type="number"
-            value={mobileNumber}
-            onChange={(e) => setMobileNumber(e.target.value)}
-            disabled={!isEditingLogin}
-          />
-        </div>
-      )}
-        {isEmailOtpSent && (
-        <div className="flex items-center  relative ">
-          <input
-            className="border-transparent border-b-2 hover:border-blue-200 h-[30px] w-[200px] text-[11px] focus:outline-gray-300"
-            placeholder="Enter OTP"
-            type="text"
-            value={emailOtp}
-            onChange={(e) => setEmailOtp(e.target.value)}
-          />
-          <button
-            className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[90px] text-[13px] font-semibold rounded-[20px] ml-[10px] text-white"
-            onClick={handleSaveClick}
-          >
-            Verify OTP
-          </button>
-        </div>
-      )}
-      {isMobileOtpSent && (
-        <div className="flex items-center  relative ">
-          <input
-            className="border-transparent border-b-2 hover:border-blue-200 h-[30px] w-[200px] text-[11px] focus:outline-gray-300"
-            placeholder="Enter OTP"
-            type="text"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-          />
-          <button
-            className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[90px] text-[13px] font-semibold rounded-[20px] ml-[10px] text-white"
-            onClick={handleSaveClick}
-          >
-            Verify OTP
-          </button>
-        </div>
-      )}
-    </div>
-    {isEditingLogin ? (
-      <>
-        <button
-          className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[90px] text-[13px] font-semibold rounded-[20px] ml-[200px] mb-[20px] text-white mt-[20px]"
-          onClick={handleLoginSaveClick}
-        >
-          Send OTP
-        </button>
-        
-      </>
-    ) : (
-      <button
-        className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[200px] mb-[20px] text-white mt-[20px]"
-        onClick={handleLoginEditClick}
-      >
-        Edit
-      </button>
-    )}
-       {isSendOtpSent && (
-    <button
-      className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[4%] text-white"
-      onClick={handleLoginCancelClick}
-    >
-      Cancel
-    </button>
-       )}
-   
-    {message && (
-      <div className="mt-[20px] text-green-500 font-semibold">
-        {message}
-      </div>
-    )}
-   
-  </div>
-
-{/* *************password details ******************************* */}
-  <div className="bg-white w-full">
-      <h1 className="ml-[6%] mt-4 text-[13px] text-[#EF5130] font-semibold">Update Password</h1>
-      <div className="flex ml-[30%] mt-[20px]">
-        <div className="inputGroup1" style={{ marginLeft: "-50px" }}>
-          <label className="text-blue-800 text-[13px] font-semibold">Password</label>
-          <input
-            className="border-transparent border-b-2 hover:border-blue-200 mr-[40px] ml-[px] h-[30px] w-[173px] text-[11px] focus:outline-gray-300 pl-[5px]"
-            type={oldPasswordVisible ? 'text' : 'password'}
-            placeholder="password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-          <span onClick={() => togglePasswordVisibility('old')} className='cursor-pointer'>
-            {oldPasswordVisible ? (
-              <img className='h-[17px] w-[17px] ml-[66%] relative -top-[25px]' src={visible} title="hide" alt='Hide Password' />
-            ) : (
-              <img className='h-[17px] w-[17px] ml-[66%] relative -top-[25px]' src={hide} title="show" alt='Show Password' />
+          <div className="flex ml-[28%] mt-[20px]">
+            {preferredLoginMethod === "Email" && (
+              <div
+                className={styles.inputGroup1}
+                style={{ marginLeft: "-60px" }}
+              >
+                <label className="text-blue-800 font-semibold">Email</label>
+                <input
+                  className={`border-transparent border-b-2 hover:border-blue-200 mr-[40px] ml-[10px] h-[30px] w-[200px] text-[11px] focus:outline-gray-300 ${
+                    isEditingLogin ? "highlight" : ""
+                  }`}
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={!isEditingLogin}
+                />
+              </div>
             )}
-          </span>
-          {oldPasswordError && <div className="text-red-500 text-xs mt-1">{oldPasswordError}</div>}
+            {preferredLoginMethod === "Mobile" && (
+              <div
+                className={styles.inputGroup1}
+                style={{ marginLeft: "-60px" }}
+              >
+                <label className="text-blue-800 font-semibold ">Mobile</label>
+                <input
+                  className={`border-transparent border-b-2 hover:border-blue-200 ml-[10px] h-[30px] w-[213px] text-[11px] focus:outline-gray-300 ${
+                    isEditingLogin ? "highlight" : ""
+                  }`}
+                  type="number"
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
+                  disabled={!isEditingLogin}
+                />
+              </div>
+            )}
+            {isEmailOtpSent && (
+              <div className="flex items-center  relative ">
+                <input
+                  className="border-transparent border-b-2 hover:border-blue-200 h-[30px] w-[200px] text-[11px] focus:outline-gray-300"
+                  placeholder="Enter OTP"
+                  type="text"
+                  value={emailOtp}
+                  onChange={(e) => setEmailOtp(e.target.value)}
+                />
+                <button
+                  className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[90px] text-[13px] font-semibold rounded-[20px] ml-[10px] text-white"
+                  onClick={handleSaveClick}
+                >
+                  Verify OTP
+                </button>
+              </div>
+            )}
+            {isMobileOtpSent && (
+              <div className="flex items-center  relative ">
+                <input
+                  className="border-transparent border-b-2 hover:border-blue-200 h-[30px] w-[200px] text-[11px] focus:outline-gray-300"
+                  placeholder="Enter OTP"
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+                <button
+                  className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[90px] text-[13px] font-semibold rounded-[20px] ml-[10px] text-white"
+                  onClick={handleSaveClick}
+                >
+                  Verify OTP
+                </button>
+              </div>
+            )}
+          </div>
+          {isEditingLogin ? (
+            <>
+              <button
+                className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[90px] text-[13px] font-semibold rounded-[20px] ml-[200px] mb-[20px] text-white mt-[20px]"
+                onClick={handleLoginSaveClick}
+              >
+                Send OTP
+              </button>
+            </>
+          ) : (
+            <button
+              className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[200px] mb-[20px] text-white mt-[20px]"
+              onClick={handleLoginEditClick}
+            >
+              Edit
+            </button>
+          )}
+          {isSendOtpSent && (
+            <button
+              className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[4%] text-white"
+              onClick={handleLoginCancelClick}
+            >
+              Cancel
+            </button>
+          )}
+
+          {message && (
+            <div className="mt-[20px] text-green-500 font-semibold">
+              {message}
+            </div>
+          )}
         </div>
 
-        {showNewPasswords && (
-          <>
-            <div className="inputGroup1">
-              <label className="text-blue-800 font-semibold ml-[15px] text-[13px]">New Password</label>
+        {/* *************password details ******************************* */}
+        <div className="bg-white w-full ">
+          <h1 className="ml-[6%] mt-4 text-[13px] text-[#EF5130] font-semibold colour red">
+            Update Password
+          </h1>
+          <div className="flex ml-[27%] mt-[20px]">
+            <div className="inputGroup1" style={{ marginLeft: "-50px" }}>
+              <label className="text-blue-800 text-[13px] font-semibold">
+                Password
+              </label>
               <input
-                className="border-transparent border-b-2 hover:border-blue-200 ml-[15px] h-[30px] w-[163px] text-[11px] focus:outline-gray-300"
-                type={newPasswordVisible ? 'text' : 'password'}
-                placeholder="new password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                className="border-transparent border-b-2 hover:border-blue-200 mr-[40px] ml-[px] h-[30px] w-[173px] text-[11px] focus:outline-gray-300 pl-[5px]"
+                type={oldPasswordVisible ? "text" : "password"}
+                placeholder="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
               />
-              <span onClick={() => togglePasswordVisibility('new')} className='cursor-pointer'>
-                {newPasswordVisible ? (
-                  <img className='h-[17px] w-[17px] ml-[72%] relative -top-[25px]' src={visible} title="hide" alt='Hide Password' />
+              <span
+                onClick={() => togglePasswordVisibility("old")}
+                className="cursor-pointer"
+              >
+                {oldPasswordVisible ? (
+                  <img
+                    className="h-[17px] w-[17px] ml-[66%] relative -top-[25px]"
+                    src={visible}
+                    title="hide"
+                    alt="Hide Password"
+                  />
                 ) : (
-                  <img className='h-[17px] w-[17px] ml-[72%] relative -top-[25px]' src={hide} title="show" alt='Show Password' />
+                  <img
+                    className="h-[17px] w-[17px] ml-[66%] relative -top-[25px]"
+                    src={hide}
+                    title="show"
+                    alt="Show Password"
+                  />
                 )}
               </span>
-              {newPasswordError && <div className="text-red-500 text-xs mt-1 w-[190px] mx-[10px]">{newPasswordError}</div>}
+              {oldPasswordError && (
+                <div className="text-red-500 text-xs mt-1">
+                  {oldPasswordError}
+                </div>
+              )}
             </div>
 
-            <div className="inputGroup1">
-              <label className="text-blue-800 font-semibold ml-[20px] text-[13px]">Confirm Password</label>
-              <input
-                className="border-transparent border-b-2 hover:border-blue-200 ml-[20px] h-[30px] w-[178px] text-[11px] focus:outline-gray-300"
-                type={confirmPasswordVisible ? 'text' : 'password'}
-                placeholder="confirm password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <span onClick={() => togglePasswordVisibility('confirm')} className='cursor-pointer'>
-                {confirmPasswordVisible ? (
-                  <img className='h-[17px] w-[17px] ml-[67%] relative -top-[25px]' src={visible} title="hide" alt='Hide Password' />
-                ) : (
-                  <img className='h-[17px] w-[17px] ml-[67%] relative -top-[25px]' src={hide} title="show" alt='Show Password' />
-                )}
-              </span>
-              {confirmPasswordError && <div className="text-red-500 text-xs mt-1 w-[200px]">{confirmPasswordError}</div>}
-            </div>
-          </>
-        )}
-      </div>
+            {showNewPasswords && (
+              <>
+                <div className="inputGroup1">
+                  <label className="text-blue-800 font-semibold ml-[15px] text-[13px]">
+                    New Password
+                  </label>
+                  <input
+                    className="border-transparent border-b-2 hover:border-blue-200 ml-[15px] h-[30px] w-[163px] text-[11px] focus:outline-gray-300"
+                    type={newPasswordVisible ? "text" : "password"}
+                    placeholder="new password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                  <span
+                    onClick={() => togglePasswordVisibility("new")}
+                    className="cursor-pointer"
+                  >
+                    {newPasswordVisible ? (
+                      <img
+                        className="h-[17px] w-[17px] ml-[72%] relative -top-[25px]"
+                        src={visible}
+                        title="hide"
+                        alt="Hide Password"
+                      />
+                    ) : (
+                      <img
+                        className="h-[17px] w-[17px] ml-[72%] relative -top-[25px]"
+                        src={hide}
+                        title="show"
+                        alt="Show Password"
+                      />
+                    )}
+                  </span>
+                  {newPasswordError && (
+                    <div className="text-red-500 text-xs mt-1 w-[190px] mx-[10px]">
+                      {newPasswordError}
+                    </div>
+                  )}
+                </div>
 
-      <button
-        className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[150px] text-[13px] font-semibold rounded-[20px] ml-[200px] mb-[20px] text-white mt-[20px] text-nowrap"
-        onClick={handleUpdatePassword}
-      >
-        {buttonText}
-      </button>
-      {showNewPasswords && (
-      <button
-      className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[4%] text-white"
-      onClick={handleLoginCancelClick1}
-    >
-      Cancel
-    </button>
-      )}
-    </div>
-       
+                <div className="inputGroup1">
+                  <label className="text-blue-800 font-semibold ml-[20px] text-[13px]">
+                    Confirm Password
+                  </label>
+                  <input
+                    className="border-transparent border-b-2 hover:border-blue-200 ml-[20px] h-[30px] w-[178px] text-[11px] focus:outline-gray-300"
+                    type={confirmPasswordVisible ? "text" : "password"}
+                    placeholder="confirm password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <span
+                    onClick={() => togglePasswordVisibility("confirm")}
+                    className="cursor-pointer"
+                  >
+                    {confirmPasswordVisible ? (
+                      <img
+                        className="h-[17px] w-[17px] ml-[67%] relative -top-[25px]"
+                        src={visible}
+                        title="hide"
+                        alt="Hide Password"
+                      />
+                    ) : (
+                      <img
+                        className="h-[17px] w-[17px] ml-[67%] relative -top-[25px]"
+                        src={hide}
+                        title="show"
+                        alt="Show Password"
+                      />
+                    )}
+                  </span>
+                  {confirmPasswordError && (
+                    <div className="text-red-500 text-xs mt-1 w-[200px]">
+                      {confirmPasswordError}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+
+          <button
+            className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[150px] text-[13px] font-semibold rounded-[20px] ml-[200px] mb-[20px] text-white mt-[20px] text-nowrap"
+            onClick={handleUpdatePassword}
+          >
+            {buttonText}
+          </button>
+          {showNewPasswords && (
+            <button
+              className="bg-[#3B61C8] hover:transform hover:scale-110 hover:bg-[rgb(239,81,48)] transition-transform duration-300 ease-in-out h-[30px] w-[80px] text-[13px] font-semibold rounded-[20px] ml-[4%] text-white"
+              onClick={handleLoginCancelClick1}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </div>
       <LogoutBar />
     </div>

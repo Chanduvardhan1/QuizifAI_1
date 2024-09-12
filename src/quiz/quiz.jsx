@@ -1310,7 +1310,7 @@ const Quiz = () => {
                           </p>
 
                           <span className="relative group -top-[13px]">
-                            <span className="text-[#002366] w-[100px] cursor-pointer z-0 truncate text-[9px] font-semibold">
+                            <span className="text-[#002366] cursor-pointer z-0 truncate text-[9px] relative top-[1px] font-semibold inline-block w-[90px] overflow-hidden whitespace-nowrap">
                               {highlightText(
                                 quizItem.sub_category,
                                 searchQuery

@@ -926,7 +926,7 @@ const Dashboard = () => {
 
                         {quizItem.attempts_count < quizItem.retake_flag && (
                           <button
-                            className="cursor-pointer ml-auto relative -top-[5px] right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
+                            className="cursor-pointer ml-auto relative  right-1 flex gap-[2px] border-2 top-[4px] bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
                             onClick={() =>
                               handleStartQuiz1(
                                 quizItem.quiz_id,
@@ -1700,7 +1700,7 @@ const Dashboard = () => {
 
                         {quizItem.attempts_count < quizItem.retake_flag && (
                           <button
-                            className="cursor-pointer ml-auto relative -top-[5px] right-1 flex gap-[2px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
+                            className="cursor-pointer ml-auto relative right-1 flex gap-[2px] top-[4px] border-2 bg-[#F5F8F9] rounded-xl border-[#472E86] h-[16px] w-[34.5px]"
                             onClick={() =>
                               handleStartQuiz1(
                                 quizItem.quiz_id,
