@@ -944,7 +944,7 @@ text-align: left;
   .textOverImage3 {
     /* margin-left: 25px; */
     position: relative;
-    top: 25px;
+    top: -45px;
     left: 65px;
     display: flex;
     color: black;

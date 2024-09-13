@@ -237,7 +237,7 @@ const quiz_results = () => {
         const result = await response.json();
 
         if (result.response === 'success') {
-          setLeaderboardData(result.data.all_results);
+          setLeaderboardData(result.data);
 
         } else {
           console.error('Failed to fetch leaderboard data:', result.message);

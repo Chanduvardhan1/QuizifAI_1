@@ -127,7 +127,8 @@ const leaderboard = () => {
             'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
-            quiz_id: quizId
+            quiz_id: quizId,
+            user_id:userId,
           })
         });
 
@@ -220,48 +221,7 @@ const leaderboard = () => {
     }
   }, [userId]);
 
-  useEffect(() => {
-    const quizId = localStorage.getItem("quiz_id");
-
-    const fetchLeaderboardData = async () => {
-      try {
-        const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
-
-    if (!authToken) {
-      console.error('No authentication token found. Please log in again.');
-      return;
-    }
-        const response = await fetch('https://quizifai.com:8010/leaderboard_result', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`,
-          },
-          body: JSON.stringify({
-            quiz_id: quizId,
-            user_id:userId,
-          })
-        });
-
-        const result = await response.json();
-
-        if (result.response === 'success') {
-          setLeaderboardData(result.data.all_results);
-
-        } else {
-          console.error('Failed to fetch leaderboard data:', result.message);
-        }
-      } catch (error) {
-        console.error('Error fetching leaderboard data:', error);
-      }
-    };
-
-    if (isQuizSubmitted) { // Trigger fetch only if quiz result submission was successful
-      fetchLeaderboardData();
-    }
-  }, [isQuizSubmitted]);
-
+  
   if (!quizData) {
     return <div>Loading...</div>;
   }

@@ -95,7 +95,7 @@ const Questions = () => {
         const result = await response.json();
 
         if (result.response === 'success') {
-          setLeaderboardData(result.data.all_results);
+          setLeaderboardData(result.data);
 
           // Assuming you have quiz data in result, otherwise update this part
           setQuizData({
