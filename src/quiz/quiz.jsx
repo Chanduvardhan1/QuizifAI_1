@@ -414,7 +414,8 @@ const Quiz = () => {
     mincompletiontime,
     quizattempts,
     avgscore,
-    max_percentage
+    max_percentage,
+    quizcreatedate
   ) => {
     localStorage.setItem("quiz_id", quizId); // Store quiz_id in local storage
     navigate("/quiz-results1", {
@@ -432,6 +433,7 @@ const Quiz = () => {
         quizattempts,
         avgscore,
         max_percentage,
+        quizcreatedate
       },
     });
   };
@@ -1600,7 +1602,8 @@ const Quiz = () => {
                                         quizItem.min_completion_time,
                                         quizItem.quiz_attempts,
                                         quizItem.avg_score,
-                                        quizItem.max_percentage
+                                        quizItem.max_percentage,
+                                        quizItem.quiz_create_date
                                       )
                                     }
                                   >
