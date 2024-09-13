@@ -239,7 +239,8 @@ const leaderboard = () => {
             'Authorization': `Bearer ${authToken}`,
           },
           body: JSON.stringify({
-            quiz_id: quizId
+            quiz_id: quizId,
+            user_id:userId,
           })
         });
 
