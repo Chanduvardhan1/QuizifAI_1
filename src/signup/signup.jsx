@@ -387,28 +387,35 @@ if (hasError) {
         return response.json();
       })
       .then((data) => {
-        // console.log("Sign-up successful:", data);
-
-        // const { response, output } = data;
+        console.log("API Response:", data);
         if (
+          data.response === "success" &&
+          data.response_message === "Account created successfully. Please check your mobile to verify your account."
+        
+        ) {
+          setResponseMessage(data.response_message);
+          setShowOtpField1(true);
+          setShowVerifyButton1(true); 
+        }else if (
+          data.response === "success" &&
+          data.response_message ==="Please verify your mobile to proceed"
+        ) {
+          
+          setResponseMessage("Please verify your mobile to proceed");
+
+          setShowOtpField1(true);
+          setShowVerifyButton1(true);
+        }else if (
           data.response === "fail" &&
           data.output ===
           "Mobile Number is already registered.Please verify your"
         ) {
+          
           setResponseMessage("Mobile Number is registered. Please verify your OTP");
+
           setShowOtpField1(true);
-          setShowVerifyButton1(true); 
-        } else if (
-          data.response === "success"
-        ) {
-          // const sanitizedOutput = data.output.replace(/\d{6}\s?/, ""); // Removes the OTP (6 digits followed by optional space)
-          // setResponseMessage(sanitizedOutput);
-          setRespon
-          seMessage(data.response_message)
-          // setGreen("Account Has Been Created OTP Successfully Sent Please verify your OTP")
-          setShowOtpField1(true);
-          setShowVerifyButton1(true); 
-        } else if (
+          setShowVerifyButton1(true);
+        }  else if (
           data.response === "fail" &&
           data.response_message === "Mobile number is invalid to proceed with your account."
         ) {
@@ -447,17 +454,8 @@ if (hasError) {
         }
       })
       .catch((error) => {
-        console.error('Error signing up:', error);
-        if (error.detail && Array.isArray(error.detail) && error.detail.length > 0) {
-          const detail = error.detail[0];
-          if (detail.type === 'value_error' && detail.loc.includes('user_name')) {
-            setResponseMessage(detail.msg);
-          } else {
-            setResponseMessage('');
-          }
-        } else {
-          setResponseMessage('Error signing up');
-        }
+        console.error("Error signing up:", error); // Log error details
+        setResponseMessage("Error signing up. Please try again later.");
       });
   };
   const handleInputChange1 = (field, value) => {
