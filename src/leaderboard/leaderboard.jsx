@@ -52,7 +52,15 @@ const leaderboard = () => {
   
   const [error, setError] = useState(null);
   const location = useLocation();
-  const { quizId, attemptNo } = location.state || {};
+  const {
+    quizId,
+  } = location.state || {};
+  const {
+    passpercentage,
+    complexity,
+    quizduration,
+    attemptId} = location.state || {};
+
   const [leaderboardData, setLeaderboardData] = useState([]);
   const navigate = useNavigate();
   const [isQuizSubmitted, setIsQuizSubmitted] = useState(false); // State to track quiz submission
@@ -179,19 +187,24 @@ const leaderboard = () => {
   // }, [quizId, attemptNo]);
   // const quizduration = localStorage.getItem("quiz_duration");
   // const complexity = localStorage.getItem("complexity");
-  const {passpercentage,complexity,quizduration,attemptId} = location.state || {};
-  useEffect(() => {
-    const quizId = localStorage.getItem("quiz_id");
-    const attemptNo = localStorage.getItem("quiz_level_attempt_id");
 
+ 
+    // const attemptNo = localStorage.getItem("quiz_level_attempt_id");
+  
     const sendQuizResult = async () => {
       try {
         const authToken = localStorage.getItem('authToken'); // Retrieve the auth token from localStorage
-
+  
         if (!authToken) {
           console.error('No authentication token found. Please log in again.');
           return;
         }
+  
+        if (!quizId || !attemptId) {
+          console.error('Quiz ID or Attempt ID is missing.');
+          return;
+        }
+  
         const response = await fetch('https://quizifai.com:8010/quiz_result_view', {
           method: 'POST',
           headers: {
@@ -202,30 +215,41 @@ const leaderboard = () => {
           body: JSON.stringify({
             user_id: userId,
             quiz_id: quizId,
-            attempt_id: attemptId
+            attempt_id: attemptId // Use the correct variable
           })
         });
+  
+        if (!response.ok) {
+          throw new Error(`Failed to fetch: ${response.status}`);
+        }
+  
         const result = await response.json();
-        const data = result.data[0];
-        setQuizData(data);
-        console.log('Quiz result submitted:', data);
-        setIsQuizSubmitted(true); // Set the submission state to true after success
+        const data = result?.data?.[0];
+  
+        if (data) {
+          setQuizData(data);
+          console.log('Quiz result submitted:', data);
+          setIsQuizSubmitted(true); // Set the submission state to true after success
+        } else {
+          console.error('No data received from API.');
+          setIsQuizSubmitted(false);
+        }
       } catch (error) {
         console.error('Error submitting quiz result:', error);
         setIsQuizSubmitted(false); // Ensure it's false on error
       }
     };
 
-    if (quizId && attemptNo) {
-      sendQuizResult(); // Trigger the POST request only if quizId and attemptNo are available
+    useEffect(() => {
+      const quizId = localStorage.getItem("quiz_id");
+    if (quizId && attemptId && userId) {
+      sendQuizResult();
     }
   }, [userId]);
-
-  
+  console.log("Attempno",attemptId)
   if (!quizData) {
     return <div>Loading...</div>;
   }
- 
   if (loading) return <div>Loading...</div>;
 if (error) return <div>Error: {error.message}</div>;
 
